@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "allowUnusedLabels": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react",
+    "lib": ["es6", "es2016", "dom", "ESNext"],
+    "removeComments": true,
+    "experimentalDecorators": true
+  },
+  "globalDependencies": {
+    "meteor-astronomy":
+      "github:emilianosantucci/meteor-astronomy-ts/.types/astronomy.d.ts#0c2adad0ade366e23ceea6ac64ffd462e52cbab5"
+  }
+}
