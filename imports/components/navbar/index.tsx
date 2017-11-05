@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
+import { Link } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
@@ -61,6 +62,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
       return (
         <div>
           <span>User Profile</span>
+          <Link to="/posts/new">Create Post</Link>
           <span onClick={this.handleLogoutClick}>Logout</span>
         </div>
       );

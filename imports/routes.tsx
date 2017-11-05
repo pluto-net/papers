@@ -10,6 +10,7 @@ import { Route, Switch } from "react-router-dom";
 import { MuiThemeProvider } from "material-ui/styles";
 import HomeComponent from "./components/home";
 import Navbar from "./components/navbar";
+import CreatePost from "./components/posts/new";
 import EnvChecker from "./helpers/envChecker";
 import { rootReducer } from "./reducers";
 import { initialState } from "./reducers/index";
@@ -51,6 +52,7 @@ const RootRoute = () => {
             <Navbar />
             <Switch>
               <Route exact path="/" component={HomeComponent} />
+              <Route exact path="/posts/new" component={CreatePost} />
             </Switch>
           </div>
         </ReactRouterRedux.ConnectedRouter>
