@@ -48,16 +48,18 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     dispatch({ type: "REQUEST_LOGOUT" });
   };
 
-  private getUserIcon = () => {
+  private getRightMenus = () => {
     const { currentUser, isLoggingIn } = this.props;
 
-    if (!currentUser || isLoggingIn) {
+    if (!currentUser) {
       return (
         <div className="navbar-right-item">
           <span onClick={this.handleOpenSignUpDialog}>Sign Up</span>
           <span onClick={this.handleOpenSignInDialog}>Sign In</span>
         </div>
       );
+    } else if (!currentUser && isLoggingIn) {
+      return <div className="navbar-right-item">is logging in...</div>;
     } else {
       return (
         <div>
@@ -81,7 +83,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
         <div className="navbar-right-box">
           <span className="navbar-search-box" />
           <input className="navbar-search-input" />
-          {this.getUserIcon()}
+          {this.getRightMenus()}
         </div>
         <SignUpDialog closeFunction={this.handleCloseSignUpDialog} />
         <SignInDialog closeFunction={this.handleCloseSignInDialog} />
