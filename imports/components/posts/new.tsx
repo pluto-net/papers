@@ -1,6 +1,8 @@
 import * as React from "react";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
+import { Post } from "../../../both/model/post";
+import { IPostParamsInterface } from "../../../server/methods/post";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface ICreatePostParams {
@@ -50,7 +52,33 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
 
   private handleSubmitPost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submit action is fired");
+    const { currentUser } = this.props;
+    const { title, content } = this.state;
+
+    if (!currentUser) {
+      // TODO: Open Sign up dialog
+      return;
+    }
+
+    const post = new Post();
+    const postParams: IPostParamsInterface = {
+      title,
+      content,
+      userId: currentUser._id,
+    };
+
+    post.callMethod("savePost", postParams, (err: Error, postId: string) => {
+      if (err) {
+        alert(err);
+      } else {
+        // TODO: Make user go to target post page
+        console.log(postId);
+        this.setState({
+          title: "",
+          content: "",
+        });
+      }
+    });
   };
 
   public render() {

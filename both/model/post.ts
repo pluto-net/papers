@@ -34,6 +34,11 @@ export const Post = Class.create({
       ],
     },
     userId: String,
-    publishedAt: Date,
+    publishedAt: {
+      type: Date,
+      default: function() {
+        return new Date();
+      },
+    },
   },
 });
