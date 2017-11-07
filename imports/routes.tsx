@@ -11,6 +11,9 @@ import { MuiThemeProvider } from "material-ui/styles";
 import HomeComponent from "./components/home";
 import Navbar from "./components/navbar";
 import CreatePost from "./components/posts/new";
+import PostShow from "./components/posts/show";
+import UserProfile from "./components/users/show";
+import UserProfileEdit from "./components/users/edit";
 import EnvChecker from "./helpers/envChecker";
 import { rootReducer } from "./reducers";
 import { initialState } from "./reducers/index";
@@ -53,6 +56,9 @@ const RootRoute = () => {
             <Switch>
               <Route exact path="/" component={HomeComponent} />
               <Route exact path="/posts/new" component={CreatePost} />
+              <Route exact path="/posts/:postId" component={PostShow} />
+              <Route exact path="/users/:userId/edit" component={UserProfileEdit} />
+              <Route exact path="/users/:userId" component={UserProfile} />
             </Switch>
           </div>
         </ReactRouterRedux.ConnectedRouter>

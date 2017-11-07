@@ -10,6 +10,9 @@ function createUser(email: string, username: string, password: string) {
         email,
         username,
         password,
+        profile: {
+          username,
+        },
       },
       (err: Error) => {
         if (err) {

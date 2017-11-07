@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
+    "dev": "meteor --settings settings.json",
     "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "lodash": "^4.17.4",
     "material-ui": "^0.19.4",
     "meteor-node-stubs": "^0.3.2",
+    "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

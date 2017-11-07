@@ -8,6 +8,8 @@ import { openDialog, closeDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 const { withTracker } = require("meteor/react-meteor-data");
 
+declare var $: any;
+
 interface INavbarProps extends DispatchProp<any> {
   currentUser: any;
   isLoggingIn: boolean;
@@ -53,20 +55,27 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
 
     if (!currentUser) {
       return (
-        <div className="navbar-right-item">
+        <span className="navbar-right-item">
           <span onClick={this.handleOpenSignUpDialog}>Sign Up</span>
           <span onClick={this.handleOpenSignInDialog}>Sign In</span>
-        </div>
+        </span>
       );
     } else if (!currentUser && isLoggingIn) {
-      return <div className="navbar-right-item">is logging in...</div>;
+      return <span className="navbar-right-item">is logging in...</span>;
     } else {
+      const profileImgUrl = currentUser.profile.profileImagePublicId
+        ? $.cloudinary.url(currentUser.profile.profileImagePublicId, { width: 50, height: 50, crop: "fill" })
+        : "https://cdn3.iconfinder.com/data/icons/pix-glyph-set/50/520913-cat-128.png";
+
       return (
-        <div>
-          <span>User Profile</span>
+        <span className="navbar-right-item">
+          <img style={{ width: 50, height: 50 }} src={profileImgUrl} />
+          <Link to={`/users/${currentUser._id}`}>{currentUser.username}</Link>
           <Link to="/posts/new">Create Post</Link>
-          <span onClick={this.handleLogoutClick}>Logout</span>
-        </div>
+          <Link to="/" onClick={this.handleLogoutClick}>
+            Logout
+          </Link>
+        </span>
       );
     }
   };
@@ -74,16 +83,21 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
   public render() {
     return (
       <nav className="navbar-container">
-        <div className="navbar-left-box">
-          <span className="navbar-logo"> The Papers</span>
-          <span className="navbar-left-item">Latest Review</span>
-          <span className="navbar-left-item">Articles</span>
-        </div>
+        <div className="navbar-box">
+          <div className="navbar-left-box">
+            <Link to="/" className="navbar-logo">
+              The Papers
+            </Link>
+            <span className="navbar-left-item">Latest Review</span>
+            <span className="navbar-left-item">Articles</span>
+          </div>
 
-        <div className="navbar-right-box">
-          <span className="navbar-search-box" />
-          <input className="navbar-search-input" />
-          {this.getRightMenus()}
+          <div className="navbar-right-box">
+            <span className="navbar-search-box">
+              <input className="navbar-search-input" />
+            </span>
+            {this.getRightMenus()}
+          </div>
         </div>
         <SignUpDialog closeFunction={this.handleCloseSignUpDialog} />
         <SignInDialog closeFunction={this.handleCloseSignInDialog} />

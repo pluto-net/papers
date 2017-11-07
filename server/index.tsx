@@ -1,11 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Post } from "../both/model/post";
 
-// TODO: Remove below after making sign up / in process
-Meteor.publish("users", () => {
-  return Meteor.users.find();
-});
-
 Meteor.publish("posts", function(limit: number) {
   const options = {
     sort: { publishedAt: -1 },
@@ -13,4 +8,15 @@ Meteor.publish("posts", function(limit: number) {
   };
 
   return Post.find({}, options);
+});
+
+Meteor.publish("post", function(id: string) {
+  return Post.find(id);
+});
+
+Meteor.publish("user", function(id: string) {
+  return Meteor.users.find(id, {
+    fields: { services: 0 },
+    transform: null,
+  });
 });

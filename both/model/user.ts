@@ -1,35 +1,4 @@
 const { Class } = require("meteor/jagi:astronomy");
-
-// {
-//   "_id" : "gfK6bd5rDBpW68GRC",
-//   "createdAt" : ISODate("2017-11-05T08:08:24.411Z"),
-//   "services" : {
-//       "password" : {
-//           "bcrypt" : "$2a$10$tJBQPkKr.g7WzwIfj4c5I.1ffO0BB26RmgMRZJzpdZ5HFVpCKdo5C"
-//       },
-
-//       "resume" : {
-//           "loginTokens" : [
-//               {
-//                   "when" : ISODate("2017-11-05T08:08:24.441Z"),
-//                   "hashedToken" : "f8Z7tRDRqcqW0EbuW1dpY/IotVNYqfVg7tDn8TgitRI="
-//               },
-//               {
-//                   "when" : ISODate("2017-11-06T01:33:14.329Z"),
-//                   "hashedToken" : "V0AWfzmqMU9/WV2jwG56zNEoEpsuyppN1djtozNGBE0="
-//               }
-//           ]
-//       }
-//   },
-//   "username" : "Tylor Shin",
-//   "emails" : [
-//       {
-//           "address" : "sshinmir@naver.com",
-//           "verified" : false
-//       }
-//   ]
-// }
-
 // var user = new User();
 // user.save({
 //   simulation: false // Insert only on the server.
@@ -58,15 +27,20 @@ const UserProfile = Class.create({
   name: "UserProfile",
   fields: {
     username: String,
+    profileImagePublicId: {
+      type: String,
+      optional: true,
+    },
     /* Any other fields you want to be published to the client */
   },
 });
 
-const User = Class.create({
+export const User = Class.create({
   name: "User",
   collection: Meteor.users,
   fields: {
     createdAt: Date,
+    username: String,
     emails: {
       type: [Object],
       default: (): string[] => {
@@ -78,6 +52,11 @@ const User = Class.create({
       default: () => {
         return {};
       },
+    },
+  },
+  events: {
+    beforeSave(e: any) {
+      e.currentTarget.profile.username = e.currentTarget.username;
     },
   },
 });

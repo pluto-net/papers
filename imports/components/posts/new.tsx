@@ -1,4 +1,6 @@
 import * as React from "react";
+import { connect, DispatchProp } from "react-redux";
+import { push } from "react-router-redux";
 import { Meteor } from "meteor/meteor";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
@@ -6,7 +8,7 @@ import { Post } from "../../../both/model/post";
 import { IPostParamsInterface } from "../../../server/methods/post";
 const { withTracker } = require("meteor/react-meteor-data");
 
-interface ICreatePostParams {
+interface ICreatePostParams extends DispatchProp<any> {
   currentUser: any;
   isLoggingIn: boolean;
 }
@@ -53,7 +55,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
 
   private handleSubmitPost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { currentUser } = this.props;
+    const { currentUser, dispatch } = this.props;
     const { title, content } = this.state;
 
     if (!currentUser) {
@@ -72,12 +74,11 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       if (err) {
         alert(err);
       } else {
-        // TODO: Make user go to target post page
-        console.log(postId);
         this.setState({
           title: "",
           content: "",
         });
+        dispatch(push(`/posts/${postId}`));
       }
     });
   };
@@ -121,6 +122,6 @@ const CreatePostContainer = withTracker(() => {
     currentUser,
     isLoggingIn,
   };
-})(CreatePost);
+})(connect()(CreatePost));
 
 export default CreatePostContainer;

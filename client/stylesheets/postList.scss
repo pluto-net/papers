@@ -1,0 +1,14 @@
+.post-list-container {
+  width: 900px;
+  margin: 50px auto;
+}
+
+.post-list-item {
+  display: block;
+  padding: 15px;
+  border-bottom: 1px solid #efefef;
+
+  &:first-of-type {
+    border-top: 1px solid #efefef;
+  }
+}

@@ -5,7 +5,6 @@ class HomeComponent extends React.PureComponent<{}, {}> {
   public render() {
     return (
       <div>
-        Hello Home
         <Feed />
       </div>
     );

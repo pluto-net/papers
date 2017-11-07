@@ -22,6 +22,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     } else {
       return (
         <div>
+          <h1 style={{ textAlign: "center" }}>Post List</h1>
           <PostList posts={posts} />
         </div>
       );
