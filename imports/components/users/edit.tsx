@@ -6,6 +6,7 @@ import { push } from "react-router-redux";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import { User } from "../../../both/model/user";
+import { IUpdateUserInformationParams } from "../../../server/methods/user";
 const { withTracker } = require("meteor/react-meteor-data");
 
 declare var Cloudinary: any;
@@ -94,6 +95,26 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
     }
   };
 
+  private handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { targetUser, dispatch } = this.props;
+
+    const params: IUpdateUserInformationParams = {
+      username: this.state.username,
+      email: this.state.email,
+    };
+
+    if (targetUser) {
+      targetUser.callMethod("updateUserInformation", params, (err: Error) => {
+        if (err) {
+          alert(err);
+        } else {
+          dispatch(push(`/users/${targetUser._id}`));
+        }
+      });
+    }
+  };
+
   public componentDidMount() {
     this.checkProperUser(this.props);
     if (this.props.targetUser) {
@@ -117,7 +138,7 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
     } else {
       return (
         <div>
-          <form>
+          <form onSubmit={this.handleSubmitForm}>
             <div>
               <input type="file" onChange={this.handleFileChange} />
             </div>

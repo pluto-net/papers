@@ -50,13 +50,18 @@ export const User = Class.create({
     profile: {
       type: UserProfile,
       default: () => {
-        return {};
+        return {
+          username: "",
+          profileImagePublicId: "",
+        };
       },
     },
   },
   events: {
     beforeSave(e: any) {
-      e.currentTarget.profile.username = e.currentTarget.username;
+      if (e.currentTarget && e.currentTarget.profile) {
+        e.currentTarget.profile.username = e.currentTarget.username;
+      }
     },
   },
 });

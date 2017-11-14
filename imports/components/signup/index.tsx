@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Meteor } from "meteor/meteor";
 import { connect, DispatchProp } from "react-redux";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
@@ -117,6 +118,21 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
     );
   }
 
+  private handleSignInWithFacebook = () => {
+    Meteor.loginWithFacebook(
+      {
+        requestPermissions: ["user_friends", "public_profile", "email"],
+      },
+      (err: Error) => {
+        if (err) {
+          alert(err);
+        } else {
+          console.log("Succees to Login");
+        }
+      },
+    );
+  };
+
   render() {
     const { closeFunction, signUpDialog } = this.props;
 
@@ -124,6 +140,7 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
       <div>
         <Dialog title="SIGN UP" modal open={signUpDialog.SIGN_UP_isOpen} onRequestClose={closeFunction}>
           {this.getSignUpForm()}
+          <button onClick={this.handleSignInWithFacebook}>Login With Facebook</button>
         </Dialog>
       </div>
     );

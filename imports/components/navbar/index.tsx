@@ -63,9 +63,12 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     } else if (!currentUser && isLoggingIn) {
       return <span className="navbar-right-item">is logging in...</span>;
     } else {
-      const profileImgUrl = currentUser.profile.profileImagePublicId
-        ? $.cloudinary.url(currentUser.profile.profileImagePublicId, { width: 50, height: 50, crop: "fill" })
-        : "https://cdn3.iconfinder.com/data/icons/pix-glyph-set/50/520913-cat-128.png";
+      const profileImgUrl =
+        currentUser.profile &&
+        currentUser.profile.profileImagePublicId &&
+        currentUser.profile.profileImagePublicId.length > 0
+          ? $.cloudinary.url(currentUser.profile.profileImagePublicId, { width: 50, height: 50, crop: "fill" })
+          : "https://cdn3.iconfinder.com/data/icons/pix-glyph-set/50/520913-cat-128.png";
 
       return (
         <span className="navbar-right-item">
