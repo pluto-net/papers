@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { History, createBrowserHistory, createHashHistory } from "history";
 import { Route, Switch } from "react-router-dom";
-import { MuiThemeProvider } from "material-ui/styles";
 import HomeComponent from "./components/home";
 import Navbar from "./components/navbar";
 import CreatePost from "./components/posts/new";
@@ -15,9 +14,9 @@ import PostShow from "./components/posts/show";
 import UserProfile from "./components/users/show";
 import UserProfileEdit from "./components/users/edit";
 import EnvChecker from "./helpers/envChecker";
-import { rootReducer } from "./reducers";
-import { initialState } from "./reducers/index";
+import { initialState, rootReducer } from "./reducers";
 import rootSaga from "./sagas/index";
+import "semantic-ui-css/semantic.min.css";
 
 let history: History;
 if (EnvChecker.isDev()) {
@@ -48,22 +47,20 @@ sagaMiddleware.run(rootSaga);
 
 const RootRoute = () => {
   return (
-    <MuiThemeProvider>
-      <Provider store={store}>
-        <ReactRouterRedux.ConnectedRouter history={history}>
-          <div>
-            <Navbar />
-            <Switch>
-              <Route exact path="/" component={HomeComponent} />
-              <Route exact path="/posts/new" component={CreatePost} />
-              <Route exact path="/posts/:postId" component={PostShow} />
-              <Route exact path="/users/:userId/edit" component={UserProfileEdit} />
-              <Route exact path="/users/:userId" component={UserProfile} />
-            </Switch>
-          </div>
-        </ReactRouterRedux.ConnectedRouter>
-      </Provider>
-    </MuiThemeProvider>
+    <Provider store={store}>
+      <ReactRouterRedux.ConnectedRouter history={history}>
+        <div>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={HomeComponent} />
+            <Route exact path="/posts/new" component={CreatePost} />
+            <Route exact path="/posts/:postId" component={PostShow} />
+            <Route exact path="/users/:userId/edit" component={UserProfileEdit} />
+            <Route exact path="/users/:userId" component={UserProfile} />
+          </Switch>
+        </div>
+      </ReactRouterRedux.ConnectedRouter>
+    </Provider>
   );
 };
 

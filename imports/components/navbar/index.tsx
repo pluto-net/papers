@@ -89,7 +89,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
         <div className="navbar-box">
           <div className="navbar-left-box">
             <Link to="/" className="navbar-logo">
-              The Papers
+              The papers
             </Link>
             <span className="navbar-left-item">Latest Review</span>
             <span className="navbar-left-item">Articles</span>

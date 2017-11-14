@@ -1,10 +1,6 @@
 import * as React from "react";
 import { Meteor } from "meteor/meteor";
 import { connect, DispatchProp } from "react-redux";
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import TextField from "material-ui/TextField";
-import { orange500, blue500 } from "material-ui/styles/colors";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
 
@@ -59,61 +55,40 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
     const { closeFunction } = this.props;
     const { email, name, password } = this.state;
 
-    const styles = {
-      errorStyle: {
-        color: orange500,
-      },
-      underlineStyle: {
-        borderColor: orange500,
-      },
-      floatingLabelStyle: {
-        color: orange500,
-      },
-      floatingLabelFocusStyle: {
-        color: blue500,
-      },
-    };
-
     return (
       <form onSubmit={this.handleSignUpSubmit}>
         <div>
-          <TextField
+          <input
             onChange={e => {
               this.handleInputChange("email", e);
             }}
             type="email"
             value={email}
-            hintText="email"
-            hintStyle={styles.errorStyle}
-            fullWidth
+            placeholder="email"
           />
         </div>
         <div>
-          <TextField
+          <input
             onChange={e => {
               this.handleInputChange("name", e);
             }}
             type="text"
             value={name}
-            hintText="username"
-            hintStyle={styles.errorStyle}
-            fullWidth
+            placeholder="username"
           />
         </div>
         <div>
-          <TextField
+          <input
             onChange={e => {
               this.handleInputChange("password", e);
             }}
             type="password"
             value={password}
-            hintText="password"
-            hintStyle={styles.errorStyle}
-            fullWidth
+            placeholder="password"
           />
         </div>
-        <FlatButton label="Cancel" primary={true} onClick={closeFunction} />
-        <FlatButton type="submit" label="Submit" primary={true} />
+        <button onClick={closeFunction}>Cancel</button>
+        <button type="submit">Submit</button>
       </form>
     );
   }
