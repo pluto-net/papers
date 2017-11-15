@@ -1,9 +1,5 @@
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import TextField from "material-ui/TextField";
-import { orange500, blue500 } from "material-ui/styles/colors";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
 
@@ -55,49 +51,30 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
     const { closeFunction } = this.props;
     const { emailOrName, password } = this.state;
 
-    const styles = {
-      errorStyle: {
-        color: orange500,
-      },
-      underlineStyle: {
-        borderColor: orange500,
-      },
-      floatingLabelStyle: {
-        color: orange500,
-      },
-      floatingLabelFocusStyle: {
-        color: blue500,
-      },
-    };
-
     return (
       <form onSubmit={this.handleSignInSubmit}>
         <div>
-          <TextField
+          <input
             onChange={e => {
               this.handleInputChange("emailOrName", e);
             }}
             type="text"
             value={emailOrName}
-            hintText="username or email"
-            hintStyle={styles.errorStyle}
-            fullWidth
+            placeholder="username or email"
           />
         </div>
         <div>
-          <TextField
+          <input
             onChange={e => {
               this.handleInputChange("password", e);
             }}
             type="password"
             value={password}
-            hintText="password"
-            hintStyle={styles.errorStyle}
-            fullWidth
+            placeholder="password"
           />
         </div>
-        <FlatButton label="Cancel" primary={true} onClick={closeFunction} />
-        <FlatButton type="submit" label="Submit" primary={true} />
+        <button onClick={closeFunction}>Cancel</button>
+        <button type="submit">Submit</button>
       </form>
     );
   }

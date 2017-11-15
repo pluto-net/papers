@@ -2,8 +2,6 @@ import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { push } from "react-router-redux";
 import { Meteor } from "meteor/meteor";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
 import { Post } from "../../../both/model/post";
 import { IPostParamsInterface } from "../../../server/methods/post";
 const { withTracker } = require("meteor/react-meteor-data");
@@ -89,8 +87,8 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     return (
       <form onSubmit={this.handleSubmitPost}>
         <div>
-          <TextField
-            floatingLabelText="Title"
+          <input
+            placeholder="Title"
             value={title}
             onKeyPress={this.preventSubmit}
             onChange={(e: any) => {
@@ -99,16 +97,17 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
           />
         </div>
         <div>
-          <TextField
-            floatingLabelText="Content"
+          <input
+            placeholder="Content"
             value={content}
             onChange={(e: any) => {
               this.handleInputChange("content", e);
             }}
-            multiLine
           />
         </div>
-        <RaisedButton type="submit" label="Submit" style={{ margin: 12 }} primary />
+        <button type="submit" style={{ margin: 12 }}>
+          Submit
+        </button>
       </form>
     );
   }

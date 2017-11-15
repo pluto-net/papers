@@ -3,8 +3,6 @@ import { connect, DispatchProp } from "react-redux";
 import { Meteor } from "meteor/meteor";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { push } from "react-router-redux";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
 import { User } from "../../../both/model/user";
 import { IUpdateUserInformationParams } from "../../../server/methods/user";
 const { withTracker } = require("meteor/react-meteor-data");
@@ -143,8 +141,8 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
               <input type="file" onChange={this.handleFileChange} />
             </div>
             <div>
-              <TextField
-                floatingLabelText="E-Mail"
+              <input
+                placeholder="E-Mail"
                 value={email}
                 onKeyPress={this.preventSubmit}
                 onChange={(e: any) => {
@@ -153,8 +151,8 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
               />
             </div>
             <div>
-              <TextField
-                floatingLabelText="Username"
+              <input
+                placeholder="Username"
                 value={username}
                 onKeyPress={this.preventSubmit}
                 onChange={(e: any) => {
@@ -162,7 +160,9 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
                 }}
               />
             </div>
-            <RaisedButton type="submit" label="Submit" style={{ margin: 12 }} primary />
+            <button type="submit" style={{ margin: 12 }}>
+              Submit
+            </button>
           </form>
         </div>
       );
