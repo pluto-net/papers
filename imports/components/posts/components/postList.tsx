@@ -42,7 +42,7 @@ const mapPostNodes = (posts: any[]) => {
                 <div className="post-list-item-item">
                   <div className="post-list-item-label">Average Rating</div>
                   <div>{`Rating count - ${post.ratingCount}`}</div>
-                  <Rating icon="star" rating={rating} maxRating={5} disabled />
+                  <Rating rating={rating} maxRating={5} disabled />
                 </div>
               </Grid.Column>
               <Grid.Column>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
+import { Table, Icon, Loader, Container } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
@@ -19,9 +20,65 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     const { post, isLoading } = this.props;
 
     if (isLoading) {
-      return <div>Loading posts ...</div>;
+      return (
+        <div>
+          <Loader active />
+        </div>
+      );
     } else {
-      return <div>{post.title}</div>;
+      return (
+        <div>
+          <Container>
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell colSpan="3">{post.title}</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell collapsing>
+                    <Icon name="folder" /> node_modules
+                  </Table.Cell>
+                  <Table.Cell>Initial commit</Table.Cell>
+                  <Table.Cell collapsing textAlign="right">
+                    10 hours ago
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name="folder" /> test
+                  </Table.Cell>
+                  <Table.Cell>Initial commit</Table.Cell>
+                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name="folder" /> build
+                  </Table.Cell>
+                  <Table.Cell>Initial commit</Table.Cell>
+                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name="file outline" /> package.json
+                  </Table.Cell>
+                  <Table.Cell>Initial commit</Table.Cell>
+                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name="file outline" /> Gruntfile.js
+                  </Table.Cell>
+                  <Table.Cell>Initial commit</Table.Cell>
+                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Container>
+        </div>
+      );
     }
   }
 }
