@@ -1,7 +1,9 @@
 import * as React from "react";
+import { Input, Divider, Button, Modal } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
+import FacebookButton from "../common/facebookButton";
 
 interface ISignInDialogProps extends DispatchProp<any> {
   signInDialog: IDialogState;
@@ -53,8 +55,9 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
 
     return (
       <form onSubmit={this.handleSignInSubmit}>
-        <div>
-          <input
+        <div className="sign-in-input">
+          <Input
+            fluid
             onChange={e => {
               this.handleInputChange("emailOrName", e);
             }}
@@ -63,8 +66,9 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
             placeholder="username or email"
           />
         </div>
-        <div>
-          <input
+        <div className="sign-in-input">
+          <Input
+            fluid
             onChange={e => {
               this.handleInputChange("password", e);
             }}
@@ -73,16 +77,29 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
             placeholder="password"
           />
         </div>
-        <button onClick={closeFunction}>Cancel</button>
-        <button type="submit">Submit</button>
+        <div className="sign-in-modal-actions-wrapper clearfix">
+          <Button onClick={closeFunction} negative>
+            No
+          </Button>
+          <Button positive content="Submit" />
+        </div>
       </form>
     );
   }
 
   render() {
+    const { closeFunction, signInDialog } = this.props;
+
     return (
       <div>
-        <div>{this.getSignInForm()}</div>
+        <Modal size="mini" open={signInDialog.SIGN_IN_isOpen} onClose={closeFunction}>
+          <Modal.Header>SIGN IN</Modal.Header>
+          <Modal.Content>
+            <FacebookButton />
+            <Divider />
+            {this.getSignInForm()}
+          </Modal.Content>
+        </Modal>
       </div>
     );
   }

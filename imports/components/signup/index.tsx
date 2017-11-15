@@ -1,9 +1,9 @@
 import * as React from "react";
-import FacebookButton from "../common/facebookButton";
-import { Input, Button, Modal } from "semantic-ui-react";
+import { Input, Button, Modal, Divider } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
+import FacebookButton from "../common/facebookButton";
 
 interface ISignUpDialogProps extends DispatchProp<any> {
   signUpDialog: IDialogState;
@@ -97,7 +97,6 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
           </Button>
           <Button positive content="Submit" />
         </div>
-        <FacebookButton />
       </form>
     );
   }
@@ -109,7 +108,11 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
       <div>
         <Modal size="mini" open={signUpDialog.SIGN_UP_isOpen} onClose={closeFunction}>
           <Modal.Header>SIGN UP</Modal.Header>
-          <Modal.Content>{this.getSignUpForm()}</Modal.Content>
+          <Modal.Content>
+            <FacebookButton />
+            <Divider />
+            {this.getSignUpForm()}
+          </Modal.Content>
         </Modal>
       </div>
     );

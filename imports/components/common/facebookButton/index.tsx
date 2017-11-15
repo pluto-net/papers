@@ -20,7 +20,7 @@ const handleSignInWithFacebook = () => {
 const FacebookButton = () => {
   return (
     <Button onClick={handleSignInWithFacebook} color="facebook" fluid>
-      <Icon name="facebook" /> Login With Facebook
+      Login With Facebook
     </Button>
   );
 };
