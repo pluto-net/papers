@@ -65,6 +65,10 @@ export const Post = Class.create({
       type: String,
       optional: true,
     },
+    fields: {
+      type: [String],
+      optional: true,
+    },
     // auto-completed fields
     commentCount: {
       type: Number,

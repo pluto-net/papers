@@ -1,13 +1,13 @@
 import * as React from "react";
 import * as moment from "moment";
-import { Container, Header, Form } from "semantic-ui-react";
+import { Container, Header, Form, Button } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
-import * as DatePicker from "react-datepicker";
 import { push } from "react-router-redux";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
 import { IPostParamsInterface } from "../../../server/methods/post";
 const { withTracker } = require("meteor/react-meteor-data");
+const DatePicker = require("react-datepicker");
 
 interface ICreatePostParams extends DispatchProp<any> {
   currentUser: any;
@@ -18,6 +18,7 @@ interface ICreatePostState {
   title: string;
   content: string;
   currency: string;
+  fields: string;
   price: string;
   bonus: string;
   homepageAddress: string;
@@ -32,6 +33,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     title: "",
     content: "",
     currency: "",
+    fields: "",
     price: "",
     bonus: "",
     homepageAddress: "",
@@ -118,6 +120,13 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
         break;
       }
 
+      case "fields": {
+        this.setState({
+          fields: content,
+        });
+        break;
+      }
+
       case "content": {
         this.setState({
           content,
@@ -144,6 +153,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       tokenDistribution,
       startDate,
       endDate,
+      fields,
     } = this.state;
 
     if (!currentUser) {
@@ -156,6 +166,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       title,
       content,
       acceptCurrency: currency.replace(/\s+/g, "").split(","),
+      fields: fields.replace(/\s+/g, "").split(","),
       icoPrice: price,
       bonus,
       homepageUrl: homepageAddress,
@@ -170,10 +181,6 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       if (err) {
         alert(err);
       } else {
-        this.setState({
-          title: "",
-          content: "",
-        });
         dispatch(push(`/posts/${postId}`));
       }
     });
@@ -189,10 +196,11 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       tokenDistribution,
       whitepaperAddress,
       bonus,
+      fields,
     } = this.state;
 
     return (
-      <Container text>
+      <Container text style={{ marginTop: 30 }}>
         <Header as="h1">New ICO / WhitePaper</Header>
         <Form onSubmit={this.handleSubmitPost}>
           <Form.Field>
@@ -273,6 +281,17 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
             />
           </Form.Field>
           <Form.Field>
+            <label>Fields</label>
+            <Form.Input
+              placeholder="Please insert fields separate by comma(ex: science, bio, medicine)"
+              value={fields}
+              onKeyPress={this.preventSubmit}
+              onChange={(e: any) => {
+                this.handleInputChange("fields", e);
+              }}
+            />
+          </Form.Field>
+          <Form.Field>
             <label>WhitePaper Address(Optional)</label>
             <Form.Input
               placeholder="Please insert WhitePaper address(ex: https://papers.whitepaper.pdf)"
@@ -304,9 +323,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
               }}
             />
           </Form.Field>
-          <button type="submit" style={{ margin: 12 }}>
-            Submit
-          </button>
+          <Button type="submit" style={{ margin: 12 }} content="Submit" />
         </Form>
       </Container>
     );

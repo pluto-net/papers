@@ -179,7 +179,6 @@ const UserEditContainer = withTracker((props: IUserProfileEditProps) => {
     const isLoading = !userHandle.ready();
     const targetUser = User.findOne(userId);
     const isMine = currentUser && currentUser._id === targetUser._id;
-    console.log(targetUser);
 
     return {
       isMine,

@@ -4,6 +4,7 @@ export interface IPostParamsInterface {
   title: string;
   content: string;
   acceptCurrency: string[];
+  fields: string[];
   icoPrice: string;
   bonus: string;
   homepageUrl: string;
@@ -22,6 +23,7 @@ Post.extend({
       acceptCurrency,
       icoPrice,
       bonus,
+      fields,
       homepageUrl,
       whitePaperUrl,
       tokenDistribution,
@@ -34,6 +36,7 @@ Post.extend({
       this.acceptCurrency = acceptCurrency;
       this.icoPrice = icoPrice;
       this.bonus = bonus;
+      this.fields = fields;
       this.homepageUrl = homepageUrl;
       this.whitePaperUrl = whitePaperUrl;
       this.tokenDistribution = tokenDistribution;

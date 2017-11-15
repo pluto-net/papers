@@ -21,7 +21,6 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     if (isLoading) {
       return <div>Loading posts ...</div>;
     } else {
-      console.log(post);
       return <div>{post.title}</div>;
     }
   }
