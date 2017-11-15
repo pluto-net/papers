@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Meteor } from "meteor/meteor";
+import FacebookButton from "../common/facebookButton";
+import { Input, Button, Modal } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
@@ -57,8 +58,9 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
 
     return (
       <form onSubmit={this.handleSignUpSubmit}>
-        <div>
-          <input
+        <div className="sign-up-input">
+          <Input
+            fluid
             onChange={e => {
               this.handleInputChange("email", e);
             }}
@@ -67,8 +69,9 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
             placeholder="email"
           />
         </div>
-        <div>
-          <input
+        <div className="sign-up-input">
+          <Input
+            fluid
             onChange={e => {
               this.handleInputChange("name", e);
             }}
@@ -77,8 +80,9 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
             placeholder="username"
           />
         </div>
-        <div>
-          <input
+        <div className="sign-up-input">
+          <Input
+            fluid
             onChange={e => {
               this.handleInputChange("password", e);
             }}
@@ -87,36 +91,26 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
             placeholder="password"
           />
         </div>
-        <button onClick={closeFunction}>Cancel</button>
-        <button type="submit">Submit</button>
+        <div className="sign-up-modal-actions-wrapper clearfix">
+          <Button onClick={closeFunction} negative>
+            No
+          </Button>
+          <Button positive content="Submit" />
+        </div>
+        <FacebookButton />
       </form>
     );
   }
-
-  private handleSignInWithFacebook = () => {
-    Meteor.loginWithFacebook(
-      {
-        requestPermissions: ["user_friends", "public_profile", "email"],
-      },
-      (err: Error) => {
-        if (err) {
-          alert(err);
-        } else {
-          console.log("Succees to Login");
-        }
-      },
-    );
-  };
 
   render() {
     const { closeFunction, signUpDialog } = this.props;
 
     return (
       <div>
-        <Dialog title="SIGN UP" modal open={signUpDialog.SIGN_UP_isOpen} onRequestClose={closeFunction}>
-          {this.getSignUpForm()}
-          <button onClick={this.handleSignInWithFacebook}>Login With Facebook</button>
-        </Dialog>
+        <Modal size="mini" open={signUpDialog.SIGN_UP_isOpen} onClose={closeFunction}>
+          <Modal.Header>SIGN UP</Modal.Header>
+          <Modal.Content>{this.getSignUpForm()}</Modal.Content>
+        </Modal>
       </div>
     );
   }

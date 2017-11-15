@@ -15,7 +15,7 @@ import UserProfile from "./components/users/show";
 import UserProfileEdit from "./components/users/edit";
 import EnvChecker from "./helpers/envChecker";
 import { initialState, rootReducer } from "./reducers";
-import rootSaga from "./sagas/index";
+import rootSaga from "./sagas";
 import "semantic-ui-css/semantic.min.css";
 
 let history: History;

@@ -80,13 +80,9 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
   }
 
   render() {
-    const { closeFunction, signInDialog } = this.props;
-
     return (
       <div>
-        <Dialog title="SIGN IN" modal open={signInDialog.SIGN_IN_isOpen} onRequestClose={closeFunction}>
-          {this.getSignInForm()}
-        </Dialog>
+        <div>{this.getSignInForm()}</div>
       </div>
     );
   }

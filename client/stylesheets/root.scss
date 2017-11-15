@@ -4,3 +4,9 @@ body {
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
 }
+
+.clearfix {
+  content: "";
+  display: table;
+  clear: both;
+}
