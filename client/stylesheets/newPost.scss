@@ -1,0 +1,14 @@
+.new-post-date-box {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.new-post-date-selector > div {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 15px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+}

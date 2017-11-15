@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Meteor } from "meteor/meteor";
-import { Button, Icon } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 const handleSignInWithFacebook = () => {
   Meteor.loginWithFacebook(
@@ -11,7 +11,7 @@ const handleSignInWithFacebook = () => {
       if (err) {
         alert(err);
       } else {
-        console.log("Succees to Login");
+        console.log("Succeed to Login");
       }
     },
   );

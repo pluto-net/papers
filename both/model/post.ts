@@ -20,22 +20,6 @@ export const Post = Class.create({
         },
       ],
     },
-    whitePaperUrl: {
-      type: String,
-      validators: [
-        {
-          type: "minLength",
-          param: 3,
-        },
-        {
-          type: "maxLength",
-          param: 300,
-        },
-      ],
-    },
-    logoUrl: {
-      type: String,
-    },
     homepageUrl: {
       type: String,
       validators: [
@@ -65,6 +49,14 @@ export const Post = Class.create({
       type: String,
     },
     // optional fields
+    logoUrl: {
+      type: String,
+      optional: true,
+    },
+    whitePaperUrl: {
+      type: String,
+      optional: true,
+    },
     content: {
       type: String,
       optional: true,
@@ -94,7 +86,7 @@ export const Post = Class.create({
     },
     userId: {
       type: String,
-      index: true,
+      index: 1,
     },
     publishedAt: {
       type: Date,
