@@ -20,7 +20,7 @@ export const Post = Class.create({
         },
       ],
     },
-    content: {
+    whitePaperUrl: {
       type: String,
       validators: [
         {
@@ -29,11 +29,73 @@ export const Post = Class.create({
         },
         {
           type: "maxLength",
-          param: 50,
+          param: 300,
         },
       ],
     },
-    userId: String,
+    logoUrl: {
+      type: String,
+    },
+    homepageUrl: {
+      type: String,
+      validators: [
+        {
+          type: "minLength",
+          param: 3,
+        },
+        {
+          type: "maxLength",
+          param: 300,
+        },
+      ],
+    },
+    startICODate: {
+      type: Date,
+    },
+    endICODate: {
+      type: Date,
+    },
+    acceptCurrency: {
+      type: [String],
+    },
+    icoPrice: {
+      type: String,
+    },
+    tokenDistribution: {
+      type: String,
+    },
+    // optional fields
+    content: {
+      type: String,
+      optional: true,
+    },
+    bonus: {
+      type: String,
+      optional: true,
+    },
+    // auto-completed fields
+    commentCount: {
+      type: Number,
+      default: function() {
+        return 0;
+      },
+    },
+    ratingCount: {
+      type: Number,
+      default: function() {
+        return 0;
+      },
+    },
+    averageRating: {
+      type: Number,
+      default: function() {
+        return 0;
+      },
+    },
+    userId: {
+      type: String,
+      index: true,
+    },
     publishedAt: {
       type: Date,
       default: function() {
