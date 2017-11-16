@@ -37,7 +37,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             <span className="subtitle2">{startDateFromNow}</span>
           </Header>
           <Rating maxRating={5} rating={rating} />
-          <div>{`Rating count - ${post.ratingCount}`}</div>
+          <div>{`Rating count ${post.ratingCount}`}</div>
         </div>
       );
     } else {
@@ -101,8 +101,23 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
           <Loader />
         </Dimmer>
       );
+    } else if (!ratingIsLoading && myRating) {
+      return (
+        <div>
+          <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />
+          <div>You already gave point {myRating.rating}</div>
+        </div>
+      );
     } else {
-      return <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />;
+      return (
+        <div>
+          <Header size="small">Please leave rating!</Header>
+          <div className="rating-description">
+            <small>Rating has relation with quality of the whitepaper and company itself.</small>
+          </div>
+          <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />
+        </div>
+      );
     }
   };
 
