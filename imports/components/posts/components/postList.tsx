@@ -47,7 +47,13 @@ const mapPostNodes = (posts: any[]) => {
               </Grid.Column>
               <Grid.Column>
                 <div className="post-list-item-item">
-                  <div className="post-list-item-label">Review Count</div>
+                  <div className="post-list-item-label">View Count</div>
+                  {post.viewCount || 0}
+                </div>
+              </Grid.Column>
+              <Grid.Column>
+                <div className="post-list-item-item">
+                  <div className="post-list-item-label">Comment Count</div>
                   {post.commentCount}
                 </div>
               </Grid.Column>

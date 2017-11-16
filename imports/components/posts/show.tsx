@@ -140,6 +140,16 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     }
   };
 
+  private updateViewCount = (post: any) => {
+    post.callMethod("updateViewCount");
+  };
+
+  public componentWillReceiveProps(nextProps: IPostShowProps) {
+    if ((!this.props.post && nextProps.post) || (this.props.post && this.props.post._id !== nextProps.post._id)) {
+      this.updateViewCount(nextProps.post);
+    }
+  }
+
   public render() {
     const { post, isLoading, comments } = this.props;
 

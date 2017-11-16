@@ -17,7 +17,9 @@ class CommentList extends React.PureComponent<ICommentListProps, any> {
     } else {
       return this.props.comments.map(comment => {
         const user = this.props.users.find(user => user._id === comment.userId);
-
+        if (!user) {
+          return null;
+        }
         return (
           <Feed key={`commentList_${comment._id}`}>
             <Feed.Event>
@@ -36,11 +38,6 @@ class CommentList extends React.PureComponent<ICommentListProps, any> {
   }
 
   public render() {
-    const { usersIsLoading } = this.props;
-    if (usersIsLoading) {
-      return null;
-    }
-
     return <div>{this.mapComments()}</div>;
   }
 }

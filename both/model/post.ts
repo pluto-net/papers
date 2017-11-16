@@ -76,6 +76,12 @@ export const Post = Class.create({
         return 0;
       },
     },
+    viewCount: {
+      type: Number,
+      default: function() {
+        return 0;
+      },
+    },
     ratingCount: {
       type: Number,
       default: function() {
