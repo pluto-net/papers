@@ -7,6 +7,7 @@ const { withTracker } = require("meteor/react-meteor-data");
 import { Post } from "../../../both/model/post";
 import { Rating as RatingModel } from "../../../both/model/rating";
 import NewRating from "../rating/new";
+import CommentInput from "../commentInput";
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
   isLoading: boolean;
@@ -121,6 +122,20 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     }
   };
 
+  private getCommentForm = () => {
+    const { currentUser } = this.props;
+
+    if (!currentUser) {
+      return null;
+    } else {
+      return (
+        <div style={{ marginTop: 30 }}>
+          <CommentInput />
+        </div>
+      );
+    }
+  };
+
   public render() {
     const { post, isLoading } = this.props;
 
@@ -208,7 +223,10 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
                 </Table.Body>
               </Table>
             </Grid.Column>
-            <Grid.Column width={4}>{this.getNewRating()}</Grid.Column>
+            <Grid.Column width={4}>
+              {this.getNewRating()}
+              {this.getCommentForm()}
+            </Grid.Column>
           </Grid>
         </div>
       );
