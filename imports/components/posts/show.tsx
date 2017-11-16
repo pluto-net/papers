@@ -1,8 +1,9 @@
 import * as React from "react";
+import * as moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
-import { Table, Icon, Loader, Container } from "semantic-ui-react";
+import { Table, Loader, Container, Header, Rating } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
@@ -16,6 +17,55 @@ interface IPostShowState {}
 
 @withRouter
 class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
+  private getHeader = () => {
+    const { post } = this.props;
+    const startDateFromNow = moment(post.startICODate).fromNow();
+    const rating = Math.round(post.averageRating);
+    const logo = post.logoUrl ? <img className="logo-image" src={post.logoUrl} /> : null;
+
+    if (post.startICODate) {
+      return (
+        <div>
+          <Header size="huge">
+            {logo}
+            {post.title}
+            <span className="subtitle">{` from start time of the ICO, `}</span>
+            <span className="subtitle2">{startDateFromNow}</span>
+          </Header>
+          <Rating maxRating={5} rating={rating} />
+          <div>{`Rating count - ${post.ratingCount}`}</div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Header size="huge">
+            {logo}
+            {post.title}
+          </Header>
+          <Rating maxRating={5} rating={rating} />
+          <div>{`Rating count - ${post.ratingCount}`}</div>
+        </div>
+      );
+    }
+  };
+
+  private mapMultiItem = (items: string[], type: string) => {
+    const { post } = this.props;
+
+    if (!items || !post) {
+      return null;
+    }
+
+    return items.map((item, index) => {
+      return (
+        <span className="post-show-item-item" key={`${post._id}_${type}_${index}`}>
+          {item}
+        </span>
+      );
+    });
+  };
+
   public render() {
     const { post, isLoading } = this.props;
 
@@ -26,53 +76,79 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
         </div>
       );
     } else {
-      return (
-        <div>
-          <Container>
-            <Table>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell colSpan="3">{post.title}</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
+      const startDate = moment(post.startICODate).format("YYYY-MM-DD HH:mm Z");
+      const endDate = moment(post.endICODate).format("YYYY-MM-DD HH:mm Z");
 
+      return (
+        <div className="post-show-container">
+          <Container>
+            {this.getHeader()}
+
+            <Table size="large">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell collapsing>
-                    <Icon name="folder" /> node_modules
+                  <Table.Cell className="table-row-title" collapsing>
+                    Fields (Category)
                   </Table.Cell>
-                  <Table.Cell>Initial commit</Table.Cell>
-                  <Table.Cell collapsing textAlign="right">
-                    10 hours ago
+                  <Table.Cell className="table-cell-content">{this.mapMultiItem(post.fields, "fields")}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="table-row-title" collapsing>
+                    WhitePaper
+                  </Table.Cell>
+                  <Table.Cell className="table-cell-content">
+                    <a href={post.whitePaperUrl} target="_blank">
+                      WhitePaper
+                    </a>
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>
-                    <Icon name="folder" /> test
+                  <Table.Cell className="table-row-title" collapsing>
+                    ICO period
                   </Table.Cell>
-                  <Table.Cell>Initial commit</Table.Cell>
-                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                  <Table.Cell className="table-cell-content">{`${startDate} ~ ${endDate}`}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>
-                    <Icon name="folder" /> build
+                  <Table.Cell className="table-row-title" collapsing>
+                    Accept Currency
                   </Table.Cell>
-                  <Table.Cell>Initial commit</Table.Cell>
-                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                  <Table.Cell className="table-cell-content">
+                    {this.mapMultiItem(post.acceptCurrency, "currency")}
+                  </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>
-                    <Icon name="file outline" /> package.json
+                  <Table.Cell className="table-row-title" collapsing>
+                    ICO Price
                   </Table.Cell>
-                  <Table.Cell>Initial commit</Table.Cell>
-                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                  <Table.Cell className="table-cell-content">{post.icoPrice}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>
-                    <Icon name="file outline" /> Gruntfile.js
+                  <Table.Cell className="table-row-title" collapsing>
+                    Bonus
                   </Table.Cell>
-                  <Table.Cell>Initial commit</Table.Cell>
-                  <Table.Cell textAlign="right">10 hours ago</Table.Cell>
+                  <Table.Cell className="table-cell-content">{post.bonus}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="table-row-title" collapsing>
+                    Homepage
+                  </Table.Cell>
+                  <Table.Cell className="table-cell-content">
+                    <a href={post.homepageUrl} target="_blank">
+                      Homepage
+                    </a>
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="table-row-title" collapsing>
+                    Token Distribution
+                  </Table.Cell>
+                  <Table.Cell className="table-cell-content">{post.tokenDistribution}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="table-row-title" collapsing>
+                    Additional Information
+                  </Table.Cell>
+                  <Table.Cell className="table-cell-content">{post.content}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>

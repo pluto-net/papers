@@ -1,0 +1,43 @@
+.post-show-container {
+  margin-top: 50px;
+  font-weight: 300;
+  font-family: "Roboto";
+
+  .logo-image {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+    object-fit: contain;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+  }
+
+  .subtitle {
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  .subtitle2 {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #000;
+  }
+
+  .post-show-item-item {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 3px;
+
+    &:first-of-type {
+      margin-left: 0px;
+    }
+  }
+
+  .table-row-title {
+    font-weight: 700;
+  }
+
+  .table-cell-content {
+    white-space: pre-wrap;
+  }
+}

@@ -204,9 +204,9 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
         <Header as="h1">New ICO / WhitePaper</Header>
         <Form onSubmit={this.handleSubmitPost}>
           <Form.Field>
-            <label>Title</label>
+            <label>Company</label>
             <Form.Input
-              placeholder="Title"
+              placeholder="Company"
               value={title}
               onKeyPress={this.preventSubmit}
               onChange={(e: any) => {
