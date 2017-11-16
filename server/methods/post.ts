@@ -22,6 +22,11 @@ interface IUpdateRatingProps {
 
 Post.extend({
   meteorMethods: {
+    updateCommentCount(count: number) {
+      this.commentCount = count;
+
+      this.save();
+    },
     updateRating({ ratingCount, newRatingAverage }: IUpdateRatingProps) {
       this.ratingCount = ratingCount;
       this.averageRating = newRatingAverage;

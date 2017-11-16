@@ -123,14 +123,14 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   };
 
   private getCommentForm = () => {
-    const { currentUser } = this.props;
+    const { currentUser, post } = this.props;
 
     if (!currentUser) {
       return null;
     } else {
       return (
         <div style={{ marginTop: 30 }}>
-          <CommentInput />
+          <CommentInput currentUser={currentUser} postId={post._id} />
         </div>
       );
     }
