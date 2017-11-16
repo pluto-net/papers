@@ -16,6 +16,7 @@ import UserProfileEdit from "./components/users/edit";
 import EnvChecker from "./helpers/envChecker";
 import { initialState, rootReducer } from "./reducers";
 import rootSaga from "./sagas";
+import LocationListener from "./components/common/locationListener";
 import "semantic-ui-css/semantic.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -52,6 +53,7 @@ const RootRoute = () => {
       <ReactRouterRedux.ConnectedRouter history={history}>
         <div>
           <Navbar />
+          <LocationListener />
           <Switch>
             <Route exact path="/" component={HomeComponent} />
             <Route exact path="/posts/new" component={CreatePost} />
