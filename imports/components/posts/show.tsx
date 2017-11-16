@@ -3,7 +3,7 @@ import * as moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
-import { Table, Loader, Container, Header, Rating } from "semantic-ui-react";
+import { Table, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
@@ -81,78 +81,80 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
 
       return (
         <div className="post-show-container">
-          <Container>
-            {this.getHeader()}
-
-            <Table size="large">
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Fields (Category)
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{this.mapMultiItem(post.fields, "fields")}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    WhitePaper
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">
-                    <a href={post.whitePaperUrl} target="_blank">
+          <Container style={{ marginBottom: 30 }}>{this.getHeader()}</Container>
+          <Grid container>
+            <Grid.Column width={12}>
+              <Table size="large">
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      Fields (Category)
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{this.mapMultiItem(post.fields, "fields")}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
                       WhitePaper
-                    </a>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    ICO period
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{`${startDate} ~ ${endDate}`}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Accept Currency
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">
-                    {this.mapMultiItem(post.acceptCurrency, "currency")}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    ICO Price
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{post.icoPrice}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Bonus
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{post.bonus}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Homepage
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">
-                    <a href={post.homepageUrl} target="_blank">
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">
+                      <a href={post.whitePaperUrl} target="_blank">
+                        WhitePaper
+                      </a>
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      ICO period
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{`${startDate} ~ ${endDate}`}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      Accept Currency
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">
+                      {this.mapMultiItem(post.acceptCurrency, "currency")}
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      ICO Price
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{post.icoPrice}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      Bonus
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{post.bonus}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
                       Homepage
-                    </a>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Token Distribution
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{post.tokenDistribution}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="table-row-title" collapsing>
-                    Additional Information
-                  </Table.Cell>
-                  <Table.Cell className="table-cell-content">{post.content}</Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          </Container>
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">
+                      <a href={post.homepageUrl} target="_blank">
+                        Homepage
+                      </a>
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      Token Distribution
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{post.tokenDistribution}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="table-row-title" collapsing>
+                      Additional Information
+                    </Table.Cell>
+                    <Table.Cell className="table-cell-content">{post.content}</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+            <Grid.Column width={4}>Comment Area</Grid.Column>
+          </Grid>
         </div>
       );
     }

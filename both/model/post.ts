@@ -98,5 +98,11 @@ export const Post = Class.create({
         return new Date();
       },
     },
+    updatedAt: {
+      type: Date,
+      default: function() {
+        return new Date();
+      },
+    },
   },
 });
