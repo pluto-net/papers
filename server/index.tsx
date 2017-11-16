@@ -1,6 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Post } from "../both/model/post";
 import { Rating } from "../both/model/rating";
+import { Comment } from "../both/model/comment";
 
 Meteor.publish("posts", function(limit: number) {
   const options = {
@@ -22,6 +23,19 @@ Meteor.publish("user", function(id: string) {
   });
 });
 
+Meteor.publish("users", function(ids: string[]) {
+  return Meteor.users.find({ _id: { $in: ids } });
+});
+
 Meteor.publish("myRating", function(postId: string, userId: string) {
   return Rating.find({ postId, userId });
+});
+
+Meteor.publish("comments", function(postId: string, limit: number) {
+  const options = {
+    sort: { publishedAt: -1 },
+    limit,
+  };
+
+  return Comment.find({ postId }, options);
 });

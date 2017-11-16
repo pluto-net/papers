@@ -23,9 +23,11 @@ export const Comment = Class.create({
     },
     postId: {
       type: String,
+      index: 1,
     },
     userId: {
       type: String,
+      index: 1,
     },
     publishedAt: {
       type: Date,
@@ -48,9 +50,6 @@ export const Comment = Class.create({
         userId: 1,
         postId: 1,
       },
-      options: {
-        unique: true,
-      }, // Mongo index options.
     },
   },
   events: {

@@ -5,9 +5,11 @@ import { Table, Dimmer, Loader, Container, Header, Rating, Grid } from "semantic
 import { Meteor } from "meteor/meteor";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post } from "../../../both/model/post";
+import { Comment } from "../../../both/model/comment";
 import { Rating as RatingModel } from "../../../both/model/rating";
 import NewRating from "../rating/new";
 import CommentInput from "../commentInput";
+import CommentList from "../comments";
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
   isLoading: boolean;
@@ -15,6 +17,8 @@ interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
   currentUser: any;
   isLoggingIn: boolean;
   myRating: any | undefined;
+  comments: any[];
+  commentsIsLoading: boolean;
   ratingIsLoading: boolean;
 }
 
@@ -137,7 +141,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   };
 
   public render() {
-    const { post, isLoading } = this.props;
+    const { post, isLoading, comments } = this.props;
 
     if (isLoading) {
       return (
@@ -226,6 +230,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             <Grid.Column width={4}>
               {this.getNewRating()}
               {this.getCommentForm()}
+              <CommentList comments={comments} />
             </Grid.Column>
           </Grid>
         </div>
@@ -240,6 +245,10 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     const currentUser = Meteor.user();
     const isLoggingIn = Meteor.loggingIn();
 
+    const commentsHandle = Meteor.subscribe("comments", postId, 50);
+    const comments = Comment.find({ postId }, { sort: { publishedAt: -1 } }).fetch();
+    const commentsIsLoading = !commentsHandle.ready();
+
     const myRatingHandle = Meteor.subscribe("myRating", postId, Meteor.userId());
     const myRating = RatingModel.findOne({ userId: Meteor.userId() });
     const ratingIsLoading = !myRatingHandle.ready();
@@ -252,6 +261,8 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
       isLoading,
       post,
       myRating,
+      comments,
+      commentsIsLoading,
       currentUser,
       isLoggingIn,
       ratingIsLoading,
