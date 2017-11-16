@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Post } from "../both/model/post";
+import { Rating } from "../both/model/rating";
 
 Meteor.publish("posts", function(limit: number) {
   const options = {
@@ -19,4 +20,8 @@ Meteor.publish("user", function(id: string) {
     fields: { services: 0 },
     transform: null,
   });
+});
+
+Meteor.publish("myRating", function(postId: string, userId: string) {
+  return Rating.find({ postId, userId });
 });

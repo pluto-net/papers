@@ -1,16 +1,20 @@
 import * as React from "react";
 import * as moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { Table, Dimmer, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
 import { Meteor } from "meteor/meteor";
-import { Post } from "../../../both/model/post";
-import { Table, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
+import { Post } from "../../../both/model/post";
+import { Rating as RatingModel } from "../../../both/model/rating";
+import NewRating from "../rating/new";
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
   isLoading: boolean;
   post: any;
   currentUser: any;
   isLoggingIn: boolean;
+  myRating: any | undefined;
+  ratingIsLoading: boolean;
 }
 
 interface IPostShowState {}
@@ -64,6 +68,42 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
         </span>
       );
     });
+  };
+
+  private handleNewRating = (rating: number) => {
+    const { currentUser, post } = this.props;
+    if (currentUser && post) {
+      const ratingObj = new RatingModel();
+      return new Promise((resolve, reject) => {
+        const params = {
+          rating,
+          userId: currentUser._id,
+          postId: post._id,
+        };
+
+        ratingObj.callMethod("postRating", params, (err: Error) => {
+          if (err) {
+            reject();
+            alert(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+  };
+
+  private getNewRating = () => {
+    const { currentUser, myRating, ratingIsLoading } = this.props;
+    if (ratingIsLoading) {
+      return (
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      );
+    } else {
+      return <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />;
+    }
   };
 
   public render() {
@@ -153,7 +193,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
                 </Table.Body>
               </Table>
             </Grid.Column>
-            <Grid.Column width={4}>Comment Area</Grid.Column>
+            <Grid.Column width={4}>{this.getNewRating()}</Grid.Column>
           </Grid>
         </div>
       );
@@ -166,6 +206,10 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     const postId = props.match.params.postId;
     const currentUser = Meteor.user();
     const isLoggingIn = Meteor.loggingIn();
+
+    const myRatingHandle = Meteor.subscribe("myRating", postId, Meteor.userId());
+    const myRating = RatingModel.findOne({ userId: Meteor.userId() });
+    const ratingIsLoading = !myRatingHandle.ready();
     // TODO: handle below count with infinite scroll
     const postsHandle = Meteor.subscribe("post", postId);
     const isLoading = !postsHandle.ready();
@@ -174,8 +218,10 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     return {
       isLoading,
       post,
+      myRating,
       currentUser,
       isLoggingIn,
+      ratingIsLoading,
     };
   }
 })(PostShow);

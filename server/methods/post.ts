@@ -15,8 +15,19 @@ export interface IPostParamsInterface {
   userId: string;
 }
 
+interface IUpdateRatingProps {
+  ratingCount: number;
+  newRatingAverage: number;
+}
+
 Post.extend({
   meteorMethods: {
+    updateRating({ ratingCount, newRatingAverage }: IUpdateRatingProps) {
+      this.ratingCount = ratingCount;
+      this.averageRating = newRatingAverage;
+
+      return this.save();
+    },
     savePost({
       title,
       content,
