@@ -41,7 +41,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             <span className="subtitle">{` from start time of the ICO, `}</span>
             <span className="subtitle2">{startDateFromNow}</span>
           </Header>
-          <Rating maxRating={5} rating={rating} />
+          <Rating icon="star" maxRating={5} rating={rating} />
           <div>{`Rating count ${post.ratingCount}`}</div>
         </div>
       );
@@ -52,7 +52,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             {logo}
             {post.title}
           </Header>
-          <Rating maxRating={5} rating={rating} />
+          <Rating icon="star" maxRating={5} rating={rating} />
           <div>{`Rating count - ${post.ratingCount}`}</div>
         </div>
       );

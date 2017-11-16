@@ -40,7 +40,9 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
       targetRating = rating;
     }
 
-    return <Rating onRate={this.handleRatingChange} maxRating={5} rating={targetRating} disabled={disabled} />;
+    return (
+      <Rating icon="star" onRate={this.handleRatingChange} maxRating={5} rating={targetRating} disabled={disabled} />
+    );
   }
 }
 
