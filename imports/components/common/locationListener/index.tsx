@@ -8,7 +8,7 @@ interface ILocationListenerProps extends RouteComponentProps<{}> {}
 class LocationListener extends React.PureComponent<ILocationListenerProps, {}> {
   public componentDidUpdate(prevProps: ILocationListenerProps) {
     if (this.props.location !== prevProps.location && !EnvChecker.isDev()) {
-      ReactGA.pageview("/about/contact-us");
+      ReactGA.pageview(this.props.location.pathname);
     }
   }
 

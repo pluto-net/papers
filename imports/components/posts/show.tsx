@@ -5,7 +5,6 @@ import { Table, Dimmer, Loader, Container, Header, Rating, Grid } from "semantic
 import { Meteor } from "meteor/meteor";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post } from "../../../both/model/post";
-import { Comment } from "../../../both/model/comment";
 import { Rating as RatingModel } from "../../../both/model/rating";
 import NewRating from "../rating/new";
 import CommentInput from "../commentInput";
@@ -17,15 +16,28 @@ interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
   currentUser: any;
   isLoggingIn: boolean;
   myRating: any | undefined;
-  comments: any[];
-  commentsIsLoading: boolean;
   ratingIsLoading: boolean;
 }
 
-interface IPostShowState {}
+interface IPostShowState {
+  commentCount: number;
+}
+
+const COMMENTS_COUNT_PER_LOAD = 15;
 
 @withRouter
 class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
+  public state = {
+    commentCount: COMMENTS_COUNT_PER_LOAD,
+  };
+
+  private loadMoreComments = () => {
+    console.log("LoadMore Comments fired!");
+    this.setState({
+      commentCount: this.state.commentCount + COMMENTS_COUNT_PER_LOAD,
+    });
+  };
+
   private getHeader = () => {
     const { post } = this.props;
     const startDateFromNow = moment(post.startICODate).fromNow();
@@ -151,7 +163,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   }
 
   public render() {
-    const { post, isLoading, comments } = this.props;
+    const { post, isLoading } = this.props;
 
     if (isLoading) {
       return (
@@ -165,9 +177,9 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
 
       return (
         <div className="post-show-container">
-          <Container style={{ marginBottom: 30 }}>{this.getHeader()}</Container>
           <Grid container>
             <Grid.Column width={12}>
+              <Container style={{ marginBottom: 30 }}>{this.getHeader()}</Container>
               <Table size="large">
                 <Table.Body>
                   <Table.Row>
@@ -239,8 +251,12 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             </Grid.Column>
             <Grid.Column width={4}>
               {this.getNewRating()}
+              <CommentList
+                post={post}
+                commentCount={this.state.commentCount}
+                loadMoreFunction={this.loadMoreComments}
+              />
               {this.getCommentForm()}
-              <CommentList comments={comments} />
             </Grid.Column>
           </Grid>
         </div>
@@ -255,10 +271,6 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     const currentUser = Meteor.user();
     const isLoggingIn = Meteor.loggingIn();
 
-    const commentsHandle = Meteor.subscribe("comments", postId, 50);
-    const comments = Comment.find({ postId }, { sort: { publishedAt: -1 } }).fetch();
-    const commentsIsLoading = !commentsHandle.ready();
-
     const myRatingHandle = Meteor.subscribe("myRating", postId, Meteor.userId());
     const myRating = RatingModel.findOne({ userId: Meteor.userId() });
     const ratingIsLoading = !myRatingHandle.ready();
@@ -271,8 +283,6 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
       isLoading,
       post,
       myRating,
-      comments,
-      commentsIsLoading,
       currentUser,
       isLoggingIn,
       ratingIsLoading,

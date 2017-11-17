@@ -1,16 +1,36 @@
 import * as React from "react";
 import { Feed } from "semantic-ui-react";
 import * as moment from "moment";
+import throttle = require("lodash.throttle");
+import InfiniteScroll = require("react-infinite-scroller");
+import { Comment, IComment } from "../../../both/model/comment";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface ICommentListProps {
-  comments: any[];
+  // From parent components
   post: any;
+  commentCount: number;
+  loadMoreFunction: () => void;
+  // From Meteor
+  comments: IComment[];
   users: any[];
   usersIsLoading: boolean;
+  commentsIsLoading: boolean;
 }
 
-class CommentList extends React.PureComponent<ICommentListProps, any> {
+interface ICommentListState {
+  hasMore: boolean;
+}
+
+class CommentList extends React.PureComponent<ICommentListProps, ICommentListState> {
+  public state = {
+    hasMore: true,
+  };
+
+  private commentListNode: HTMLDivElement;
+
+  private handleLoadMore = throttle(this.props.loadMoreFunction, 2000);
+
   private mapComments() {
     if (!this.props.comments || !this.props.users) {
       return null;
@@ -37,13 +57,50 @@ class CommentList extends React.PureComponent<ICommentListProps, any> {
     }
   }
 
+  public componentDidUpdate(prevProps: ICommentListProps) {
+    if (this.commentListNode && prevProps.comments.length !== this.props.comments.length) {
+      this.commentListNode.scrollTop = this.commentListNode.offsetHeight;
+    }
+
+    if (this.commentListNode && prevProps.commentCount > this.props.comments.length + 15) {
+      this.setState({
+        hasMore: false,
+      });
+    }
+  }
+
   public render() {
-    return <div>{this.mapComments()}</div>;
+    if (!this.props.comments || this.props.comments.length === 0) {
+      return <div>There isn't any comment yet.</div>;
+    }
+    return (
+      <div>
+        <div ref={el => (this.commentListNode = el)} className="comments-list-wrapper">
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={this.handleLoadMore}
+            hasMore={this.state.hasMore}
+            threshold={10}
+            loader={<div>loading...</div>}
+            useWindow={false}
+            initialLoad={false}
+            isReverse
+          >
+            {this.mapComments()}
+          </InfiniteScroll>
+        </div>
+      </div>
+    );
   }
 }
 
 const CommentListContainer = withTracker((props: ICommentListProps) => {
-  const { comments } = props;
+  const postId = props.post._id;
+
+  const commentsHandle = Meteor.subscribe("comments", props.post._id, props.commentCount);
+  const comments: IComment[] = Comment.find({ postId }, { sort: { publishedAt: 1 } }).fetch();
+  const commentsIsLoading = !commentsHandle.ready();
+
   const userIds = comments.map(comment => comment.userId);
   const userHandle = Meteor.subscribe("users", userIds);
   const users = Meteor.users.find().fetch();
@@ -52,6 +109,8 @@ const CommentListContainer = withTracker((props: ICommentListProps) => {
   return {
     users,
     usersIsLoading,
+    comments,
+    commentsIsLoading,
   };
 })(CommentList);
 

@@ -17,14 +17,17 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
   };
 
   private handleRatingChange = (event: React.MouseEvent<HTMLDivElement>, data: RatingProps) => {
-    const { handleRating } = this.props;
+    const { handleRating, currentUser } = this.props;
     event.preventDefault();
+    handleRating(data.rating as number);
+
+    if (!currentUser) {
+      return;
+    }
 
     this.setState({
       rating: data.rating as number,
     });
-
-    handleRating(data.rating as number);
   };
 
   public render() {

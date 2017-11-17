@@ -4,6 +4,15 @@ const { Class } = require("meteor/jagi:astronomy");
 
 const Comments = new Mongo.Collection("comments");
 
+export interface IComment {
+  _id: string;
+  content: string;
+  postId: string;
+  userId: string;
+  publishedAt: Date;
+  updatedAt: Date;
+}
+
 export const Comment = Class.create({
   name: "Comment",
   collection: Comments,
