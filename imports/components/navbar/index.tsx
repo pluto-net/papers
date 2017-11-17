@@ -2,13 +2,14 @@ import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Link } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
+import { Menu, Button, Container, Header } from "semantic-ui-react";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 const { withTracker } = require("meteor/react-meteor-data");
 
-declare var $: any;
+declare var web3: any;
 
 interface INavbarProps extends DispatchProp<any> {
   currentUser: any;
@@ -50,61 +51,81 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     dispatch({ type: "REQUEST_LOGOUT" });
   };
 
+  private handleDonateClick = () => {
+    web3.eth.getAccounts((err: Error, res: any) => {
+      if (!err) {
+        web3.eth.sendTransaction({
+          value: web3.utils.toWei("0.1", "ether"),
+          from: res[0],
+          to: "0xa18D01eB32f0649EffD427c3B9796caA8eCc7490",
+        });
+      }
+    });
+  };
+
   private getRightMenus = () => {
     const { currentUser, isLoggingIn } = this.props;
 
     if (!currentUser) {
       return (
-        <span className="navbar-right-item">
-          <span onClick={this.handleOpenSignUpDialog}>Sign Up</span>
-          <span onClick={this.handleOpenSignInDialog}>Sign In</span>
-        </span>
+        <Menu.Menu position="right">
+          <Menu.Item onClick={this.handleOpenSignUpDialog}>
+            <Button size="tiny" primary>
+              Sign Up
+            </Button>
+          </Menu.Item>
+          <Menu.Item onClick={this.handleOpenSignInDialog}>
+            <Button size="tiny">Log-in</Button>
+          </Menu.Item>
+          <Menu.Item onClick={this.handleDonateClick}>
+            <Button size="tiny" color="red">
+              DONATE US
+            </Button>
+          </Menu.Item>
+        </Menu.Menu>
       );
     } else if (!currentUser && isLoggingIn) {
-      return <span className="navbar-right-item">is logging in...</span>;
+      return <Menu.Menu position="right">is logging in...</Menu.Menu>;
     } else {
-      const profileImgUrl =
-        currentUser.profile &&
-        currentUser.profile.profileImagePublicId &&
-        currentUser.profile.profileImagePublicId.length > 0
-          ? $.cloudinary.url(currentUser.profile.profileImagePublicId, { width: 50, height: 50, crop: "fill" })
-          : "https://cdn3.iconfinder.com/data/icons/pix-glyph-set/50/520913-cat-128.png";
-
       return (
-        <span className="navbar-right-item">
-          <img style={{ width: 50, height: 50 }} src={profileImgUrl} />
-          <Link to={`/users/${currentUser._id}`}>{currentUser.username}</Link>
-          <Link to="/posts/new">Create Post</Link>
-          <Link to="/" onClick={this.handleLogoutClick}>
-            Logout
-          </Link>
-        </span>
+        <Menu.Menu position="right">
+          <Menu.Item>
+            <Link to={`/users/${currentUser._id}`}>{currentUser.username}</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/posts/new">Create Post</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/" onClick={this.handleLogoutClick}>
+              Logout
+            </Link>
+          </Menu.Item>
+          <Menu.Item onClick={this.handleDonateClick}>
+            <Button size="tiny" color="red">
+              DONATE US
+            </Button>
+          </Menu.Item>
+        </Menu.Menu>
       );
     }
   };
 
   public render() {
     return (
-      <nav className="navbar-container">
-        <div className="navbar-box">
-          <div className="navbar-left-box">
-            <Link to="/" className="navbar-logo">
-              The papers
-            </Link>
-            <span className="navbar-left-item">Latest Review</span>
-            <span className="navbar-left-item">Articles</span>
-          </div>
-
-          <div className="navbar-right-box">
-            <span className="navbar-search-box">
-              <input className="navbar-search-input" />
-            </span>
+      <div className="navbar-container">
+        <Menu borderless color="grey" size="small">
+          <Container>
+            <Menu.Item>
+              <Link to="/">
+                <Header>The Papers</Header>
+              </Link>
+            </Menu.Item>
             {this.getRightMenus()}
-          </div>
-        </div>
+          </Container>
+        </Menu>
         <SignUpDialog closeFunction={this.handleCloseSignUpDialog} />
         <SignInDialog closeFunction={this.handleCloseSignInDialog} />
-      </nav>
+      </div>
     );
   }
 }
