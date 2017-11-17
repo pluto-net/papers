@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
-import { Container, Item, Grid, Rating } from "semantic-ui-react";
+import { Item, Grid, Rating } from "semantic-ui-react";
 
 interface IPostListParams {
   posts: any[];
@@ -113,9 +113,9 @@ const PostList = (params: IPostListParams) => {
     return null;
   } else {
     return (
-      <Container style={{ marginTop: 30 }} text>
+      <div style={{ marginTop: 30 }}>
         <Item.Group divided>{mapPostNodes(params.posts)}</Item.Group>
-      </Container>
+      </div>
     );
   }
 };

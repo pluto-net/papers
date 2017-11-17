@@ -16,6 +16,10 @@ Meteor.publish("post", function(id: string) {
   return Post.find(id);
 });
 
+Meteor.publish("bestPosts", function(limit: number) {
+  return Post.find({}, { sort: { averageRating: -1 }, limit });
+});
+
 Meteor.publish("user", function(id: string) {
   return Meteor.users.find(id, {
     fields: { services: 0 },

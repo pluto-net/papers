@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Meteor } from "meteor/meteor";
+import { Container, Grid } from "semantic-ui-react";
 import { Post } from "../../../both/model/post";
 import PostList from "./components/postList";
 const { withTracker } = require("meteor/react-meteor-data");
@@ -22,8 +23,16 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     } else {
       return (
         <div>
-          <h1 style={{ textAlign: "center" }}>Post List</h1>
-          <PostList posts={posts} />
+          <Container>
+            <Grid columns={2} divided>
+              <Grid.Row>
+                <Grid.Column width={4}>align</Grid.Column>
+                <Grid.Column width={12}>
+                  <PostList posts={posts} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
         </div>
       );
     }
