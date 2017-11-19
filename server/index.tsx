@@ -17,7 +17,23 @@ Meteor.publish("post", function(id: string) {
 });
 
 Meteor.publish("bestPosts", function(limit: number) {
-  return Post.find({}, { sort: { averageRating: -1 }, limit });
+  const date = new Date();
+  return Post.find({ endICODate: { $gte: date } }, { sort: { ratingCount: -1, averageRating: -1 }, limit });
+});
+
+Meteor.publish("closeToEndPosts", function(limit: number) {
+  const date = new Date();
+  return Post.find({ endICODate: { $gte: date } }, { sort: { endICODate: 1 }, limit });
+});
+
+Meteor.publish("manyViewCountPosts", function(limit: number) {
+  const date = new Date();
+  return Post.find({ endICODate: { $gte: date } }, { sort: { viewCount: -1 }, limit });
+});
+
+Meteor.publish("manyCommentsPosts", function(limit: number) {
+  const date = new Date();
+  return Post.find({ endICODate: { $gte: date } }, { sort: { commentCount: -1 }, limit });
 });
 
 Meteor.publish("user", function(id: string) {

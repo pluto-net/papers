@@ -9,6 +9,12 @@ interface IHomeComponentProps {
   // From Meteor
   bestPostsIsLoading: boolean;
   bestPosts: any[];
+  closeToEndPostsIsLoading: boolean;
+  closeToEndPosts: any[];
+  manyViewCountPostsIsLoading: boolean;
+  manyViewCountPosts: any[];
+  manyCommentsPostsIsLoading: boolean;
+  manyCommentsPosts: any[];
   currentUser: any;
   isLoggingIn: boolean;
 }
@@ -41,6 +47,75 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     }
   };
 
+  private getCloseToEndPosts = () => {
+    const { closeToEndPostsIsLoading, closeToEndPosts } = this.props;
+
+    if (closeToEndPostsIsLoading) {
+      return <Loader active />;
+    } else if (closeToEndPosts && closeToEndPosts.length > 0) {
+      return (
+        <div style={{ marginTop: 30 }}>
+          <Button floated="left">Close to the End of ICO date</Button>
+          <Link to="/posts">
+            <Button size="tiny" color="black" floated="right">
+              See More
+            </Button>
+          </Link>
+          <Divider clearing />
+          <Card.Group itemsPerRow={4}>{this.mapPostItem(closeToEndPosts, "closeToEndPosts")}</Card.Group>
+        </div>
+      );
+    } else {
+      return <span>No information yet</span>;
+    }
+  };
+
+  private getManyCommentsPosts = () => {
+    const { manyCommentsPostsIsLoading, manyCommentsPosts } = this.props;
+
+    if (manyCommentsPostsIsLoading) {
+      return <Loader active />;
+    } else if (manyCommentsPosts && manyCommentsPosts.length > 0) {
+      return (
+        <div style={{ marginTop: 30 }}>
+          <Button floated="left">Has many comments</Button>
+          <Link to="/posts">
+            <Button size="tiny" color="black" floated="right">
+              See More
+            </Button>
+          </Link>
+          <Divider clearing />
+          <Card.Group itemsPerRow={4}>{this.mapPostItem(manyCommentsPosts, "manyCommentsPosts")}</Card.Group>
+        </div>
+      );
+    } else {
+      return <span>No information yet</span>;
+    }
+  };
+
+  private getManyViewCountPosts = () => {
+    const { manyViewCountPostsIsLoading, manyViewCountPosts } = this.props;
+
+    if (manyViewCountPostsIsLoading) {
+      return <Loader active />;
+    } else if (manyViewCountPosts && manyViewCountPosts.length > 0) {
+      return (
+        <div style={{ marginTop: 30 }}>
+          <Button floated="left">Has many view count</Button>
+          <Link to="/posts">
+            <Button size="tiny" color="black" floated="right">
+              See More
+            </Button>
+          </Link>
+          <Divider clearing />
+          <Card.Group itemsPerRow={4}>{this.mapPostItem(manyViewCountPosts, "manyViewCountPosts")}</Card.Group>
+        </div>
+      );
+    } else {
+      return <span>No information yet</span>;
+    }
+  };
+
   public render() {
     return (
       <div>
@@ -65,7 +140,12 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
             We believe that we will have much rational choice when we sharing our intelligence and information.
           </div>
         </div>
-        <Container style={{ marginTop: 30 }}>{this.getBestPosts()}</Container>
+        <Container style={{ marginTop: 30 }}>
+          {this.getBestPosts()}
+          {this.getCloseToEndPosts()}
+          {this.getManyCommentsPosts()}
+          {this.getManyViewCountPosts()}
+        </Container>
       </div>
     );
   }
@@ -74,14 +154,34 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
 const HomeContainer = withTracker(() => {
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
-  // TODO: handle below count with infinite scroll
+  // best
   const bestPostsHandle = Meteor.subscribe("bestPosts", 4);
   const bestPostsIsLoading = !bestPostsHandle.ready();
-  const bestPosts = Post.find({}, { sort: { averageRating: -1 } }).fetch();
+  const bestPosts = Post.find({}, { sort: { ratingCount: -1, averageRating: -1 }, limit: 4 }).fetch();
+  // close to end
+  const closeToEndPostsHandle = Meteor.subscribe("closeToEndPosts", 4);
+  const closeToEndPostsIsLoading = !closeToEndPostsHandle.ready();
+  const closeToEndPosts = Post.find({}, { sort: { endICODate: 1 }, limit: 4 }).fetch();
+
+  // manyCommentsPosts
+  const manyViewCountPostsHandle = Meteor.subscribe("manyViewCountPosts", 4);
+  const manyViewCountPostsIsLoading = !manyViewCountPostsHandle.ready();
+  const manyViewCountPosts = Post.find({}, { sort: { viewCount: -1 }, limit: 4 }).fetch();
+
+  // manyCommentsPosts
+  const manyCommentsPostsHandle = Meteor.subscribe("manyCommentsPosts", 4);
+  const manyCommentsPostsIsLoading = !manyCommentsPostsHandle.ready();
+  const manyCommentsPosts = Post.find({}, { sort: { commentCount: -1 }, limit: 4 }).fetch();
 
   return {
     bestPostsIsLoading,
     bestPosts,
+    closeToEndPostsIsLoading,
+    closeToEndPosts,
+    manyViewCountPosts,
+    manyViewCountPostsIsLoading,
+    manyCommentsPostsIsLoading,
+    manyCommentsPosts,
     currentUser,
     isLoggingIn,
   };
