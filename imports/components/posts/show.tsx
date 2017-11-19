@@ -32,7 +32,6 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   };
 
   private loadMoreComments = () => {
-    console.log("LoadMore Comments fired!");
     this.setState({
       commentCount: this.state.commentCount + COMMENTS_COUNT_PER_LOAD,
     });
@@ -250,13 +249,15 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
               </Table>
             </Grid.Column>
             <Grid.Column width={4}>
-              {this.getNewRating()}
-              <CommentList
-                post={post}
-                commentCount={this.state.commentCount}
-                loadMoreFunction={this.loadMoreComments}
-              />
-              {this.getCommentForm()}
+              <div className="show-right-section-wrapper">
+                {this.getNewRating()}
+                <CommentList
+                  post={post}
+                  commentCount={this.state.commentCount}
+                  loadMoreFunction={this.loadMoreComments}
+                />
+                {this.getCommentForm()}
+              </div>
             </Grid.Column>
           </Grid>
         </div>

@@ -59,7 +59,7 @@ class CommentList extends React.PureComponent<ICommentListProps, ICommentListSta
 
   public componentDidUpdate(prevProps: ICommentListProps) {
     if (this.commentListNode && prevProps.comments.length !== this.props.comments.length) {
-      this.commentListNode.scrollTop = this.commentListNode.offsetHeight;
+      this.commentListNode.scrollTop = (this.commentListNode.firstChild as HTMLDivElement).clientHeight;
     }
 
     if (this.commentListNode && prevProps.commentCount > this.props.comments.length + 15) {
@@ -74,7 +74,7 @@ class CommentList extends React.PureComponent<ICommentListProps, ICommentListSta
       return <div>There isn't any comment yet.</div>;
     }
     return (
-      <div>
+      <div style={{ height: "100%" }}>
         <div ref={el => (this.commentListNode = el)} className="comments-list-wrapper">
           <InfiniteScroll
             pageStart={0}
