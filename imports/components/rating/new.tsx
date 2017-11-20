@@ -19,12 +19,14 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
 
   private handleRatingChange = (event: React.MouseEvent<HTMLDivElement>, data: RatingProps) => {
     const { handleRating, currentUser, handleOpenSignUpDialog } = this.props;
+
     event.preventDefault();
-    handleRating(data.rating as number);
 
     if (!currentUser) {
       return handleOpenSignUpDialog();
     }
+
+    handleRating(data.rating as number);
 
     this.setState({
       rating: data.rating as number,
@@ -36,17 +38,13 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
     const { rating } = this.state;
 
     let targetRating: number;
-    let disabled: boolean = false;
     if (myRating && myRating.rating >= 0) {
-      disabled = true;
       targetRating = myRating.rating;
     } else {
       targetRating = rating;
     }
 
-    return (
-      <Rating icon="star" onRate={this.handleRatingChange} maxRating={5} rating={targetRating} disabled={disabled} />
-    );
+    return <Rating icon="star" onRate={this.handleRatingChange} maxRating={5} rating={targetRating} />;
   }
 }
 

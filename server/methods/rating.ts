@@ -9,11 +9,18 @@ export interface IPostRatingParams {
 Rating.extend({
   meteorMethods: {
     postRating({ rating, userId, postId }: IPostRatingParams) {
-      this.rating = rating;
-      this.userId = userId;
-      this.postId = postId;
+      const previousRating = Rating.findOne({ userId, postId });
 
-      return this.save();
+      if (previousRating) {
+        previousRating.rating = rating;
+        return previousRating.save();
+      } else {
+        this.rating = rating;
+        this.userId = userId;
+        this.postId = postId;
+
+        return this.save();
+      }
     },
   },
 });

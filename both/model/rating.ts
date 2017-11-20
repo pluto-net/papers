@@ -54,14 +54,18 @@ export const Rating = Class.create({
     },
   },
   events: {
-    afterInsert(e: any) {
+    afterSave(e: any) {
       if (e.currentTarget) {
-        const { postId, rating } = e.currentTarget;
+        const { postId } = e.currentTarget;
         const post = Post.findOne(postId);
-        const { ratingCount, averageRating } = post;
+
         const ratings = Rating.find({ postId });
         const newRatingCount = ratings.count();
-        const newRatingAverage = (averageRating * ratingCount + rating) / newRatingCount;
+        const parsedRatings = ratings.fetch();
+        const sumOfRating = parsedRatings.reduce((a: any, b: any) => {
+          return a + b.rating;
+        }, 0);
+        const newRatingAverage = sumOfRating / newRatingCount;
 
         post.callMethod(
           "updateRating",

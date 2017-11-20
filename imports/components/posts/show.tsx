@@ -95,8 +95,9 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     });
   };
 
-  private handleNewRating = (rating: number) => {
+  private handleRatingClick = (rating: number) => {
     const { currentUser, post } = this.props;
+
     if (currentUser && post) {
       const ratingObj = new RatingModel();
       return new Promise((resolve, reject) => {
@@ -129,7 +130,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             handleOpenSignUpDialog={this.handleOpenSignUpDialog}
             currentUser={currentUser}
             myRating={myRating}
-            handleRating={this.handleNewRating}
+            handleRating={this.handleRatingClick}
           />
           <div>You already gave point {myRating.rating}</div>
         </div>
@@ -145,7 +146,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             handleOpenSignUpDialog={this.handleOpenSignUpDialog}
             currentUser={currentUser}
             myRating={myRating}
-            handleRating={this.handleNewRating}
+            handleRating={this.handleRatingClick}
           />
         </div>
       );
