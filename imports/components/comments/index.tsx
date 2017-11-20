@@ -81,7 +81,7 @@ class CommentList extends React.PureComponent<ICommentListProps, ICommentListSta
             loadMore={this.handleLoadMore}
             hasMore={this.state.hasMore}
             threshold={10}
-            loader={<div>loading...</div>}
+            loader={null}
             useWindow={false}
             initialLoad={false}
             isReverse

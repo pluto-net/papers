@@ -5,6 +5,7 @@ interface INewRatingProps {
   currentUser: any;
   myRating: any | undefined;
   handleRating: (rating: number) => Promise<{}>;
+  handleOpenSignUpDialog: () => void;
 }
 
 interface INewRatingState {
@@ -17,12 +18,12 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
   };
 
   private handleRatingChange = (event: React.MouseEvent<HTMLDivElement>, data: RatingProps) => {
-    const { handleRating, currentUser } = this.props;
+    const { handleRating, currentUser, handleOpenSignUpDialog } = this.props;
     event.preventDefault();
     handleRating(data.rating as number);
 
     if (!currentUser) {
-      return;
+      return handleOpenSignUpDialog();
     }
 
     this.setState({

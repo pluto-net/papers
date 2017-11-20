@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Header, Form, Button, Dimmer, Loader } from "semantic-ui-react";
+import { Header, Form, Button, Loader } from "semantic-ui-react";
 import { Comment } from "../../../both/model/comment";
 
 interface ICommentInputProps {
   currentUser: any;
   postId: string;
+  handleOpenSignUpDialog: () => void;
 }
 
 interface ICommentInputState {
@@ -22,6 +23,10 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
     e.preventDefault();
     const { currentUser, postId } = this.props;
     const { isLoading, comment } = this.state;
+
+    if (!currentUser) {
+      return this.authCheck();
+    }
 
     if (!isLoading && currentUser) {
       this.setState({
@@ -61,13 +66,17 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
   private getButtonContent = () => {
     const { isLoading } = this.state;
     if (isLoading) {
-      return (
-        <Dimmer active>
-          <Loader />
-        </Dimmer>
-      );
+      return <Loader active />;
     } else {
       return <span>Submit</span>;
+    }
+  };
+
+  private authCheck = () => {
+    const { handleOpenSignUpDialog, currentUser } = this.props;
+
+    if (!currentUser) {
+      return handleOpenSignUpDialog();
     }
   };
 
@@ -76,10 +85,15 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
 
     return (
       <div>
-        <Header size="tiny">Leave real-time feedback</Header>
+        <Header size="tiny">Leave real time feedback</Header>
         <Form onSubmit={this.handleSubmit}>
           <Form.Field>
-            <Form.TextArea placeholder="Please leave user message" value={comment} onChange={this.handleInputChange} />
+            <Form.TextArea
+              onFocus={this.authCheck}
+              placeholder="Please leave user message"
+              value={comment}
+              onChange={this.handleInputChange}
+            />
           </Form.Field>
           <Button size="tiny" floated="right" type="submit" primary>
             {this.getButtonContent()}

@@ -1,16 +1,19 @@
+import { Meteor } from "meteor/meteor";
 import * as React from "react";
 import * as moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Table, Dimmer, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
-import { Meteor } from "meteor/meteor";
+import { Table, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
+import { connect, DispatchProp } from "react-redux";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post } from "../../../both/model/post";
 import { Rating as RatingModel } from "../../../both/model/rating";
 import NewRating from "../rating/new";
 import CommentInput from "../commentInput";
 import CommentList from "../comments";
+import { openDialog } from "../../actions/globalDialog";
+import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 
-interface IPostShowProps extends RouteComponentProps<{ postId: string }> {
+interface IPostShowProps extends RouteComponentProps<{ postId: string }>, DispatchProp<{}> {
   isLoading: boolean;
   post: any;
   currentUser: any;
@@ -35,6 +38,12 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     this.setState({
       commentCount: this.state.commentCount + COMMENTS_COUNT_PER_LOAD,
     });
+  };
+
+  private handleOpenSignUpDialog = () => {
+    const { dispatch } = this.props;
+
+    dispatch(openDialog(GLOBAL_DIALOGS.SIGN_UP));
   };
 
   private getHeader = () => {
@@ -112,15 +121,16 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   private getNewRating = () => {
     const { currentUser, myRating, ratingIsLoading } = this.props;
     if (ratingIsLoading) {
-      return (
-        <Dimmer active>
-          <Loader />
-        </Dimmer>
-      );
+      return <Loader active />;
     } else if (!ratingIsLoading && myRating) {
       return (
         <div>
-          <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />
+          <NewRating
+            handleOpenSignUpDialog={this.handleOpenSignUpDialog}
+            currentUser={currentUser}
+            myRating={myRating}
+            handleRating={this.handleNewRating}
+          />
           <div>You already gave point {myRating.rating}</div>
         </div>
       );
@@ -131,7 +141,12 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
           <div className="rating-description">
             <small>Rating has relation with quality of the whitepaper and company itself.</small>
           </div>
-          <NewRating currentUser={currentUser} myRating={myRating} handleRating={this.handleNewRating} />
+          <NewRating
+            handleOpenSignUpDialog={this.handleOpenSignUpDialog}
+            currentUser={currentUser}
+            myRating={myRating}
+            handleRating={this.handleNewRating}
+          />
         </div>
       );
     }
@@ -140,15 +155,15 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   private getCommentForm = () => {
     const { currentUser, post } = this.props;
 
-    if (!currentUser) {
-      return null;
-    } else {
-      return (
-        <div style={{ marginTop: 30 }}>
-          <CommentInput currentUser={currentUser} postId={post._id} />
-        </div>
-      );
-    }
+    return (
+      <div style={{ marginTop: 30 }}>
+        <CommentInput
+          handleOpenSignUpDialog={this.handleOpenSignUpDialog}
+          currentUser={currentUser}
+          postId={post._id}
+        />
+      </div>
+    );
   };
 
   private updateViewCount = (post: any) => {
@@ -289,6 +304,6 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
       ratingIsLoading,
     };
   }
-})(PostShow);
+})(connect()(PostShow));
 
 export default PostShowContainer;
