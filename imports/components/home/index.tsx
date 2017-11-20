@@ -1,9 +1,11 @@
 import * as React from "react";
+import * as queryString from "query-string";
 import { Link } from "react-router-dom";
 import { Container, Button, Divider, Loader, Card } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post } from "../../../both/model/post";
 import IcoCard from "./components/icoCard";
+import { IFeedState } from "../posts";
 
 interface IHomeComponentProps {
   // From Meteor
@@ -24,6 +26,11 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     return targetPosts.map(post => <IcoCard key={`${type}_${post._id}`} type={type} post={post} />);
   };
 
+  private getPostListLink = (option: IFeedState) => {
+    const search = queryString.stringify(option);
+    return `/posts?${search}`;
+  };
+
   private getBestPosts = () => {
     const { bestPostsIsLoading, bestPosts } = this.props;
 
@@ -33,7 +40,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
       return (
         <div>
           <Button floated="left">Best Ratings</Button>
-          <Link to="/posts">
+          <Link to={this.getPostListLink({ ratingCount: true, rating: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
             </Button>
@@ -56,7 +63,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
       return (
         <div style={{ marginTop: 30 }}>
           <Button floated="left">Close to the End of ICO date</Button>
-          <Link to="/posts">
+          <Link to={this.getPostListLink({ closeToICOEnd: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
             </Button>
@@ -79,7 +86,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
       return (
         <div style={{ marginTop: 30 }}>
           <Button floated="left">Has many comments</Button>
-          <Link to="/posts">
+          <Link to={this.getPostListLink({ commentCount: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
             </Button>
@@ -102,7 +109,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
       return (
         <div style={{ marginTop: 30 }}>
           <Button floated="left">Has many view count</Button>
-          <Link to="/posts">
+          <Link to={this.getPostListLink({ viewCount: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
             </Button>
@@ -119,26 +126,9 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
   public render() {
     return (
       <div>
-        <div
-          style={{
-            padding: "30px 50px",
-            backgroundColor: "#EFEFEF",
-          }}
-        >
-          <div
-            style={{
-              lineHeight: "1.5",
-              fontSize: "3rem",
-              color: "rgba(0,0,0,.6)",
-              fontWeight: 700,
-              margin: "0.5rem",
-            }}
-          >
-            Assess WhitePapers and ICO NOW
-          </div>
-          <div style={{ lineHeight: "1.5", fontSize: "2rem", color: "rgba(0,0,0,.6)", marginTop: "0.3rem" }}>
-            We believe that we will have much rational choice when we sharing our intelligence and information.
-          </div>
+        <div className="pluto-banner">
+          <h1>Recommend ICO</h1>
+          <div>Pluto is sharing and reviewing Cryptocurrency and blockchain.</div>
         </div>
         <Container style={{ marginTop: 30 }}>
           {this.getBestPosts()}
@@ -154,21 +144,17 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
 const HomeContainer = withTracker(() => {
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
-  // best
   const bestPostsHandle = Meteor.subscribe("bestPosts", 4);
   const bestPostsIsLoading = !bestPostsHandle.ready();
   const bestPosts = Post.find({}, { sort: { ratingCount: -1, averageRating: -1 }, limit: 4 }).fetch();
-  // close to end
   const closeToEndPostsHandle = Meteor.subscribe("closeToEndPosts", 4);
   const closeToEndPostsIsLoading = !closeToEndPostsHandle.ready();
   const closeToEndPosts = Post.find({}, { sort: { endICODate: 1 }, limit: 4 }).fetch();
 
-  // manyCommentsPosts
   const manyViewCountPostsHandle = Meteor.subscribe("manyViewCountPosts", 4);
   const manyViewCountPostsIsLoading = !manyViewCountPostsHandle.ready();
   const manyViewCountPosts = Post.find({}, { sort: { viewCount: -1 }, limit: 4 }).fetch();
 
-  // manyCommentsPosts
   const manyCommentsPostsHandle = Meteor.subscribe("manyCommentsPosts", 4);
   const manyCommentsPostsIsLoading = !manyCommentsPostsHandle.ready();
   const manyCommentsPosts = Post.find({}, { sort: { commentCount: -1 }, limit: 4 }).fetch();

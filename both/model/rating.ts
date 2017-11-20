@@ -62,9 +62,11 @@ export const Rating = Class.create({
         const ratings = Rating.find({ postId });
         const newRatingCount = ratings.count();
         const parsedRatings = ratings.fetch();
-        const sumOfRating = parsedRatings.reduce((a: any, b: any) => {
+
+        const sumOfRating = parsedRatings.reduce((a: number, b: any) => {
           return a + b.rating;
         }, 0);
+
         const newRatingAverage = sumOfRating / newRatingCount;
 
         post.callMethod(

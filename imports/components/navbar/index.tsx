@@ -52,10 +52,12 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
   };
 
   private handleDonateClick = () => {
+    const ether = prompt("how much Ether You want to donate? The unit is ether. ex) 0.1 ");
+
     web3.eth.getAccounts((err: Error, res: any) => {
       if (!err) {
         web3.eth.sendTransaction({
-          value: web3.utils.toWei("0.1", "ether"),
+          value: web3.utils.toWei(ether, "ether"),
           from: res[0],
           to: "0xa18D01eB32f0649EffD427c3B9796caA8eCc7490",
         });
@@ -78,9 +80,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
             <Button size="tiny">Log-in</Button>
           </Menu.Item>
           <Menu.Item onClick={this.handleDonateClick}>
-            <Button size="tiny" color="red">
-              DONATE US
-            </Button>
+            <div className="navbar-menu-item">Donate</div>
           </Menu.Item>
         </Menu.Menu>
       );
@@ -101,9 +101,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
             </Link>
           </Menu.Item>
           <Menu.Item onClick={this.handleDonateClick}>
-            <Button size="tiny" color="red">
-              DONATE US
-            </Button>
+            <div className="navbar-menu-item">Donate</div>
           </Menu.Item>
         </Menu.Menu>
       );
