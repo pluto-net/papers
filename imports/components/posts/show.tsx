@@ -265,7 +265,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
             </Grid.Column>
             <Grid.Column width={4}>
               <div className="show-right-section-wrapper">
-                {this.getNewRating()}
+                <div style={{ marginBottom: 20 }}>{this.getNewRating()}</div>
                 <CommentList
                   post={post}
                   commentCount={this.state.commentCount}
