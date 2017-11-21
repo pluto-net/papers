@@ -3,7 +3,7 @@ import * as queryString from "query-string";
 import { connect, DispatchProp } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Container, Grid, Checkbox } from "semantic-ui-react";
+import { Container, Grid, Checkbox, Form, Button } from "semantic-ui-react";
 import isEmpty = require("lodash.isempty");
 import pickBy = require("lodash.pickby");
 import transform = require("lodash.transform");
@@ -26,6 +26,7 @@ export interface IFeedState {
   commentCount?: boolean;
   closeToICOEnd?: boolean;
   viewCount?: boolean;
+  searchTerm?: string;
 }
 
 @withRouter
@@ -37,9 +38,10 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     commentCount: false,
     closeToICOEnd: false,
     viewCount: false,
+    searchTerm: "",
   };
 
-  private handleClickSortOption = (_e: React.FormEvent<HTMLInputElement>, data: any) => {
+  private changeSortOption = (_e: any, data: any) => {
     const { dispatch, location } = this.props;
 
     const newState = {
@@ -62,6 +64,21 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     }
   };
 
+  private handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { searchTerm } = this.state;
+
+    this.changeSortOption("", { searchTerm });
+  };
+
+  private handleChangeSearchInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+
+    this.setState({
+      searchTerm: value,
+    });
+  };
+
   public componentDidMount() {
     const { location } = this.props;
 
@@ -78,6 +95,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
 
   public render() {
     const { posts, isLoading } = this.props;
+    const { searchTerm } = this.state;
 
     if (isLoading) {
       return <div>Loading posts ...</div>;
@@ -87,6 +105,19 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
       return (
         <div>
           <Container>
+            <Form onSubmit={this.handleSearchSubmit}>
+              <Form.Field>
+                <Form.Input
+                  placeholder="Search ICO or Whitepaper"
+                  value={searchTerm}
+                  onChange={this.handleChangeSearchInput}
+                />
+              </Form.Field>
+              <Button size="tiny" floated="right" type="submit" primary>
+                Search
+              </Button>
+            </Form>
+
             <Grid columns={2} divided>
               <Grid.Row>
                 <Grid.Column width={4}>
@@ -94,7 +125,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="newest"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(newest)}
                       label={<label>Newest ICO</label>}
                     />
@@ -102,7 +133,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="rating"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(rating)}
                       label={<label>Best Rating ICO</label>}
                     />
@@ -110,7 +141,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="ratingCount"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(ratingCount)}
                       label={<label>Many Rating ICO</label>}
                     />
@@ -118,7 +149,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="closeToICOEnd"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(closeToICOEnd)}
                       label={<label>Close to end period ICO</label>}
                     />
@@ -127,7 +158,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="commentCount"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(commentCount)}
                       label={<label>Many Comments ICO</label>}
                     />
@@ -136,7 +167,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   <div className="sort-option-item">
                     <Checkbox
                       value="viewCount"
-                      onChange={this.handleClickSortOption}
+                      onChange={this.changeSortOption}
                       checked={this.checkTrue(viewCount)}
                       label={<label>Many View Count</label>}
                     />
@@ -158,9 +189,9 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   const rawSearch = params.location.search;
   const search = queryString.parse(rawSearch);
 
-  let sortOption: any = {};
+  let subscribeOptions: any = {};
   if (isEmpty(search)) {
-    sortOption = {
+    subscribeOptions = {
       publishedAt: -1,
     };
   } else {
@@ -168,30 +199,30 @@ const FeedContainer = withTracker((params: IFeedProps) => {
       return val === "true";
     });
 
-    sortOption = (transform as any)(rawOption, (result: any, _value: any, key: string) => {
+    subscribeOptions = (transform as any)(rawOption, (option: any, _value: any, key: string) => {
       switch (key) {
         case "newest": {
-          result.publishedAt = -1;
+          option.publishedAt = -1;
           break;
         }
         case "viewCount": {
-          result.viewCount = -1;
+          option.viewCount = -1;
           break;
         }
         case "ratingCount": {
-          result.ratingCount = -1;
+          option.ratingCount = -1;
           break;
         }
         case "rating": {
-          result.averageRating = -1;
+          option.averageRating = -1;
           break;
         }
         case "commentCount": {
-          result.commentCount = -1;
+          option.commentCount = -1;
           break;
         }
         case "closeToICOEnd": {
-          result.endICODate = -1;
+          option.endICODate = 1;
           break;
         }
       }
@@ -201,9 +232,14 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
   // TODO: handle below count with infinite scroll
-  const postsHandle = Meteor.subscribe("posts", 50);
+  let postsHandle;
+  if (search.searchTerm) {
+    postsHandle = Meteor.subscribe("posts", subscribeOptions, search.searchTerm);
+  } else {
+    postsHandle = Meteor.subscribe("posts", subscribeOptions);
+  }
   const isLoading = !postsHandle.ready();
-  const posts = Post.find({}, { sort: sortOption }).fetch();
+  const posts = Post.find({}, { sort: subscribeOptions }).fetch();
 
   return {
     isLoading,

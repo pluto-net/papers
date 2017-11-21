@@ -94,14 +94,6 @@ const mapPostNodes = (posts: any[]) => {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {/* <div className="post-list-item-item">
-            <div className="post-list-item-label">Token Distribution</div>
-            {post.tokenDistribution}
-          </div>
-          <div className="post-list-item-item">
-            <div className="post-list-item-label">Additional Information</div>
-            {post.content}
-          </div> */}
         </Item.Content>
       </Item>
     );

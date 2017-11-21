@@ -3,13 +3,24 @@ import { Post } from "../both/model/post";
 import { Rating } from "../both/model/rating";
 import { Comment } from "../both/model/comment";
 
-Meteor.publish("posts", function(limit: number) {
-  const options = {
+Meteor.publish("posts", function(options?: object, findString?: string) {
+  const basicOptions = {
     sort: { publishedAt: -1 },
-    limit,
+    limit: 50,
   };
 
-  return Post.find({}, options);
+  let finalOptions;
+  if (options) {
+    finalOptions = options;
+  } else {
+    finalOptions = basicOptions;
+  }
+  if (findString) {
+    const searchTerm = new RegExp(findString, "ig");
+    return Post.find({ title: { $regex: searchTerm } }, finalOptions);
+  } else {
+    return Post.find({}, finalOptions);
+  }
 });
 
 Meteor.publish("post", function(id: string) {

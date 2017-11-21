@@ -9,10 +9,11 @@ export const Post = Class.create({
   fields: {
     title: {
       type: String,
+      index: "text",
       validators: [
         {
           type: "minLength",
-          param: 3,
+          param: 1,
         },
         {
           type: "maxLength",
