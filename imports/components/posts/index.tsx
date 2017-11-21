@@ -94,7 +94,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
   }
 
   public render() {
-    const { posts, isLoading } = this.props;
+    const { posts, isLoading , currentUser} = this.props;
     const { searchTerm } = this.state;
 
     if (isLoading) {
@@ -174,7 +174,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   </div>
                 </Grid.Column>
                 <Grid.Column width={12}>
-                  <PostList posts={posts} />
+                  <PostList posts={posts} currentUser={currentUser} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

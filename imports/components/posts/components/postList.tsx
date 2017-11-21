@@ -1,10 +1,11 @@
 import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
-import { Item, Grid, Rating } from "semantic-ui-react";
+import { Item, Grid, Rating,Button } from "semantic-ui-react";
 
-interface IPostListParams {
+interface IPostListProps {
   posts: any[];
+  currentUser: any;
 }
 
 const mapMultiItem = (items: string[], postId: string, type: string) => {
@@ -21,8 +22,24 @@ const mapMultiItem = (items: string[], postId: string, type: string) => {
   });
 };
 
-const mapPostNodes = (posts: any[]) => {
-  return posts.map(post => {
+const handleTogglePublish = (post: any) => {
+  post.callMethod("changePublishState");
+};
+
+const getManagingPlublishingButton = (currentUser:any, post: any) => {
+  if (currentUser && currentUser.profile&& currentUser.profile.admin) {
+    if (post.published) {
+      return <Button onClick={() => {handleTogglePublish(post) }} negative>Unpublish</Button>
+    } else {
+      return <Button onClick={() => {handleTogglePublish(post) }} positive>Publish</Button>
+    }
+  } else {
+    return null;
+  }
+};
+
+const mapPostNodes = (props: IPostListProps) => {
+  return props.posts.map(post => {
     const startDate = moment(post.startICODate).format("MMM Do YY");
     const endDate = moment(post.endICODate).format("MMM Do YY");
     const rating = Math.round(post.averageRating);
@@ -31,6 +48,9 @@ const mapPostNodes = (posts: any[]) => {
       <Item key={`post_list_item_${post._id}`}>
         <Item.Content>
           <Item.Header>
+            <div>
+              {getManagingPlublishingButton(props.currentUser, post)}
+            </div>
             <Link to={`/posts/${post._id}`}>
               <span>{post.title}</span>
             </Link>
@@ -100,13 +120,13 @@ const mapPostNodes = (posts: any[]) => {
   });
 };
 
-const PostList = (params: IPostListParams) => {
-  if (!params.posts) {
+const PostList = (props: IPostListProps) => {
+  if (!props.posts) {
     return null;
   } else {
     return (
       <div style={{ marginTop: 30 }}>
-        <Item.Group divided>{mapPostNodes(params.posts)}</Item.Group>
+        <Item.Group divided>{mapPostNodes(props)}</Item.Group>
       </div>
     );
   }

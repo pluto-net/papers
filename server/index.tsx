@@ -17,10 +17,14 @@ Meteor.publish("posts", function(options?: object, findString?: string) {
   }
   if (findString) {
     const searchTerm = new RegExp(findString, "ig");
-    return Post.find({ title: { $regex: searchTerm } }, finalOptions);
+    return Post.find({ title: { $regex: searchTerm }, published: true }, finalOptions);
   } else {
-    return Post.find({}, finalOptions);
+    return Post.find({published: true}, finalOptions);
   }
+});
+
+Meteor.publish("unpublishedPosts", function() {
+    return Post.find({published: false});
 });
 
 Meteor.publish("post", function(id: string) {

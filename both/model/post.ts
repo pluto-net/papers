@@ -71,6 +71,12 @@ export const Post = Class.create({
       optional: true,
     },
     // auto-completed fields
+    published: {
+      type: Boolean,
+      default: function() {
+        return false;
+      },
+    },
     commentCount: {
       type: Number,
       default: function() {

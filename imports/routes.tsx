@@ -14,6 +14,8 @@ import CreatePost from "./components/posts/new";
 import PostShow from "./components/posts/show";
 import UserProfile from "./components/users/show";
 import UserProfileEdit from "./components/users/edit";
+import AdminMainPage from "./components/admin";
+import AdminConfirmFeedContainer from "./components/admin/postsConfirm";
 import EnvChecker from "./helpers/envChecker";
 import { initialState, rootReducer } from "./reducers";
 import rootSaga from "./sagas";
@@ -60,6 +62,8 @@ const RootRoute = () => {
             <Route exact path="/posts" component={FeedContainer} />
             <Route exact path="/posts/new" component={CreatePost} />
             <Route exact path="/posts/:postId" component={PostShow} />
+            <Route exact path="/admin" component={AdminMainPage} />
+            <Route exact path="/admin/posts/confirm" component={AdminConfirmFeedContainer} />
             <Route exact path="/users/:userId/edit" component={UserProfileEdit} />
             <Route exact path="/users/:userId" component={UserProfile} />
           </Switch>

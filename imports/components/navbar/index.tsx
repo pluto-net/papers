@@ -68,6 +68,15 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
   private getRightMenus = () => {
     const { currentUser, isLoggingIn } = this.props;
 
+    let adminMenu = null;
+    if (currentUser && currentUser.profile && currentUser.profile.admin) {
+      adminMenu = (
+        <Menu.Item>
+        <Link to="/admin">ADMIN</Link>
+        </Menu.Item>
+      )
+    }
+
     if (!currentUser) {
       return (
         <Menu.Menu position="right">
@@ -90,16 +99,17 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
       return (
         <Menu.Menu position="right">
           <Menu.Item>
-            <Link to={`/users/${currentUser._id}`}>{currentUser.username}</Link>
+            <div className="navbar-menu-item">{currentUser.username}</div>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/posts/new">Create Post</Link>
+            <Link to="/posts/new">New ICO</Link>
           </Menu.Item>
           <Menu.Item>
             <Link to="/" onClick={this.handleLogoutClick}>
               Logout
             </Link>
           </Menu.Item>
+          {adminMenu}
           <Menu.Item onClick={this.handleDonateClick}>
             <div className="navbar-menu-item">Donate</div>
           </Menu.Item>

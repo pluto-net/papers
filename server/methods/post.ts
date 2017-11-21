@@ -22,6 +22,10 @@ interface IUpdateRatingProps {
 
 Post.extend({
   meteorMethods: {
+    changePublishState() {
+      this.published = !this.published;
+      return this.save();
+    },
     updateViewCount() {
       if (!this.viewCount) {
         this.viewCount = 0;

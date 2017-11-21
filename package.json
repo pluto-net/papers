@@ -4,7 +4,8 @@
   "scripts": {
     "start": "meteor run",
     "dev": "meteor --settings settings.json",
-    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
+    "prettify": "prettier --write",
+    "deploy": "npm run prettify && DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
   },
   "dependencies": {
     "@types/meteor": "^1.4.12",

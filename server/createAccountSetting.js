@@ -15,11 +15,17 @@ Accounts.onCreateUser((options, user) => {
       profile: {
         username: user.services.facebook.name,
         profileImagePublicId: "",
+        admin: false,
       },
     };
 
     return customUser;
   } else {
+    user.profile = {
+      username: user.username,
+      profileImagePublicId: "",
+      admin: false,
+    };
     return user;
   }
 });
