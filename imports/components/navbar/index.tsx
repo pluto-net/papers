@@ -1,8 +1,9 @@
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
+import { push } from "react-router-redux";
 import { Link } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
-import { Menu, Button, Container, Header } from "semantic-ui-react";
+import { Menu, Button, Container, Header, Input } from "semantic-ui-react";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
@@ -16,11 +17,15 @@ interface INavbarProps extends DispatchProp<any> {
   isLoggingIn: boolean;
 }
 
-function mapStateToProps() {
-  return {};
+interface INavbarState {
+  searchTerm: string;
 }
 
-class Navbar extends React.PureComponent<INavbarProps, {}> {
+class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
+  public state = {
+    searchTerm: "",
+  };
+
   private handleCloseSignUpDialog = () => {
     const { dispatch } = this.props;
 
@@ -51,6 +56,32 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     dispatch({ type: "REQUEST_LOGOUT" });
   };
 
+  private handleChangeSearchTerm = (e: React.FormEvent<HTMLInputElement>) => {
+    this.setState({
+      searchTerm: e.currentTarget.value,
+    });
+  };
+
+  private handleSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+
+    dispatch(push(`/posts?searchTerm=${this.state.searchTerm}`));
+    this.setState({
+      searchTerm: "",
+    });
+  };
+
+  private getSearchInput = () => {
+    return (
+      <Menu.Item>
+        <form onSubmit={this.handleSubmitSearch}>
+          <Input onChange={this.handleChangeSearchTerm} className="icon" icon="search" placeholder="Search ICO" />
+        </form>
+      </Menu.Item>
+    );
+  };
+
   private handleDonateClick = () => {
     const ether = prompt("how much Ether You want to donate? The unit is ether. ex) 0.1 ");
 
@@ -72,14 +103,15 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     if (currentUser && currentUser.profile && currentUser.profile.admin) {
       adminMenu = (
         <Menu.Item>
-        <Link to="/admin">ADMIN</Link>
+          <Link to="/admin">ADMIN</Link>
         </Menu.Item>
-      )
+      );
     }
 
     if (!currentUser) {
       return (
         <Menu.Menu position="right">
+          {this.getSearchInput()}
           <Menu.Item onClick={this.handleOpenSignUpDialog}>
             <Button size="tiny" primary>
               Sign Up
@@ -98,6 +130,7 @@ class Navbar extends React.PureComponent<INavbarProps, {}> {
     } else {
       return (
         <Menu.Menu position="right">
+          {this.getSearchInput()}
           <Menu.Item>
             <div className="navbar-menu-item">{currentUser.username}</div>
           </Menu.Item>
@@ -146,6 +179,6 @@ const NavbarContainer = withTracker(() => {
     currentUser,
     isLoggingIn,
   };
-})(connect(mapStateToProps)(Navbar));
+})(connect()(Navbar));
 
 export default NavbarContainer;

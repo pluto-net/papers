@@ -4,8 +4,7 @@
   "scripts": {
     "start": "meteor run",
     "dev": "meteor --settings settings.json",
-    "prettify": "prettier --write",
-    "deploy": "npm run prettify && DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
+    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
   },
   "dependencies": {
     "@types/meteor": "^1.4.12",
@@ -20,6 +19,7 @@
     "lodash.transform": "^4.6.0",
     "meteor-node-stubs": "^0.3.2",
     "moment": "^2.19.1",
+    "prettier": "^1.8.2",
     "query-string": "^5.0.1",
     "react": "^16.0.0",
     "react-datepicker": "^0.61.0",
