@@ -19,36 +19,39 @@ Meteor.publish("posts", function(options?: object, findString?: string) {
     const searchTerm = new RegExp(findString, "ig");
     return Post.find({ title: { $regex: searchTerm }, published: true }, finalOptions);
   } else {
-    return Post.find({published: true}, finalOptions);
+    return Post.find({ published: true }, finalOptions);
   }
 });
 
 Meteor.publish("unpublishedPosts", function() {
-    return Post.find({published: false});
+  return Post.find({ published: false });
 });
 
 Meteor.publish("post", function(id: string) {
-  return Post.find(id);
+  return Post.find({ id });
 });
 
 Meteor.publish("bestPosts", function(limit: number) {
   const date = new Date();
-  return Post.find({ endICODate: { $gte: date } }, { sort: { ratingCount: -1, averageRating: -1 }, limit });
+  return Post.find(
+    { published: true, endICODate: { $gte: date } },
+    { sort: { ratingCount: -1, averageRating: -1 }, limit },
+  );
 });
 
 Meteor.publish("closeToEndPosts", function(limit: number) {
   const date = new Date();
-  return Post.find({ endICODate: { $gte: date } }, { sort: { endICODate: 1 }, limit });
+  return Post.find({ published: true, endICODate: { $gte: date } }, { sort: { endICODate: 1 }, limit });
 });
 
 Meteor.publish("manyViewCountPosts", function(limit: number) {
   const date = new Date();
-  return Post.find({ endICODate: { $gte: date } }, { sort: { viewCount: -1 }, limit });
+  return Post.find({ published: true, endICODate: { $gte: date } }, { sort: { viewCount: -1 }, limit });
 });
 
 Meteor.publish("manyCommentsPosts", function(limit: number) {
   const date = new Date();
-  return Post.find({ endICODate: { $gte: date } }, { sort: { commentCount: -1 }, limit });
+  return Post.find({ published: true, endICODate: { $gte: date } }, { sort: { commentCount: -1 }, limit });
 });
 
 Meteor.publish("user", function(id: string) {
