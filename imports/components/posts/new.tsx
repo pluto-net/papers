@@ -2,10 +2,12 @@ import * as React from "react";
 import * as moment from "moment";
 import { Container, Header, Form, Button } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
-import { push } from "react-router-redux";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
 import { IPostParamsInterface } from "../../../server/methods/post";
+import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
+import { openDialog } from "../../actions/globalDialog";
+import AfterCreatePost from "./components/afterCreatePost";
 const { withTracker } = require("meteor/react-meteor-data");
 const DatePicker = require("react-datepicker");
 
@@ -26,6 +28,7 @@ interface ICreatePostState {
   tokenDistribution: string;
   startDate: moment.Moment;
   endDate: moment.Moment;
+  succeededToCreate: boolean;
 }
 
 class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState> {
@@ -41,6 +44,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     tokenDistribution: "",
     startDate: moment(),
     endDate: moment(),
+    succeededToCreate: false,
   };
 
   private preventSubmit = (e: any) => {
@@ -141,7 +145,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
 
   private handleSubmitPost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { currentUser, dispatch } = this.props;
+    const { dispatch, currentUser } = this.props;
     const {
       title,
       content,
@@ -157,8 +161,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     } = this.state;
 
     if (!currentUser) {
-      // TODO: Open Sign up dialog
-      return;
+      return dispatch(openDialog(GLOBAL_DIALOGS.SIGN_UP));
     }
 
     const post = new Post();
@@ -177,11 +180,13 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       userId: currentUser._id,
     };
 
-    post.callMethod("savePost", postParams, (err: Error, postId: string) => {
+    post.callMethod("savePost", postParams, (err: Error, _postId: string) => {
       if (err) {
         alert(err);
       } else {
-        dispatch(push(`/posts/${postId}`));
+        this.setState({
+          succeededToCreate: true,
+        });
       }
     });
   };
@@ -197,7 +202,13 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       whitepaperAddress,
       bonus,
       fields,
+      succeededToCreate,
     } = this.state;
+    const { currentUser } = this.props;
+
+    if (succeededToCreate && currentUser) {
+      return <AfterCreatePost currentUser={currentUser} />;
+    }
 
     return (
       <Container text style={{ marginTop: 30 }}>
