@@ -172,7 +172,10 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
   };
 
   public componentWillReceiveProps(nextProps: IPostShowProps) {
-    if ((!this.props.post && nextProps.post) || (this.props.post && this.props.post._id !== nextProps.post._id)) {
+    if (
+      (!this.props.post && nextProps.post) ||
+      (this.props.post && nextProps.post && this.props.post._id !== nextProps.post._id)
+    ) {
       this.updateViewCount(nextProps.post);
     }
   }
@@ -186,6 +189,8 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
           <Loader active />
         </div>
       );
+    } else if (!post) {
+      return null;
     } else {
       const startDate = moment(post.startICODate).format("YYYY-MM-DD HH:mm Z");
       const endDate = moment(post.endICODate).format("YYYY-MM-DD HH:mm Z");

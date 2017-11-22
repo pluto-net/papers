@@ -28,7 +28,7 @@ Meteor.publish("unpublishedPosts", function() {
 });
 
 Meteor.publish("post", function(id: string) {
-  return Post.find({ id });
+  return Post.find(id);
 });
 
 Meteor.publish("bestPosts", function(limit: number) {
