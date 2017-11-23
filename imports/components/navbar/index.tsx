@@ -10,8 +10,6 @@ import { openDialog, closeDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 const { withTracker } = require("meteor/react-meteor-data");
 
-declare var web3: any;
-
 interface INavbarProps extends DispatchProp<any> {
   currentUser: any;
   isLoggingIn: boolean;
@@ -82,25 +80,11 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
     );
   };
 
-  private handleDonateClick = () => {
-    const ether = prompt("how much Ether You want to donate? The unit is ether. ex) 0.1 ");
-
-    web3.eth.getAccounts((err: Error, res: any) => {
-      if (!err) {
-        web3.eth.sendTransaction({
-          value: web3.utils.toWei(ether, "ether"),
-          from: res[0],
-          to: "0xa18D01eB32f0649EffD427c3B9796caA8eCc7490",
-        });
-      }
-    });
-  };
-
   private getRightMenus = () => {
     const { currentUser, isLoggingIn } = this.props;
 
     let adminMenu = null;
-    if (currentUser && currentUser.profile && currentUser.profile.admin) {
+    if (currentUser && currentUser.admin) {
       adminMenu = (
         <Menu.Item>
           <Link to="/admin">ADMIN</Link>
@@ -119,9 +103,6 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
           </Menu.Item>
           <Menu.Item onClick={this.handleOpenSignInDialog}>
             <Button size="tiny">Log-in</Button>
-          </Menu.Item>
-          <Menu.Item onClick={this.handleDonateClick}>
-            <div className="navbar-menu-item">Donate</div>
           </Menu.Item>
         </Menu.Menu>
       );
@@ -143,9 +124,6 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
             </Link>
           </Menu.Item>
           {adminMenu}
-          <Menu.Item onClick={this.handleDonateClick}>
-            <div className="navbar-menu-item">Donate</div>
-          </Menu.Item>
         </Menu.Menu>
       );
     }

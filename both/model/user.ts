@@ -27,7 +27,6 @@ const UserProfile = Class.create({
   name: "UserProfile",
   fields: {
     username: String,
-    admin: Boolean,
     profileImagePublicId: {
       type: String,
       optional: true,
@@ -48,11 +47,16 @@ export const User = Class.create({
         return [];
       },
     },
+    admin: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
     profile: {
       type: UserProfile,
       default: () => {
         return {
-          admin: false,
           username: "",
           profileImagePublicId: "",
         };

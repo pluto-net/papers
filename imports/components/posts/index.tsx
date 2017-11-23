@@ -17,6 +17,8 @@ interface IFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   posts: any;
   currentUser: any;
   isLoggingIn: boolean;
+  users: any[];
+  usersIsLoading: boolean;
 }
 
 export interface IFeedState {
@@ -94,7 +96,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
   }
 
   public render() {
-    const { posts, isLoading , currentUser} = this.props;
+    const { posts, isLoading, currentUser, users, usersIsLoading } = this.props;
     const { searchTerm } = this.state;
 
     if (isLoading) {
@@ -174,7 +176,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                   </div>
                 </Grid.Column>
                 <Grid.Column width={12}>
-                  <PostList posts={posts} currentUser={currentUser} />
+                  <PostList posts={posts} currentUser={currentUser} users={users} usersIsLoading={usersIsLoading} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -241,9 +243,16 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   const isLoading = !postsHandle.ready();
   const posts = Post.find({}, { sort: subscribeOptions }).fetch();
 
+  const userIds = posts.map((post: any) => post.userId);
+  const userHandle = Meteor.subscribe("users", userIds);
+  const users = Meteor.users.find().fetch();
+  const usersIsLoading = !userHandle.ready();
+
   return {
     isLoading,
     posts,
+    users,
+    usersIsLoading,
     currentUser,
     isLoggingIn,
   };

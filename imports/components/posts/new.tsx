@@ -177,7 +177,6 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       tokenDistribution: tokenDistribution,
       startICODate: startDate.toDate(),
       endICODate: endDate.toDate(),
-      userId: currentUser._id,
     };
 
     post.callMethod("savePost", postParams, (err: Error, _postId: string) => {

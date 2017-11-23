@@ -1,3 +1,4 @@
+// import { Email } from 'meteor/email'
 import { Post } from "../../both/model/post";
 
 export interface IPostParamsInterface {
@@ -12,7 +13,6 @@ export interface IPostParamsInterface {
   tokenDistribution: string;
   startICODate: Date;
   endICODate: Date;
-  userId: string;
 }
 
 interface IUpdateRatingProps {
@@ -22,8 +22,16 @@ interface IUpdateRatingProps {
 
 Post.extend({
   meteorMethods: {
-    changePublishState() {
+    changePublishState(post: any, email: string) {
       this.published = !this.published;
+      if (this.published) {
+        Email.send({
+          to: email,
+          from: "no-reply@pluto.network",
+          subject: `Your ${post.title} ICO is now being alive!`,
+          html: "<h1>congratulation!</h1> Your ICO article is on live now. Anyone can see your ICO article.",
+        });
+      }
       return this.save();
     },
     updateViewCount() {
@@ -41,7 +49,6 @@ Post.extend({
     updateRating({ ratingCount, newRatingAverage }: IUpdateRatingProps) {
       this.ratingCount = ratingCount;
       this.averageRating = newRatingAverage;
-
       return this.save();
     },
     savePost({
@@ -56,7 +63,6 @@ Post.extend({
       tokenDistribution,
       startICODate,
       endICODate,
-      userId,
     }: IPostParamsInterface) {
       this.title = title;
       this.content = content;
@@ -69,7 +75,7 @@ Post.extend({
       this.tokenDistribution = tokenDistribution;
       this.startICODate = startICODate;
       this.endICODate = endICODate;
-      this.userId = userId;
+      this.userId = Meteor.userId();
 
       return this.save();
     },

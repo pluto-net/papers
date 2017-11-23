@@ -293,7 +293,7 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     const currentUser = Meteor.user();
     const isLoggingIn = Meteor.loggingIn();
 
-    const myRatingHandle = Meteor.subscribe("myRating", postId, Meteor.userId());
+    const myRatingHandle = Meteor.subscribe("myRating", postId);
     const myRating = RatingModel.findOne({ userId: Meteor.userId() });
     const ratingIsLoading = !myRatingHandle.ready();
     // TODO: handle below count with infinite scroll

@@ -1,11 +1,13 @@
 import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
-import { Item, Grid, Rating,Button } from "semantic-ui-react";
+import { Item, Grid, Rating, Button } from "semantic-ui-react";
 
 interface IPostListProps {
   posts: any[];
   currentUser: any;
+  users: any[];
+  usersIsLoading: boolean;
 }
 
 const mapMultiItem = (items: string[], postId: string, type: string) => {
@@ -22,16 +24,40 @@ const mapMultiItem = (items: string[], postId: string, type: string) => {
   });
 };
 
-const handleTogglePublish = (post: any) => {
-  post.callMethod("changePublishState");
+const handleTogglePublish = (post: any, author: any) => {
+  if (post && author) {
+    post.callMethod("changePublishState", post, author.emails[0].address);
+  }
 };
 
-const getManagingPlublishingButton = (currentUser:any, post: any) => {
-  if (currentUser && currentUser.profile&& currentUser.profile.admin) {
+const getManagingPlublishingButton = (props: IPostListProps, post: any) => {
+  const { currentUser, users } = props;
+
+  const author = users.find((user: any) => user._id === post.userId);
+
+  if (currentUser && currentUser.admin) {
     if (post.published) {
-      return <Button onClick={() => {handleTogglePublish(post) }} negative>Unpublish</Button>
+      return (
+        <Button
+          onClick={() => {
+            handleTogglePublish(post, author);
+          }}
+          negative
+        >
+          Unpublish
+        </Button>
+      );
     } else {
-      return <Button onClick={() => {handleTogglePublish(post) }} positive>Publish</Button>
+      return (
+        <Button
+          onClick={() => {
+            handleTogglePublish(post, author);
+          }}
+          positive
+        >
+          Publish
+        </Button>
+      );
     }
   } else {
     return null;
@@ -48,9 +74,7 @@ const mapPostNodes = (props: IPostListProps) => {
       <Item key={`post_list_item_${post._id}`}>
         <Item.Content>
           <Item.Header>
-            <div>
-              {getManagingPlublishingButton(props.currentUser, post)}
-            </div>
+            <div>{getManagingPlublishingButton(props, post)}</div>
             <Link to={`/posts/${post._id}`}>
               <span>{post.title}</span>
             </Link>

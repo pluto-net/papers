@@ -38,7 +38,6 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
         "postComment",
         {
           content: comment,
-          userId: currentUser._id,
           postId,
         },
         (err: Error) => {

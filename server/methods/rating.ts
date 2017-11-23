@@ -2,13 +2,18 @@ import { Rating } from "../../both/model/rating";
 
 export interface IPostRatingParams {
   rating: number;
-  userId: string;
   postId: string;
 }
 
 Rating.extend({
   meteorMethods: {
-    postRating({ rating, userId, postId }: IPostRatingParams) {
+    postRating({ rating, postId }: IPostRatingParams) {
+      const userId = Meteor.userId();
+
+      if (!userId) {
+        throw new Error("Wrong user authentication");
+      }
+
       const previousRating = Rating.findOne({ userId, postId });
 
       if (previousRating) {
