@@ -35,7 +35,7 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
     this.setState({ ...this.state, ...{ [field]: value } });
   };
 
-  private handleSignInSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  private handleSignInSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { dispatch } = this.props;
     const { emailOrName, password } = this.state;
@@ -50,11 +50,10 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
   };
 
   private getSignInForm() {
-    const { closeFunction } = this.props;
     const { emailOrName, password } = this.state;
 
     return (
-      <form onSubmit={this.handleSignInSubmit}>
+      <div>
         <div className="sign-in-input">
           <Input
             fluid
@@ -77,13 +76,7 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
             placeholder="password"
           />
         </div>
-        <div className="sign-in-modal-actions-wrapper clearfix">
-          <Button onClick={closeFunction} negative>
-            No
-          </Button>
-          <Button positive content="Submit" />
-        </div>
-      </form>
+      </div>
     );
   }
 
@@ -99,6 +92,12 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
             <Divider />
             {this.getSignInForm()}
           </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={closeFunction} negative>
+              No
+            </Button>
+            <Button onClick={this.handleSignInSubmit} type="submit" positive content="Submit" />
+          </Modal.Actions>
         </Modal>
       </div>
     );

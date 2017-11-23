@@ -37,7 +37,7 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
     this.setState({ ...this.state, ...{ [field]: value } });
   };
 
-  private handleSignUpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  private handleSignUpSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { dispatch } = this.props;
     const { email, name, password } = this.state;
@@ -53,11 +53,10 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
   };
 
   private getSignUpForm() {
-    const { closeFunction } = this.props;
     const { email, name, password } = this.state;
 
     return (
-      <form onSubmit={this.handleSignUpSubmit}>
+      <div>
         <div className="sign-up-input">
           <Input
             fluid
@@ -91,13 +90,7 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
             placeholder="password"
           />
         </div>
-        <div className="sign-up-modal-actions-wrapper clearfix">
-          <Button onClick={closeFunction} negative>
-            No
-          </Button>
-          <Button positive content="Submit" />
-        </div>
-      </form>
+      </div>
     );
   }
 
@@ -113,6 +106,12 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
             <Divider />
             {this.getSignUpForm()}
           </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={closeFunction} negative>
+              No
+            </Button>
+            <Button onClick={this.handleSignUpSubmit} positive content="Submit" />
+          </Modal.Actions>
         </Modal>
       </div>
     );
