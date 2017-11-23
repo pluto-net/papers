@@ -1,4 +1,4 @@
-// import { Email } from 'meteor/email'
+import * as AWS from "aws-sdk";
 import { Post } from "../../both/model/post";
 
 export interface IPostParamsInterface {
@@ -25,14 +25,33 @@ Post.extend({
     changePublishState(post: any, email: string) {
       this.published = !this.published;
       if (this.published) {
-        Email.send({
-          to: email,
-          from: "no-reply@pluto.network",
-          subject: `Your ${post.title} ICO is now being alive!`,
-          html: "<h1>congratulation!</h1> Your ICO article is on live now. Anyone can see your ICO article.",
+        const ses = new AWS.SES({ apiVersion: "2010-12-01", region: "us-east-1" });
+        const params = {
+          Destination: {
+            ToAddresses: [email],
+          },
+          Message: {
+            Body: {
+              Html: {
+                Charset: "UTF-8",
+                Data: "<h1>congratulation!</h1> Your ICO article is on live now. Anyone can see your ICO article.",
+              },
+            },
+            Subject: {
+              Charset: "UTF-8",
+              Data: `Your ${post.title} ICO is now being alive!`,
+            },
+          },
+          Source: "no-reply@pluto.network",
+        };
+
+        ses.sendEmail(params, (err, _data) => {
+          if (err) {
+            console.error(err, err.stack);
+          }
         });
+        return this.save();
       }
-      return this.save();
     },
     updateViewCount() {
       if (!this.viewCount) {

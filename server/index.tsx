@@ -57,7 +57,6 @@ Meteor.publish("manyCommentsPosts", function(limit: number) {
 Meteor.publish("user", function(id: string) {
   return Meteor.users.find(id, {
     fields: { services: 0 },
-    transform: null,
   });
 });
 

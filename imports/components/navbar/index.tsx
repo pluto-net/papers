@@ -150,7 +150,9 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
 }
 
 const NavbarContainer = withTracker(() => {
-  const currentUser = Meteor.user();
+  Meteor.subscribe("user", Meteor.userId());
+  const currentUser = Meteor.users.findOne(Meteor.userId());
+  console.log(currentUser);
   const isLoggingIn = Meteor.loggingIn();
 
   return {
