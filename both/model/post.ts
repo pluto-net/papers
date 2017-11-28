@@ -17,7 +17,7 @@ export const Post = Class.create({
         },
         {
           type: "maxLength",
-          param: 50,
+          param: 150,
         },
       ],
     },
@@ -26,7 +26,7 @@ export const Post = Class.create({
       validators: [
         {
           type: "minLength",
-          param: 3,
+          param: 0,
         },
         {
           type: "maxLength",
@@ -68,6 +68,18 @@ export const Post = Class.create({
     },
     fields: {
       type: [String],
+      optional: true,
+    },
+    links: {
+      type: [String],
+      optional: true,
+    },
+    bountyCampaign: {
+      type: String,
+      optional: true,
+    },
+    escrow: {
+      type: String,
       optional: true,
     },
     // auto-completed fields

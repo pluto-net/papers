@@ -241,7 +241,7 @@ const FeedContainer = withTracker((params: IFeedProps) => {
     postsHandle = Meteor.subscribe("posts", subscribeOptions);
   }
   const isLoading = !postsHandle.ready();
-  const posts = Post.find({}, { sort: subscribeOptions }).fetch();
+  const posts = Post.find({}, { sort: subscribeOptions, limit: 50 }).fetch();
 
   const userIds = posts.map((post: any) => post.userId);
   const userHandle = Meteor.subscribe("users", userIds);
