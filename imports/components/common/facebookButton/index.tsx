@@ -10,8 +10,6 @@ const handleSignInWithFacebook = () => {
     (err: Error) => {
       if (err) {
         alert(err);
-      } else {
-        console.log("Succeed to Login");
       }
     },
   );

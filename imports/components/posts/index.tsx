@@ -100,7 +100,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     const { searchTerm } = this.state;
 
     if (isLoading) {
-      return <div>Loading posts ...</div>;
+      return null;
     } else {
       const { newest, ratingCount, rating, commentCount, closeToICOEnd, viewCount } = this.state;
 
@@ -191,11 +191,13 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   const rawSearch = params.location.search;
   const search = queryString.parse(rawSearch);
 
-  let subscribeOptions: any = {};
+  let subscribeOptions: any = {
+    limit: 20,
+  };
   if (isEmpty(search)) {
     subscribeOptions = {
       publishedAt: -1,
-      limit: 50,
+      limit: 20,
     };
   } else {
     const rawOption = pickBy(search, (val: any) => {
@@ -242,11 +244,11 @@ const FeedContainer = withTracker((params: IFeedProps) => {
     postsHandle = Meteor.subscribe("posts", subscribeOptions);
   }
   const isLoading = !postsHandle.ready();
-  const posts = Post.find({}, { sort: subscribeOptions, limit: 50 }).fetch();
+  const posts = Post.find({}, { sort: subscribeOptions, limit: 20, reactive: false }).fetch();
 
   const userIds = posts.map((post: any) => post.userId);
   const userHandle = Meteor.subscribe("users", userIds);
-  const users = Meteor.users.find().fetch();
+  const users = Meteor.users.find({}, { reactive: false }).fetch();
   const usersIsLoading = !userHandle.ready();
 
   return {

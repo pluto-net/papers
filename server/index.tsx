@@ -6,12 +6,13 @@ import { Comment } from "../both/model/comment";
 Meteor.publish("posts", function(options?: object, findString?: string) {
   const basicOptions = {
     sort: { publishedAt: -1 },
-    limit: 50,
+    disableOplog: true,
+    limit: 20,
   };
 
   let finalOptions;
   if (options) {
-    finalOptions = options;
+    finalOptions = { ...basicOptions, ...options };
   } else {
     finalOptions = basicOptions;
   }
