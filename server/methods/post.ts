@@ -20,6 +20,7 @@ interface IUpdateRatingProps {
   newRatingAverage: number;
 }
 
+// Post model methods
 Post.extend({
   meteorMethods: {
     changePublishState(post: any, email: string) {

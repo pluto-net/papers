@@ -39,7 +39,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     } else if (bestPosts && bestPosts.length > 0) {
       return (
         <div>
-          <Button floated="left">Best Ratings</Button>
+          <Link to={this.getPostListLink({ ratingCount: true, rating: true })}>Best Ratings</Link>
           <Link to={this.getPostListLink({ ratingCount: true, rating: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
@@ -62,7 +62,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     } else if (closeToEndPosts && closeToEndPosts.length > 0) {
       return (
         <div style={{ marginTop: 30 }}>
-          <Button floated="left">Close to the End of ICO date</Button>
+          <Link to={this.getPostListLink({ closeToICOEnd: true })}>Close to the End of ICO date</Link>
           <Link to={this.getPostListLink({ closeToICOEnd: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
@@ -85,7 +85,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     } else if (manyCommentsPosts && manyCommentsPosts.length > 0) {
       return (
         <div style={{ marginTop: 30 }}>
-          <Button floated="left">Has many comments</Button>
+          <Link to={this.getPostListLink({ commentCount: true })}>Most Comments</Link>
           <Link to={this.getPostListLink({ commentCount: true })}>
             <Button size="tiny" color="black" floated="right">
               See More
@@ -108,7 +108,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     } else if (manyViewCountPosts && manyViewCountPosts.length > 0) {
       return (
         <div style={{ marginTop: 30 }}>
-          <Button floated="left">Has many view count</Button>
+          <Link to={this.getPostListLink({ viewCount: true })}>Most view count</Link>
           <Link to={this.getPostListLink({ viewCount: true })}>
             <Button size="tiny" color="black" floated="right">
               See More

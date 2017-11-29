@@ -12,6 +12,10 @@ import { Post } from "../../../both/model/post";
 import PostList from "./components/postList";
 const { withTracker } = require("meteor/react-meteor-data");
 
+declare var Counter: any;
+
+const POSTS_PER_PAGE: number = 5;
+
 interface IFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   isLoading: boolean;
   posts: any;
@@ -19,6 +23,9 @@ interface IFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   isLoggingIn: boolean;
   users: any[];
   usersIsLoading: boolean;
+  postCount: number;
+  currentPage: number;
+  handlePageChange: (page: number) => void;
 }
 
 export interface IFeedState {
@@ -79,6 +86,83 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
     this.setState({
       searchTerm: value,
     });
+  };
+
+  private handleChangePage = (page: number) => {
+    this.props.handlePageChange(page);
+  };
+
+  private getPagination = () => {
+    const { postCount, currentPage } = this.props;
+
+    const paginationItems = [];
+
+    const totalPage = Math.ceil(postCount / POSTS_PER_PAGE);
+    const startPage = Math.floor(currentPage / 10) * 10 + 1;
+
+    let beforePageArrow = null;
+    let nextPageArrow = null;
+    let endPage: number;
+
+    if (startPage > 1) {
+      beforePageArrow = (
+        <span
+          className="pagination-item"
+          onClick={() => {
+            this.handleChangePage(startPage - 10);
+          }}
+        >
+          {"<"}
+        </span>
+      );
+    }
+
+    if (startPage + 9 > totalPage) {
+      endPage = totalPage;
+    } else if (startPage + 9 < 10) {
+      endPage = totalPage;
+    } else {
+      nextPageArrow = (
+        <span
+          className="pagination-item"
+          onClick={() => {
+            this.handleChangePage(startPage + 10);
+          }}
+        >
+          >
+        </span>
+      );
+      endPage = startPage + 9;
+    }
+
+    for (let i = startPage; i < endPage; i++) {
+      let paginationItemClassName;
+      if (currentPage === i) {
+        paginationItemClassName = "pagination-item active";
+      } else {
+        paginationItemClassName = "pagination-item";
+      }
+
+      paginationItems.push(
+        <span
+          key={`post_pagination_${i}`}
+          className={paginationItemClassName}
+          onClick={() => {
+            this.handleChangePage(i);
+          }}
+        >
+          {i}
+        </span>,
+      );
+    }
+
+    return (
+      <div className="post-pagination-wrapper">
+        {beforePageArrow}
+        {paginationItems}
+        {nextPageArrow}
+      </div>
+    );
   };
 
   public componentDidMount() {
@@ -180,6 +264,7 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
+            {this.getPagination()}
           </Container>
         </div>
       );
@@ -191,20 +276,21 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   const rawSearch = params.location.search;
   const search = queryString.parse(rawSearch);
 
+  const skip = (params.currentPage - 1) * POSTS_PER_PAGE;
+
+  let sortOptions: any = {};
   let subscribeOptions: any = {
-    limit: 20,
+    publishedAt: -1,
+    limit: POSTS_PER_PAGE,
+    skip,
   };
-  if (isEmpty(search)) {
-    subscribeOptions = {
-      publishedAt: -1,
-      limit: 20,
-    };
-  } else {
+
+  if (!isEmpty(search)) {
     const rawOption = pickBy(search, (val: any) => {
       return val === "true";
     });
 
-    subscribeOptions = (transform as any)(rawOption, (option: any, _value: any, key: string) => {
+    sortOptions = (transform as any)(rawOption, (option: any, _value: any, key: string) => {
       switch (key) {
         case "newest": {
           option.publishedAt = -1;
@@ -232,23 +318,29 @@ const FeedContainer = withTracker((params: IFeedProps) => {
         }
       }
     });
+
+    subscribeOptions = { ...subscribeOptions, ...{ sort: sortOptions } };
   }
 
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
-  // TODO: handle below count with infinite scroll
+
   let postsHandle;
   if (search.searchTerm) {
     postsHandle = Meteor.subscribe("posts", subscribeOptions, search.searchTerm);
   } else {
     postsHandle = Meteor.subscribe("posts", subscribeOptions);
   }
+
   const isLoading = !postsHandle.ready();
-  const posts = Post.find({}, { sort: subscribeOptions, limit: 20, reactive: false }).fetch();
+
+  const posts = Post.find({}, { sort: sortOptions, limit: POSTS_PER_PAGE }).fetch();
+  Meteor.subscribe("fullPostCount");
+  const postCount = Counter.get("fullPostCount");
 
   const userIds = posts.map((post: any) => post.userId);
   const userHandle = Meteor.subscribe("users", userIds);
-  const users = Meteor.users.find({}, { reactive: false }).fetch();
+  const users = Meteor.users.find({}).fetch();
   const usersIsLoading = !userHandle.ready();
 
   return {
@@ -258,7 +350,30 @@ const FeedContainer = withTracker((params: IFeedProps) => {
     usersIsLoading,
     currentUser,
     isLoggingIn,
+    postCount,
   };
 })(connect()(Feed));
 
-export default FeedContainer;
+interface IFeedContainerWithPageProps {
+  currentPage: number;
+}
+
+class FeedContainerWithPage extends React.PureComponent<any, IFeedContainerWithPageProps> {
+  public state = {
+    currentPage: 1,
+  };
+
+  private handlePageChange = (page: number) => {
+    console.log("fired");
+    this.setState({ currentPage: page });
+  };
+
+  public render() {
+    const { currentPage } = this.state;
+    const newProps = { ...this.props, ...{ currentPage, handlePageChange: this.handlePageChange } };
+
+    return <FeedContainer {...newProps} />;
+  }
+}
+
+export default FeedContainerWithPage;
