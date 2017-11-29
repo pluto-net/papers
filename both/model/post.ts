@@ -119,6 +119,7 @@ export const Post = Class.create({
     },
     publishedAt: {
       type: Date,
+      index: 1,
       default: function() {
         return new Date();
       },

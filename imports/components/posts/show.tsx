@@ -299,7 +299,7 @@ const PostShowContainer = withTracker((props: IPostShowProps) => {
     // TODO: handle below count with infinite scroll
     const postsHandle = Meteor.subscribe("post", postId);
     const isLoading = !postsHandle.ready();
-    const post = Post.findOne();
+    const post = Post.findOne(postId);
 
     return {
       isLoading,

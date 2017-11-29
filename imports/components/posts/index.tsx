@@ -195,6 +195,7 @@ const FeedContainer = withTracker((params: IFeedProps) => {
   if (isEmpty(search)) {
     subscribeOptions = {
       publishedAt: -1,
+      limit: 50,
     };
   } else {
     const rawOption = pickBy(search, (val: any) => {

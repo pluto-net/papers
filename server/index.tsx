@@ -15,6 +15,7 @@ Meteor.publish("posts", function(options?: object, findString?: string) {
   } else {
     finalOptions = basicOptions;
   }
+
   if (findString) {
     const searchTerm = new RegExp(findString, "ig");
     return Post.find({ title: { $regex: searchTerm }, published: true }, finalOptions);
