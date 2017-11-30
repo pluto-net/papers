@@ -34,6 +34,8 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     commentCount: COMMENTS_COUNT_PER_LOAD,
   };
 
+  private chatRoomWrapperRef: HTMLDivElement;
+
   private loadMoreComments = () => {
     this.setState({
       commentCount: this.state.commentCount + COMMENTS_COUNT_PER_LOAD,
@@ -180,6 +182,12 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     }
   }
 
+  public componentDidUpdate() {
+    if (this.chatRoomWrapperRef) {
+      this.chatRoomWrapperRef.style.width = `${this.chatRoomWrapperRef.parentElement.clientWidth}px`;
+    }
+  }
+
   public render() {
     const { post, isLoading } = this.props;
 
@@ -270,7 +278,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
               </Table>
             </Grid.Column>
             <Grid.Column width={4}>
-              <div className="show-right-section-wrapper">
+              <div ref={el => (this.chatRoomWrapperRef = el)} className="show-right-section-wrapper">
                 <div style={{ marginBottom: 20 }}>{this.getNewRating()}</div>
                 <CommentList
                   post={post}

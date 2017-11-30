@@ -19,8 +19,10 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
     comment: "",
   };
 
-  private handleSubmit = (e: React.FormEvent<HTMLFontElement>) => {
-    e.preventDefault();
+  private handleSubmit = (e?: React.FormEvent<HTMLFontElement>) => {
+    if (e) {
+      e.preventDefault();
+    }
     const { currentUser, postId } = this.props;
     const { isLoading, comment } = this.state;
 
@@ -62,6 +64,15 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
     });
   };
 
+  private handleKeypress = (e: React.KeyboardEvent<any>) => {
+    if (e.charCode === 13 && !e.shiftKey) {
+      this.handleSubmit();
+      this.setState({
+        comment: "",
+      });
+    }
+  };
+
   private getButtonContent = () => {
     const { isLoading } = this.state;
     if (isLoading) {
@@ -91,6 +102,7 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
               onFocus={this.authCheck}
               placeholder="Please leave user message"
               value={comment}
+              onKeyPress={this.handleKeypress}
               onChange={this.handleInputChange}
             />
           </Form.Field>
