@@ -37,6 +37,7 @@ function* authorizeUser(params: ISignInParams) {
     yield put({ type: "LOGIN_SUCCESS" });
     yield put({ type: `CLOSE_${GLOBAL_DIALOGS.SIGN_IN}` });
   } catch (error) {
+    alert(error.reason);
     yield put({ type: "LOGIN_ERROR" });
   } finally {
     if (yield cancelled()) {
