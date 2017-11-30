@@ -5,11 +5,11 @@ import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Container, Grid, Checkbox, Form, Button } from "semantic-ui-react";
 import isEmpty = require("lodash.isempty");
-import pickBy = require("lodash.pickby");
-import transform = require("lodash.transform");
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
 import PostList from "./components/postList";
+import { mapSortOptionFromConditionObject, ISortOptions } from "./helpers";
+import { getHavingStringTypeTrueAttributesFromObject } from "../../helpers/getTrueAttributes";
 const { withTracker } = require("meteor/react-meteor-data");
 
 declare var Counter: any;
@@ -25,7 +25,6 @@ interface IFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   usersIsLoading: boolean;
   postCount: number;
   currentPage: number;
-  handlePageChange: (page: number) => void;
 }
 
 export interface IFeedState {
@@ -51,16 +50,19 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
   };
 
   private changeSortOption = (_e: any, data: any) => {
-    const { dispatch, location } = this.props;
-
     const newState = {
       ...this.state,
       ...{ [data.value]: data.checked },
     };
 
     this.setState(newState);
+    this.makeNewPathAndPushLocation(newState);
+  };
 
-    const search = queryString.stringify(newState);
+  private makeNewPathAndPushLocation = (object?: Object) => {
+    const { location, dispatch } = this.props;
+
+    const search = queryString.stringify(object);
     const pathWithSearch = `${location.pathname}?${search}`;
     dispatch(push(pathWithSearch));
   };
@@ -89,7 +91,8 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
   };
 
   private handleChangePage = (page: number) => {
-    this.props.handlePageChange(page);
+    const searchObject = { ...this.state, ...{ page } };
+    this.makeNewPathAndPushLocation(searchObject);
   };
 
   private getPagination = () => {
@@ -274,70 +277,47 @@ class Feed extends React.PureComponent<IFeedProps, IFeedState> {
 
 const FeedContainer = withTracker((params: IFeedProps) => {
   const rawSearch = params.location.search;
-  const search = queryString.parse(rawSearch);
+  const queryParamsObject = queryString.parse(rawSearch);
 
-  const skip = (params.currentPage - 1) * POSTS_PER_PAGE;
+  // pagination
+  const page = parseInt(queryParamsObject.page, 10);
+  const currentPage = page >= 0 ? page : 1;
+  const skip = (currentPage - 1) * POSTS_PER_PAGE;
 
-  let sortOptions: any = {};
+  // Build subscribe options
+  let sortOptions: ISortOptions = {};
   let subscribeOptions: any = {
     publishedAt: -1,
     limit: POSTS_PER_PAGE,
     skip,
   };
 
-  if (!isEmpty(search)) {
-    const rawOption = pickBy(search, (val: any) => {
-      return val === "true";
-    });
+  if (!isEmpty(queryParamsObject)) {
+    const sortConditions = getHavingStringTypeTrueAttributesFromObject(queryParamsObject);
 
-    sortOptions = (transform as any)(rawOption, (option: any, _value: any, key: string) => {
-      switch (key) {
-        case "newest": {
-          option.publishedAt = -1;
-          break;
-        }
-        case "viewCount": {
-          option.viewCount = -1;
-          break;
-        }
-        case "ratingCount": {
-          option.ratingCount = -1;
-          break;
-        }
-        case "rating": {
-          option.averageRating = -1;
-          break;
-        }
-        case "commentCount": {
-          option.commentCount = -1;
-          break;
-        }
-        case "closeToICOEnd": {
-          option.endICODate = 1;
-          break;
-        }
-      }
-    });
-
+    if (!isEmpty(sortConditions)) {
+      sortOptions = mapSortOptionFromConditionObject(sortConditions);
+    }
     subscribeOptions = { ...subscribeOptions, ...{ sort: sortOptions } };
   }
 
+  // currentUser subscription
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
 
+  // Post subscription
   let postsHandle;
-  if (search.searchTerm) {
-    postsHandle = Meteor.subscribe("posts", subscribeOptions, search.searchTerm);
+  if (queryParamsObject.searchTerm) {
+    postsHandle = Meteor.subscribe("posts", subscribeOptions, queryParamsObject.searchTerm);
   } else {
     postsHandle = Meteor.subscribe("posts", subscribeOptions);
   }
-
   const isLoading = !postsHandle.ready();
-
   const posts = Post.find({}, { sort: sortOptions, limit: POSTS_PER_PAGE }).fetch();
   Meteor.subscribe("fullPostCount");
   const postCount = Counter.get("fullPostCount");
 
+  // User subscription
   const userIds = posts.map((post: any) => post.userId);
   const userHandle = Meteor.subscribe("users", userIds);
   const users = Meteor.users.find({}).fetch();
@@ -351,29 +331,9 @@ const FeedContainer = withTracker((params: IFeedProps) => {
     currentUser,
     isLoggingIn,
     postCount,
+    currentPage,
+    handlePageChange: () => {},
   };
 })(connect()(Feed));
 
-interface IFeedContainerWithPageProps {
-  currentPage: number;
-}
-
-class FeedContainerWithPage extends React.PureComponent<any, IFeedContainerWithPageProps> {
-  public state = {
-    currentPage: 1,
-  };
-
-  private handlePageChange = (page: number) => {
-    console.log("fired");
-    this.setState({ currentPage: page });
-  };
-
-  public render() {
-    const { currentPage } = this.state;
-    const newProps = { ...this.props, ...{ currentPage, handlePageChange: this.handlePageChange } };
-
-    return <FeedContainer {...newProps} />;
-  }
-}
-
-export default FeedContainerWithPage;
+export default FeedContainer;
