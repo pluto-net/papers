@@ -2,7 +2,7 @@ import { Mongo } from "meteor/mongo";
 import { IModelClassInstance } from "./astronomy";
 const { Class } = require("meteor/jagi:astronomy");
 
-const Posts = new Mongo.Collection("posts");
+export const Posts = new Mongo.Collection("posts");
 
 export interface IPost extends IModelClassInstance {
   _id: string;
