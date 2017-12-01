@@ -5,26 +5,12 @@ import { Comment } from "../both/model/comment";
 
 declare var Counter: any;
 
-Meteor.publish("posts", function(options?: object, findString?: string) {
-  const basicOptions = {
-    sort: { publishedAt: -1 },
-    disableOplog: true,
-    limit: 5,
+Meteor.publish("posts", function(filterOptions: any) {
+  const defaultFilterOption = {
+    published: true,
   };
-
-  let finalOptions;
-  if (options) {
-    finalOptions = { ...basicOptions, ...options };
-  } else {
-    finalOptions = basicOptions;
-  }
-
-  if (findString) {
-    const searchTerm = new RegExp(findString, "ig");
-    return Post.find({ title: { $regex: searchTerm }, published: true }, finalOptions);
-  } else {
-    return Post.find({ published: true }, finalOptions);
-  }
+  const finalFilterOption = { ...defaultFilterOption, ...filterOptions };
+  return Post.find(finalFilterOption, { limit: 20 });
 });
 
 Meteor.publish("unpublishedPosts", function() {
@@ -44,14 +30,6 @@ Meteor.publish("fullPostCount", function() {
       },
       { disableOplog: true },
     ),
-  );
-});
-
-Meteor.publish("manyViewCountPosts", function(limit: number) {
-  const date = new Date();
-  return Post.find(
-    { published: true, endICODate: { $gte: date } },
-    { sort: { viewCount: -1 }, limit, disableOplog: true },
   );
 });
 

@@ -1,11 +1,12 @@
 import * as React from "react";
-// import * as queryString from "query-string";
+import * as queryString from "query-string";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Container, Tab, Loader, Grid } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post, IPost } from "../../../both/model/post";
 import IcoCard from "./components/icoCard";
 
-interface IHomeComponentProps {
+interface IHomeComponentProps extends RouteComponentProps<{}> {
   // From Meteor
   postsIsLoading: boolean;
   posts: IPost[];
@@ -13,6 +14,7 @@ interface IHomeComponentProps {
   isLoggingIn: boolean;
 }
 
+@withRouter
 class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
   private mapPostItem = (targetPosts: any[], type: string) => {
     return targetPosts.map(post => <IcoCard key={`${type}_${post._id}`} type={type} post={post} />);
@@ -59,11 +61,32 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
   }
 }
 
-const HomeContainer = withTracker(() => {
+const HomeContainer = withTracker((props: IHomeComponentProps) => {
+  const rawLocationSearch = props.location.search;
+  const queryParamsObject = queryString.parse(rawLocationSearch);
+  console.log(queryParamsObject);
+  // Basic subscribe options
+  const date = new Date();
+  const subscribeFilter: any = { startICODate: { $lte: date }, endICODate: { $gte: date } };
+  if (queryParamsObject.dateSort) {
+    switch (queryParamsObject.dateSort) {
+      case "upcoming":
+        subscribeFilter.startICODate = { $gte: date };
+        break;
+
+      case "past":
+        subscribeFilter.endICODate = { $lte: date };
+        break;
+
+      default:
+        break;
+    }
+  }
+
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
   // posts subscribe
-  const PostsHandle = Meteor.subscribe("manyViewCountPosts", 4);
+  const PostsHandle = Meteor.subscribe("posts", subscribeFilter);
   const postsIsLoading = !PostsHandle.ready();
   const posts = Post.find({}, { sort: { viewCount: -1 }, limit: 4 }).fetch();
 
