@@ -47,35 +47,11 @@ Meteor.publish("fullPostCount", function() {
   );
 });
 
-Meteor.publish("bestPosts", function(limit: number) {
-  const date = new Date();
-  return Post.find(
-    { published: true, endICODate: { $gte: date } },
-    { sort: { ratingCount: -1, averageRating: -1 }, limit, disableOplog: true },
-  );
-});
-
-Meteor.publish("closeToEndPosts", function(limit: number) {
-  const date = new Date();
-  return Post.find(
-    { published: true, endICODate: { $gte: date } },
-    { sort: { endICODate: 1 }, limit, disableOplog: true },
-  );
-});
-
 Meteor.publish("manyViewCountPosts", function(limit: number) {
   const date = new Date();
   return Post.find(
     { published: true, endICODate: { $gte: date } },
     { sort: { viewCount: -1 }, limit, disableOplog: true },
-  );
-});
-
-Meteor.publish("manyCommentsPosts", function(limit: number) {
-  const date = new Date();
-  return Post.find(
-    { published: true, endICODate: { $gte: date } },
-    { sort: { commentCount: -1 }, limit, disableOplog: true },
   );
 });
 
