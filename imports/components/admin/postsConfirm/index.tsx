@@ -3,13 +3,13 @@ import { connect, DispatchProp } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Container, Header, Loader } from "semantic-ui-react";
 import { Meteor } from "meteor/meteor";
-import { Post } from "../../../../both/model/post";
+import { Post, IPost } from "../../../../both/model/post";
 import PostList from "../../posts/components/postList";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IAdminConfirmFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   isLoading: boolean;
-  posts: any[];
+  posts: IPost[];
   currentUser: any;
   isLoggingIn: boolean;
   users: any[];

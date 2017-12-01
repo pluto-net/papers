@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Table, Loader, Container, Header, Rating, Grid } from "semantic-ui-react";
 import { connect, DispatchProp } from "react-redux";
 const { withTracker } = require("meteor/react-meteor-data");
-import { Post } from "../../../both/model/post";
+import { Post, IPost } from "../../../both/model/post";
 import { Rating as RatingModel } from "../../../both/model/rating";
 import NewRating from "../rating/new";
 import CommentInput from "../commentInput";
@@ -15,7 +15,7 @@ import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 
 interface IPostShowProps extends RouteComponentProps<{ postId: string }>, DispatchProp<{}> {
   isLoading: boolean;
-  post: any;
+  post: IPost;
   currentUser: any;
   isLoggingIn: boolean;
   myRating: any | undefined;
@@ -169,7 +169,7 @@ class PostShow extends React.PureComponent<IPostShowProps, IPostShowState> {
     );
   };
 
-  private updateViewCount = (post: any) => {
+  private updateViewCount = (post: IPost) => {
     post.callMethod("updateViewCount");
   };
 

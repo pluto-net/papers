@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Container, Grid, Checkbox, Form, Button } from "semantic-ui-react";
 import isEmpty = require("lodash.isempty");
 import { Meteor } from "meteor/meteor";
-import { Post } from "../../../both/model/post";
+import { Post, IPost } from "../../../both/model/post";
 import PostList from "./components/postList";
 import { mapSortOptionFromConditionObject, ISortOptions } from "./helpers";
 import { getHavingStringTypeTrueAttributesFromObject } from "../../helpers/getTrueAttributes";
@@ -18,7 +18,7 @@ const POSTS_PER_PAGE: number = 5;
 
 interface IFeedProps extends RouteComponentProps<{}>, DispatchProp<any> {
   isLoading: boolean;
-  posts: any;
+  posts: IPost[];
   currentUser: any;
   isLoggingIn: boolean;
   users: any[];

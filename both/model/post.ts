@@ -1,7 +1,37 @@
 import { Mongo } from "meteor/mongo";
+import { IModelClassInstance } from "./astronomy";
 const { Class } = require("meteor/jagi:astronomy");
 
 const Posts = new Mongo.Collection("posts");
+
+export interface IPost extends IModelClassInstance {
+  _id: string;
+  title: string;
+  homepageUrl: string;
+  startICODate: Date;
+  endICODate: Date;
+  acceptCurrency: string[];
+  icoPrice: string;
+  tokenDistribution: string;
+  // optional fields
+  logoUrl?: string;
+  whitePaperUrl?: string;
+  content?: string;
+  bonus?: string;
+  fields?: string[];
+  links?: string[];
+  bountyCampaign?: string;
+  escrow?: string;
+  // auto-completed fields
+  published: boolean;
+  commentCount: number;
+  viewCount: number;
+  ratingCount: number;
+  averageRating: number;
+  userId: string;
+  publishedAt: Date;
+  updatedAt: Date;
+}
 
 export const Post = Class.create({
   name: "Post",

@@ -3,20 +3,20 @@ import * as queryString from "query-string";
 import { Link } from "react-router-dom";
 import { Container, Button, Divider, Loader, Card } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
-import { Post } from "../../../both/model/post";
+import { Post, IPost } from "../../../both/model/post";
 import IcoCard from "./components/icoCard";
 import { IFeedState } from "../posts";
 
 interface IHomeComponentProps {
   // From Meteor
   bestPostsIsLoading: boolean;
-  bestPosts: any[];
+  bestPosts: IPost[];
   closeToEndPostsIsLoading: boolean;
-  closeToEndPosts: any[];
+  closeToEndPosts: IPost[];
   manyViewCountPostsIsLoading: boolean;
-  manyViewCountPosts: any[];
+  manyViewCountPosts: IPost[];
   manyCommentsPostsIsLoading: boolean;
-  manyCommentsPosts: any[];
+  manyCommentsPosts: IPost[];
   currentUser: any;
   isLoggingIn: boolean;
 }

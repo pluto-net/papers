@@ -2,9 +2,10 @@ import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
 import { Item, Grid, Rating, Button } from "semantic-ui-react";
+import { IPost } from "../../../../both/model/post";
 
 interface IPostListProps {
-  posts: any[];
+  posts: IPost[];
   currentUser: any;
   users: any[];
   usersIsLoading: boolean;
@@ -24,13 +25,13 @@ const mapMultiItem = (items: string[], postId: string, type: string) => {
   });
 };
 
-const handleTogglePublish = (post: any, author: any) => {
+const handleTogglePublish = (post: IPost, author: any) => {
   if (post && author) {
     post.callMethod("changePublishState", post, author.emails[0].address);
   }
 };
 
-const getManagingPlublishingButton = (props: IPostListProps, post: any) => {
+const getManagingPlublishingButton = (props: IPostListProps, post: IPost) => {
   const { currentUser, users } = props;
 
   const author = users.find((user: any) => user._id === post.userId);

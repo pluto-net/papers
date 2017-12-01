@@ -4,11 +4,12 @@ import * as moment from "moment";
 import throttle = require("lodash.throttle");
 import InfiniteScroll = require("react-infinite-scroller");
 import { Comment, IComment } from "../../../both/model/comment";
+import { IPost } from "../../../both/model/post";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface ICommentListProps {
   // From parent components
-  post: any;
+  post: IPost;
   commentCount: number;
   loadMoreFunction: () => void;
   // From Meteor

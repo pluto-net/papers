@@ -2,9 +2,10 @@ import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
 import { Card, Image, Rating } from "semantic-ui-react";
+import { IPost } from "../../../../both/model/post";
 
 interface IICOCardProps {
-  post: any;
+  post: IPost;
   type: string;
 }
 
