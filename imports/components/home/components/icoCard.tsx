@@ -17,13 +17,17 @@ const ICOCard = (props: IICOCardProps) => {
   const fromNow = moment(post.endICODate).fromNow();
   const tokenDistribution = post.tokenDistribution.slice(0, 50);
 
+  if (!post) {
+    return null;
+  }
+
   return (
     <Grid.Column>
       <div className="ico-card-item-wrapper">
         <div className="ico-card-item-title-box">
           <div className="ico-card-item-title-left-box">
             <div className="ico-card-item-img-wrapper">
-              <img src="#" alt="" />
+              <img src={post.logoUrl} alt={post.title} />
             </div>
           </div>
           <div className="ico-card-item-title-right-box">
@@ -46,7 +50,7 @@ const ICOCard = (props: IICOCardProps) => {
           <a target="_blank" href={getWhitePaperAddress(post)} className="link-button">
             White Paper
           </a>
-          <a target="_blank" href={post.links[0]} className="link-button">
+          <a target="_blank" href={post.links ? post.links[0] : getWhitePaperAddress(post)} className="link-button">
             Homepage
           </a>
         </div>
