@@ -31,24 +31,29 @@ if (EnvChecker.isDev()) {
 
 const routerMid = ReactRouterRedux.routerMiddleware(history as any);
 const sagaMiddleware = createSagaMiddleware();
-let logger = null;
-if (!Meteor.isProduction) {
-  logger = createLogger({
-    stateTransformer: state => {
-      const newState: any = {}; // HACK: Should assign proper type later
-      for (const i of Object.keys(state)) {
-        if (Iterable.isIterable(state[i])) {
-          newState[i] = state[i].toJS();
-        } else {
-          newState[i] = state[i];
-        }
+const logger = createLogger({
+  stateTransformer: state => {
+    const newState: any = {}; // HACK: Should assign proper type later
+    for (const i of Object.keys(state)) {
+      if (Iterable.isIterable(state[i])) {
+        newState[i] = state[i].toJS();
+      } else {
+        newState[i] = state[i];
       }
-      return newState;
-    },
-  });
+    }
+    return newState;
+  },
+});
+
+const middlewares = [];
+middlewares.push(routerMid);
+middlewares.push(sagaMiddleware);
+
+if (!Meteor.isProduction) {
+  middlewares.push(logger);
 }
 
-export const store = createStore(rootReducer, initialState, applyMiddleware(routerMid, sagaMiddleware, logger));
+export const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares));
 
 sagaMiddleware.run(rootSaga);
 
