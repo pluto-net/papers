@@ -15,13 +15,21 @@ export interface IPost extends IModelClassInstance {
   tokenDistribution: string;
   // optional fields
   logoUrl?: string;
-  whitePaperUrl?: string;
   content?: string;
   bonus?: string;
   fields?: string[];
   links?: string[];
   bountyCampaign?: string;
   escrow?: string;
+  whitePaperUrl?: string;
+  facebookUrl?: string;
+  twitterUrl?: string;
+  redditUrl?: string;
+  githubUrl?: string;
+  slackUrl?: string;
+  telegramUrl?: string;
+  mediumUrl?: string;
+  linkedinUrl?: string;
   // auto-completed fields
   published: boolean;
   commentCount: number;
@@ -88,6 +96,39 @@ export const Post = Class.create({
       type: String,
       optional: true,
     },
+    facebookUrl: {
+      type: String,
+      optional: true,
+    },
+    twitterUrl: {
+      type: String,
+      optional: true,
+    },
+    redditUrl: {
+      type: String,
+      optional: true,
+    },
+    githubUrl: {
+      type: String,
+      optional: true,
+    },
+    slackUrl: {
+      type: String,
+      optional: true,
+    },
+    telegramUrl: {
+      type: String,
+      optional: true,
+    },
+    mediumUrl: {
+      type: String,
+      optional: true,
+    },
+    linkedinUrl: {
+      type: String,
+      optional: true,
+    },
+
     content: {
       type: String,
       optional: true,
