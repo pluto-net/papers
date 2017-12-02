@@ -5,6 +5,7 @@ import { Container, Tab, Loader, Grid } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import { Post, IPost } from "../../../both/model/post";
 import IcoCard from "./components/icoCard";
+import { getCurrentDate } from "../../helpers/getCurrentDate";
 
 interface IHomeComponentProps extends RouteComponentProps<{}> {
   // From Meteor
@@ -66,7 +67,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
   const queryParamsObject = queryString.parse(rawLocationSearch);
   console.log(queryParamsObject);
   // Basic subscribe options
-  const date = new Date();
+  const date = getCurrentDate();
   const subscribeFilter: any = { startICODate: { $lte: date }, endICODate: { $gte: date } };
   if (queryParamsObject.dateSort) {
     switch (queryParamsObject.dateSort) {
@@ -88,7 +89,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
   // posts subscribe
   const PostsHandle = Meteor.subscribe("posts", subscribeFilter);
   const postsIsLoading = !PostsHandle.ready();
-  const posts = Post.find({}, { sort: { viewCount: -1 }, limit: 4 }).fetch();
+  const posts = Post.find().fetch();
 
   return {
     posts,

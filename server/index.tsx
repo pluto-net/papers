@@ -10,7 +10,7 @@ Meteor.publish("posts", function(filterOptions: any) {
     published: true,
   };
   const finalFilterOption = { ...defaultFilterOption, ...filterOptions };
-  return Post.find(finalFilterOption, { limit: 20 });
+  return Post.find(finalFilterOption, { limit: 20, disableOplog: true });
 });
 
 Meteor.publish("unpublishedPosts", function() {
