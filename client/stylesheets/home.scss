@@ -1,18 +1,25 @@
-.pluto-banner {
-  margin: 0 auto;
-  background-size: cover;
-  width: 1180px;
-  height: 350.5px;
-  background-image: url("https://dd2gn9pwu61vr.cloudfront.net/final-banner-background@2x.jpg");
-  color: #fff;
-  padding: 30px;
-  border-radius: 5px;
-}
-
 .ico-list-wrapper {
   display: flex;
 }
 
 .ico-list-wrapper {
   border: 0 !important;
+}
+
+.home-header-filter-wrapper {
+  position: relative;
+  height: 50px;
+}
+
+.home-header-sort-dropdown-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.home-header-title {
+  font-size: 23.5px;
+  text-align: left;
+  color: #0c1020;
+  margin-bottom: 38px;
 }

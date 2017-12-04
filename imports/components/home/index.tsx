@@ -4,7 +4,7 @@ import * as queryString from "query-string";
 import { connect, DispatchProp } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Container, Tab, Grid } from "semantic-ui-react";
+import { Container, Tab, Grid, Dropdown } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import InfiniteScroll = require("react-infinite-scroller");
 import throttle = require("lodash.throttle");
@@ -23,13 +23,22 @@ interface IHomeComponentProps extends RouteComponentProps<{}>, DispatchProp<any>
   // From Meta
   limit: number;
   hasMore: boolean;
+  sortOption: SortOption;
   incrementSubscriptionLimit: () => void;
 }
 
 type DateFilter = "current" | "upcoming" | "past";
+type SortOption = "hot" | "score" | "date";
 
 interface IHomeQueryParams {
   dateFilter?: DateFilter;
+  sortOption?: SortOption;
+}
+
+interface ISortOptionDropdownItem {
+  key: number;
+  text: string;
+  value: SortOption;
 }
 
 @withRouter
@@ -48,7 +57,34 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
     dispatch(push(`/?${queryParams}`));
   };
 
-  private getHeader = () => {
+  private handleSortChange = (_e: any, data: any) => {
+    const { dispatch, location } = this.props;
+
+    const sortOption = data.value;
+    const queryParams = addOrChangeQueryParams(location.search, { sortOption });
+
+    dispatch(push(`/?${queryParams}`));
+  };
+
+  private getSortDropdown = () => {
+    const options: ISortOptionDropdownItem[] = [
+      { key: 1, text: "Hot", value: "hot" },
+      { key: 2, text: "Score", value: "score" },
+      { key: 3, text: "Date", value: "date" },
+    ];
+
+    return (
+      <Dropdown
+        onChange={this.handleSortChange}
+        options={options}
+        placeholder="Choose an option"
+        value={this.props.sortOption}
+        selection
+      />
+    );
+  };
+
+  private getContent = () => {
     const { dateFilter } = this.props;
 
     const panes = [
@@ -59,7 +95,15 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
 
     const activeIndex = panes.findIndex(pane => pane.menuItem.toLowerCase() === dateFilter);
 
-    return <Tab onTabChange={this.handleTabChange} activeIndex={activeIndex} panes={panes} />;
+    return (
+      <div>
+        <div className="home-header-filter-wrapper">
+          <h1 className="home-header-title">{this.getTitle()}</h1>
+          <div className="home-header-sort-dropdown-wrapper">{this.getSortDropdown()}</div>
+        </div>
+        <Tab onTabChange={this.handleTabChange} activeIndex={activeIndex} panes={panes} />
+      </div>
+    );
   };
 
   private getIcoList = () => {
@@ -83,19 +127,30 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
           </InfiniteScroll>
         </div>
       );
-    } else {
-      return <span>No information yet</span>;
+    }
+  };
+
+  private getTitle = () => {
+    const { dateFilter } = this.props;
+    switch (dateFilter) {
+      case "current":
+        return "Ongoing ICO Project";
+
+      case "upcoming":
+        return "Upcoming ICO Project";
+
+      case "past":
+        return "Past ICO Project";
+
+      default:
+        return "Ongoing ICO Project";
     }
   };
 
   public render() {
     return (
-      <div>
-        <div className="pluto-banner">
-          <h1>Recommend ICO</h1>
-          <div>Pluto is sharing and reviewing Cryptocurrency and blockchain.</div>
-        </div>
-        <Container style={{ marginTop: 30 }}>{this.getHeader()}</Container>
+      <div className="pluto-home-page">
+        <Container style={{ marginTop: 30 }}>{this.getContent()}</Container>
       </div>
     );
   }
@@ -104,9 +159,8 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, {}> {
 const HomeContainer = withTracker((props: IHomeComponentProps) => {
   const rawLocationSearch = props.location.search;
   const queryParamsObject: IHomeQueryParams = queryString.parse(rawLocationSearch);
-  console.log(queryParamsObject);
   const limit = props.limit;
-  // Basic subscribe options
+  // Build subscribe options
   const date = getCurrentDate();
   const subscribeFilter: any = { startICODate: { $lte: date }, endICODate: { $gte: date } };
   if (queryParamsObject.dateFilter) {
@@ -124,16 +178,42 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
     }
   }
 
+  // build subscription option
+  const targetSortOption: any = {};
+  switch (queryParamsObject.sortOption) {
+    case "score":
+      targetSortOption.averageRating = -1;
+      targetSortOption.startICODate = -1;
+      break;
+
+    case "hot":
+      targetSortOption.commentCount = -1;
+      targetSortOption.startICODate = -1;
+      break;
+
+    case "date":
+      targetSortOption.endICODate = 1;
+      break;
+
+    default:
+      targetSortOption.commentCount = -1;
+      targetSortOption.startICODate = -1;
+      break;
+  }
+
   const subscribeOptions: any = {
     limit,
+    sort: targetSortOption,
   };
+
+  console.log(subscribeOptions);
 
   const currentUser = Meteor.user();
   const isLoggingIn = Meteor.loggingIn();
   // posts subscribe
   const PostsHandle = Meteor.subscribe("posts", subscribeFilter, subscribeOptions);
   const postsIsLoading = !PostsHandle.ready();
-  const posts = Post.find().fetch();
+  const posts = Post.find(subscribeFilter, subscribeOptions).fetch();
 
   let hasMore: boolean = true;
   Meteor.call("getIcoPostCountWithOptions", subscribeFilter, subscribeOptions, (err: Error, count: number) => {
@@ -156,6 +236,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
     dateFilter: queryParamsObject.dateFilter ? queryParamsObject.dateFilter : "current",
     limit,
     hasMore,
+    sortOption: queryParamsObject.sortOption ? queryParamsObject.sortOption : "hot",
   };
 })(connect()(HomeComponent));
 

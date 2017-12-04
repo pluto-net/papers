@@ -99,6 +99,10 @@ $logo-image-margin-right: 20px;
     border: solid 1px #d8dde7;
     color: #9aa3b5;
     font-size: 13px;
+
+    &:hover {
+      background-color: #f5f7fb;
+    }
   }
 
   .link-button + .link-button {

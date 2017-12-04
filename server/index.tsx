@@ -12,7 +12,6 @@ Meteor.publish("posts", function(filterOptions: object, subscribeOptions: object
   const finalFilterOption = { ...defaultFilterOption, ...filterOptions };
 
   const defaultSubscribeOptions = {
-    sort: { startICODate: -1 },
     disableOplog: true,
   };
 
