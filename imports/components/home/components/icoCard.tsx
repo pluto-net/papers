@@ -15,7 +15,7 @@ const ICOCard = (props: IICOCardProps) => {
   const rating = Math.round(post.averageRating);
   const avgRating = post.averageRating.toFixed(1);
   const fromNow = moment(post.endICODate).fromNow();
-  const tokenDistribution = post.tokenDistribution.slice(0, 50);
+  const content = post.content.slice(0, 50);
 
   if (!post) {
     return null;
@@ -43,7 +43,7 @@ const ICOCard = (props: IICOCardProps) => {
           </div>
         </div>
         <div className="content-wrapper">
-          <Link style={{ color: "inherit" }} to={`/posts/${post._id}`}>{`${tokenDistribution} ...`}</Link>
+          <Link style={{ color: "inherit" }} to={`/posts/${post._id}`}>{`${content} ...`}</Link>
         </div>
 
         <div className="link-buttons-wrapper">

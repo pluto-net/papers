@@ -1,4 +1,6 @@
+import { Meteor } from "meteor/meteor";
 import * as AWS from "aws-sdk";
+import omit = require("lodash.omit");
 import { Post } from "../../both/model/post";
 
 export interface IPostParamsInterface {
@@ -19,6 +21,15 @@ interface IUpdateRatingProps {
   ratingCount: number;
   newRatingAverage: number;
 }
+
+// Meteor Methods
+Meteor.methods({
+  getIcoPostCountWithOptions(filterOptions: object, subscribeOptions?: any) {
+    const finalSubscribeOptions = omit(subscribeOptions, "limit");
+
+    return Post.find(filterOptions, finalSubscribeOptions).count();
+  },
+});
 
 // Post model methods
 Post.extend({

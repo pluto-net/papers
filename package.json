@@ -6,6 +6,7 @@
     "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
   },
   "dependencies": {
+    "@types/lodash.omit": "^4.5.3",
     "@types/meteor": "^1.4.12",
     "aws-sdk": "^2.156.0",
     "babel-runtime": "^6.26.0",
@@ -14,6 +15,7 @@
     "immutable": "^3.8.2",
     "lodash": "^4.17.4",
     "lodash.isempty": "^4.4.0",
+    "lodash.omit": "^4.5.0",
     "lodash.pickby": "^4.6.0",
     "lodash.throttle": "^4.1.1",
     "lodash.transform": "^4.6.0",

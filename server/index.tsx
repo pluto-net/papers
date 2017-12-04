@@ -5,12 +5,23 @@ import { Comment } from "../both/model/comment";
 
 declare var Counter: any;
 
-Meteor.publish("posts", function(filterOptions: any) {
+Meteor.publish("posts", function(filterOptions: object, subscribeOptions: object) {
   const defaultFilterOption = {
     published: true,
   };
   const finalFilterOption = { ...defaultFilterOption, ...filterOptions };
-  return Post.find(finalFilterOption, { limit: 20, disableOplog: true });
+
+  const defaultSubscribeOptions = {
+    sort: { startICODate: -1 },
+    disableOplog: true,
+  };
+
+  const finalSubscribeOptions = {
+    ...defaultSubscribeOptions,
+    ...subscribeOptions,
+  };
+
+  return Post.find(finalFilterOption, finalSubscribeOptions);
 });
 
 Meteor.publish("unpublishedPosts", function() {
