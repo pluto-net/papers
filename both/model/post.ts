@@ -30,6 +30,8 @@ export interface IPost extends IModelClassInstance {
   telegramUrl?: string;
   mediumUrl?: string;
   linkedinUrl?: string;
+  founded?: string;
+  technicalDetails?: string;
   // auto-completed fields
   published: boolean;
   commentCount: number;
@@ -150,6 +152,14 @@ export const Post = Class.create({
       optional: true,
     },
     escrow: {
+      type: String,
+      optional: true,
+    },
+    founded: {
+      type: String,
+      optional: true,
+    },
+    technicalDetails: {
       type: String,
       optional: true,
     },
