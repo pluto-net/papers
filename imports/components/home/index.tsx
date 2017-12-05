@@ -31,7 +31,7 @@ interface IHomeComponentStates {
   searchTerm: string;
 }
 
-type DateFilter = "current" | "upcoming" | "past";
+type DateFilter = "current" | "upcoming" | "past" | "all";
 type SortOption = "hot" | "score" | "date";
 
 interface IHomeQueryParams {
@@ -61,7 +61,9 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
   private handleTabChange = (_e: any, data: any) => {
     const { dispatch, location } = this.props;
     const dateFilter = data.panes[data.activeIndex].menuItem.toLowerCase();
-    const queryParams = addOrChangeQueryParams(location.search, { dateFilter });
+
+    const removeKeys = dateFilter === "all" ? null : ["keyword"];
+    const queryParams = addOrChangeQueryParams(location.search, { dateFilter }, removeKeys);
 
     dispatch(push(`/?${queryParams}`));
   };
@@ -100,13 +102,14 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
       { menuItem: "CURRENT", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
       { menuItem: "UPCOMING", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
       { menuItem: "PAST", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
+      { menuItem: "ALL", render: () => <Tab.Pane className="ico-list-wrapper ">{this.getIcoList()}</Tab.Pane> },
     ];
 
     const activeIndex = panes.findIndex(pane => pane.menuItem.toLowerCase() === dateFilter);
 
     return (
-      <div>
-        <Tab onTabChange={this.handleTabChange} activeIndex={activeIndex} panes={panes} />
+      <div className="home-tab-wrapper">
+        <Tab className="home-tab-menu" onTabChange={this.handleTabChange} activeIndex={activeIndex} panes={panes} />
       </div>
     );
   };
@@ -151,6 +154,9 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
       case "past":
         return "Past ICO Project";
 
+      case "all":
+        return "All ICO Project";
+
       default:
         return "Ongoing ICO Project";
     }
@@ -170,7 +176,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     const { dispatch, location } = this.props;
 
     const keyword = searchTerm;
-    const queryParams = addOrChangeQueryParams(location.search, { keyword });
+    const queryParams = addOrChangeQueryParams(location.search, { keyword, dateFilter: "all" });
 
     dispatch(push(`/?${queryParams}`));
   };
@@ -204,7 +210,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
   const limit = props.limit;
   // Build subscribe options
   const currentDate = getCurrentDate();
-  const subscribeFilter: any = { startICODate: { $lte: currentDate }, endICODate: { $gte: currentDate } };
+  const subscribeFilter: any = {};
   if (queryParamsObject.dateFilter) {
     switch (queryParamsObject.dateFilter) {
       case "upcoming":
@@ -215,7 +221,12 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
         subscribeFilter.endICODate = { $lte: currentDate };
         break;
 
+      case "all":
+        break;
+
       default:
+        subscribeFilter.startICODate = { $lte: currentDate };
+        subscribeFilter.endICODate = { $gte: currentDate };
         break;
     }
   }

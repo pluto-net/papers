@@ -29,6 +29,20 @@
   margin-bottom: 45px;
 }
 
+.home-tab-menu {
+  position: relative;
+}
+
+.home-tab-menu .item:last-of-type {
+  position: absolute !important;
+  right: 0;
+  border: 0 !important;
+  font-size: 16px;
+  background-color: transparent !important;
+  text-align: center;
+  color: #6096ff !important;
+}
+
 .home-search-input {
   border: 0 !important;
   border-bottom: 1px solid #3643a0 !important;

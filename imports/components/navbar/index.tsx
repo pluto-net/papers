@@ -1,16 +1,17 @@
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { push } from "react-router-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import { Menu, Button, Container, Header, Input } from "semantic-ui-react";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
+import { addOrChangeQueryParams } from "../../helpers/queryParams";
 const { withTracker } = require("meteor/react-meteor-data");
 
-interface INavbarProps extends DispatchProp<any> {
+interface INavbarProps extends RouteComponentProps<{}>, DispatchProp<any> {
   currentUser: any;
   isLoggingIn: boolean;
 }
@@ -19,6 +20,7 @@ interface INavbarState {
   searchTerm: string;
 }
 
+@withRouter
 class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
   public state = {
     searchTerm: "",
@@ -62,9 +64,14 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
 
   private handleSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { dispatch } = this.props;
+    const { searchTerm } = this.state;
+    const { dispatch, location } = this.props;
 
-    dispatch(push(`/posts?searchTerm=${this.state.searchTerm}`));
+    const keyword = searchTerm;
+    const queryParams = addOrChangeQueryParams(location.search, { keyword, dateFilter: "all" });
+
+    dispatch(push(`/?${queryParams}`));
+
     this.setState({
       searchTerm: "",
     });
