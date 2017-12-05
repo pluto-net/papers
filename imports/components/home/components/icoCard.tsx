@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as moment from "moment";
-import { Link } from "react-router-dom";
 import { Rating, Grid } from "semantic-ui-react";
 import { IPost } from "../../../../both/model/post";
 import { getWhitePaperAddress } from "../../../helpers/getWhitepaperAddress";
@@ -8,6 +7,7 @@ import { getWhitePaperAddress } from "../../../helpers/getWhitepaperAddress";
 interface IICOCardProps {
   post: IPost;
   type: string;
+  handleClickPost: (post: IPost) => void;
 }
 
 const ICOCard = (props: IICOCardProps) => {
@@ -32,7 +32,14 @@ const ICOCard = (props: IICOCardProps) => {
           </div>
           <div className="ico-card-item-title-right-box">
             <div className="ico-card-item-title">
-              <Link to={`/posts/${post._id}`}>{post.title}</Link>
+              <a
+                className="ico-card-item-modal-link"
+                onClick={() => {
+                  props.handleClickPost(post);
+                }}
+              >
+                {post.title}
+              </a>
             </div>
             <div className="ico-card-item-rating-box">
               <Rating style={{ marginRight: 3 }} icon="star" maxRating={5} rating={rating} disabled />
@@ -43,7 +50,13 @@ const ICOCard = (props: IICOCardProps) => {
           </div>
         </div>
         <div className="content-wrapper">
-          <Link style={{ color: "inherit" }} to={`/posts/${post._id}`}>{`${content} ...`}</Link>
+          <a
+            style={{ color: "inherit" }}
+            className="ico-card-item-modal-link"
+            onClick={() => {
+              props.handleClickPost(post);
+            }}
+          >{`${content} ...`}</a>
         </div>
 
         <div className="link-buttons-wrapper">
@@ -56,9 +69,15 @@ const ICOCard = (props: IICOCardProps) => {
         </div>
 
         <div className="meta-information-wrapper">
-          <Link className="fromNow" to={`/posts/${post._id}`}>
+          <a
+            className="fromNow"
+            className="ico-card-item-modal-link"
+            onClick={() => {
+              props.handleClickPost(post);
+            }}
+          >
             {fromNow}
-          </Link>
+          </a>
           <div className="comment-info">
             Comments
             <span className="comment-count">{` ${post.commentCount}`}</span>

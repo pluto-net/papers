@@ -57,10 +57,14 @@ Meteor.publish("myRating", function(postId: string) {
   return Rating.find({ postId, userId: Meteor.userId() });
 });
 
-Meteor.publish("comments", function(postId: string, limit: number) {
+Meteor.publish("ratingsFromPostIdAndUserIds", function(postId: string, userIds: string[]) {
+  return Rating.find({ postId, userId: { $in: userIds } });
+});
+
+Meteor.publish("comments", function(postId: string) {
   const options = {
     sort: { publishedAt: -1 },
-    limit,
+    disableOplog: true,
   };
 
   return Comment.find({ postId }, options);

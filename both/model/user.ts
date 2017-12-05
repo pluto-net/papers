@@ -1,13 +1,29 @@
 const { Class } = require("meteor/jagi:astronomy");
-// var user = new User();
-// user.save({
-//   simulation: false // Insert only on the server.
-// });
 
-// server.js
-// Meteor.publish('posts', function() {
-//   Post.find({}, {fields: {title: 1}});
-// });
+interface IUserEmail {
+  address: string;
+  verified: boolean;
+}
+
+/***
+ ***************** IMPORTANT ***************************************************************
+ ** DO NOT USE PROFILE BECAUSE OF THE SECURITY ISSUE.
+ ** CLIENT CAN ACCESS AND CHANGE USER PROFILE
+ ********************************************************************************************
+ **
+ */
+interface IUserProfile {
+  profileImagePublicId?: string;
+}
+
+export interface IUser {
+  _id: string;
+  username: string;
+  createdAt: Date;
+  emails: IUserEmail[];
+  profile: IUserProfile;
+  admin: boolean;
+}
 
 // bad_client.js
 // Meteor.subscribe('posts');

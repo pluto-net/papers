@@ -1,0 +1,44 @@
+.ico-post-content-wrapper {
+  .header {
+    height: 160px;
+  }
+
+  .post-content-comment-item-wrapper {
+    .meta-information-box {
+      position: relative;
+      height: 35px;
+
+      .username {
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.33;
+        color: #0c1020;
+      }
+
+      .from-now {
+        font-size: 14px;
+        line-height: 1.71;
+        text-align: left;
+        color: #9aa3b5;
+      }
+
+      .rating-information {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+  }
+
+  .load-more-comments {
+    height: 50px;
+    line-height: 50px;
+    border-radius: 5px;
+    background-color: #f5f7fb;
+    border: solid 1px #d8dde7;
+    font-size: 16px;
+    text-align: center;
+    color: #9aa3b5;
+    cursor: pointer;
+  }
+}
