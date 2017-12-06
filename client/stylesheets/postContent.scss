@@ -1,6 +1,49 @@
 .ico-post-content-wrapper {
+  padding: 47.5px 59px 185px 59px;
+
   .header {
-    height: 160px;
+    position: relative;
+    height: 113px;
+
+    .logo-image-wrapper {
+      display: inline-block;
+      vertical-align: top;
+      width: 81.5px;
+      height: 81.5px;
+      border-radius: 50%;
+      border: solid 1px #f1f3f6;
+      margin-right: 24px;
+
+      .logo-image {
+        width: 81.5px;
+        height: 81.5px;
+        border-radius: 50%;
+      }
+    }
+
+    .header-left-box-information {
+      display: inline-block;
+      vertical-align: top;
+
+      .header-title {
+        font-size: 27.5px;
+        font-weight: bold;
+        color: #0c1020;
+        margin-bottom: 10.5px;
+      }
+
+      .header-fields {
+        font-size: 18px;
+        text-align: center;
+        color: #6096ff;
+      }
+    }
+
+    .header-right-box {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 
   .post-content-comment-item-wrapper {
@@ -40,5 +83,24 @@
     text-align: center;
     color: #9aa3b5;
     cursor: pointer;
+  }
+
+  .comments-information-wrapper {
+    padding-bottom: 10px;
+    border-bottom: solid 1px #d8dde7;
+
+    .comment-count {
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.33;
+      color: #0c1020;
+    }
+
+    .comment-count-number {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.5;
+      color: #6096ff;
+    }
   }
 }

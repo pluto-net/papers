@@ -6,10 +6,15 @@ import * as moment from "moment";
 import { Comment, IComment } from "../../../../both/model/comment";
 import { IUser, User } from "../../../../both/model/user";
 import { IRating } from "../../../../both/model/rating";
+import CommentInput from "../../commentInput/index";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostContentProps {
+  // From parent component
   post: IPost;
+  currentUser: IUser | null;
+  handleOpenSignUpDialog: () => void;
+  // From Meteor
   commentsIsLoading: boolean;
   comments: IComment[];
   users: IUser[];
@@ -132,6 +137,19 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
     });
   };
 
+  private getCommentsInformation = () => {
+    const { post } = this.props;
+
+    return (
+      <div className="comments-information-wrapper">
+        <div className="comment-count">
+          {`Comments `}
+          <span className="comment-count-number">{post.commentCount}</span>
+        </div>
+      </div>
+    );
+  };
+
   private getComments = () => {
     const { isCommentsOpen } = this.state;
     const { comments, commentsIsLoading, usersIsLoading } = this.props;
@@ -160,19 +178,28 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
   };
 
   public render() {
-    const { post } = this.props;
+    const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
     return (
       <div className="ico-post-content-wrapper">
         <div className="header">
-          <h1 className="header-title">{post.title}</h1>
-          <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+          <div className="header-left-box">
+            <span className="logo-image-wrapper">
+              <img src={post.logoUrl} alt={post.title} className="logo-image" />
+            </span>
+            <span className="header-left-box-information">
+              <h1 className="header-title">{post.title}</h1>
+              <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+            </span>
+          </div>
           <div className="header-right-box">{this.getRatingShow()}</div>
         </div>
 
         <div className="content-wrapper">
           {this.getICOPeriod()}
           <div className="content-description">{post.content}</div>
+          <CommentInput currentUser={currentUser} postId={post._id} handleOpenSignUpDialog={handleOpenSignUpDialog} />
+          {this.getCommentsInformation()}
           {this.getComments()}
         </div>
       </div>
