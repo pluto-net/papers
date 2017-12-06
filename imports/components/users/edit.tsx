@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import { Meteor } from "meteor/meteor";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { push } from "react-router-redux";
@@ -67,7 +67,7 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
     const { isLoggingIn, isLoading, targetUser, isMine, dispatch } = props;
     if (!isLoading && !isLoggingIn && !isMine) {
       alert("You are not proper user!");
-      dispatch(push(`/users/${targetUser}`));
+      (dispatch as Dispatch<any>)(push(`/users/${targetUser}`));
     }
   };
 
@@ -107,7 +107,7 @@ class UserProfileEdit extends React.PureComponent<IUserProfileEditProps, IUserPr
         if (err) {
           alert(err);
         } else {
-          dispatch(push(`/users/${targetUser._id}`));
+          (dispatch as Dispatch<any>)(push(`/users/${targetUser._id}`));
         }
       });
     }

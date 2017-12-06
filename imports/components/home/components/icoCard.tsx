@@ -15,11 +15,16 @@ const ICOCard = (props: IICOCardProps) => {
   const rating = Math.round(post.averageRating);
   const avgRating = post.averageRating.toFixed(1);
   const fromNow = moment(post.endICODate).fromNow();
-  const content = post.content.slice(0, 50);
-
-  if (!post) {
-    return null;
+  let content: string;
+  if (post.content && post.content.length > 50) {
+    content = post.content.slice(0, 50) + "...";
+  } else if (!post.content) {
+    content = "There is no description yet";
+  } else {
+    content = post.content;
   }
+
+  if (!post) return null;
 
   return (
     <Grid.Column>
@@ -46,7 +51,7 @@ const ICOCard = (props: IICOCardProps) => {
               <span className="average-rating">{avgRating}</span>
               <span className="average-count">{` (${post.ratingCount} participants)`}</span>
             </div>
-            <div className="field-wrapper">{post.fields.join(" · ")}</div>
+            <div className="field-wrapper">{post.fields ? post.fields.join(" · ") : null}</div>
           </div>
         </div>
         <div className="content-wrapper">
@@ -56,7 +61,9 @@ const ICOCard = (props: IICOCardProps) => {
             onClick={() => {
               props.handleClickPost(post);
             }}
-          >{`${content} ...`}</a>
+          >
+            {content}
+          </a>
         </div>
 
         <div className="link-buttons-wrapper">
@@ -70,8 +77,7 @@ const ICOCard = (props: IICOCardProps) => {
 
         <div className="meta-information-wrapper">
           <a
-            className="fromNow"
-            className="ico-card-item-modal-link"
+            className="ico-card-item-modal-link fromNow"
             onClick={() => {
               props.handleClickPost(post);
             }}

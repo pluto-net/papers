@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
@@ -29,31 +29,31 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
   private handleCloseSignUpDialog = () => {
     const { dispatch } = this.props;
 
-    dispatch(closeDialog(GLOBAL_DIALOGS.SIGN_UP));
+    (dispatch as Dispatch<any>)(closeDialog(GLOBAL_DIALOGS.SIGN_UP));
   };
 
   private handleOpenSignUpDialog = () => {
     const { dispatch } = this.props;
 
-    dispatch(openDialog(GLOBAL_DIALOGS.SIGN_UP));
+    (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_UP));
   };
 
   private handleCloseSignInDialog = () => {
     const { dispatch } = this.props;
 
-    dispatch(closeDialog(GLOBAL_DIALOGS.SIGN_IN));
+    (dispatch as Dispatch<any>)(closeDialog(GLOBAL_DIALOGS.SIGN_IN));
   };
 
   private handleOpenSignInDialog = () => {
     const { dispatch } = this.props;
 
-    dispatch(openDialog(GLOBAL_DIALOGS.SIGN_IN));
+    (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_IN));
   };
 
   private handleLogoutClick = () => {
     const { dispatch } = this.props;
 
-    dispatch({ type: "REQUEST_LOGOUT" });
+    (dispatch as Dispatch<any>)({ type: "REQUEST_LOGOUT" });
   };
 
   private handleChangeSearchTerm = (e: React.FormEvent<HTMLInputElement>) => {
@@ -70,7 +70,7 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
     const keyword = searchTerm;
     const queryParams = addOrChangeQueryParams(location.search, { keyword, dateFilter: "all" });
 
-    dispatch(push(`/?${queryParams}`));
+    (dispatch as Dispatch<any>)(push(`/?${queryParams}`));
 
     this.setState({
       searchTerm: "",

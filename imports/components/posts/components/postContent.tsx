@@ -85,14 +85,18 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
     const { ratings } = this.props;
 
     if (ratings && ratings.length > 0) {
-      const rating = ratings.find(rating => rating.userId === targetUserId);
+      const rating: IRating | undefined = ratings.find(rating => rating.userId === targetUserId);
 
-      return (
-        <span className="rating-information">
-          <Rating icon="star" maxRating={5} rating={rating.rating} />
-          {` ${rating.rating}`}
-        </span>
-      );
+      if (rating) {
+        return (
+          <span className="rating-information">
+            <Rating icon="star" maxRating={5} rating={rating.rating} />
+            {` ${rating.rating}`}
+          </span>
+        );
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -103,17 +107,20 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
 
     if (users && users.length > 0) {
       const targetUser = users.find(user => user._id === comment.userId);
-
-      return (
-        <div key={`post_content_comment_item_${comment._id}`} className="post-content-comment-item-wrapper">
-          <div className="meta-information-box">
-            <span className="username">{targetUser.username}</span>
-            <span className="from-now">{moment(comment.publishedAt).fromNow()}</span>
-            {this.getRatingInformation(targetUser._id)}
+      if (targetUser) {
+        return (
+          <div key={`post_content_comment_item_${comment._id}`} className="post-content-comment-item-wrapper">
+            <div className="meta-information-box">
+              <span className="username">{targetUser.username}</span>
+              <span className="from-now">{moment(comment.publishedAt).fromNow()}</span>
+              {this.getRatingInformation(targetUser._id)}
+            </div>
+            {comment.content}
           </div>
-          {comment.content}
-        </div>
-      );
+        );
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -159,7 +166,7 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
       <div className="ico-post-content-wrapper">
         <div className="header">
           <h1 className="header-title">{post.title}</h1>
-          <div className="header-fields">{this.getFields(post.fields)}</div>
+          <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
           <div className="header-right-box">{this.getRatingShow()}</div>
         </div>
 

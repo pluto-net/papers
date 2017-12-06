@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as moment from "moment";
 import { Container, Header, Form, Button } from "semantic-ui-react";
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import { Meteor } from "meteor/meteor";
 import { Post } from "../../../both/model/post";
 import { IPostParamsInterface } from "../../../server/methods/post";
@@ -161,7 +161,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     } = this.state;
 
     if (!currentUser) {
-      return dispatch(openDialog(GLOBAL_DIALOGS.SIGN_UP));
+      return (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_UP));
     }
 
     const post = new Post();

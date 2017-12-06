@@ -6,12 +6,13 @@ export function getWhitePaperAddress(post: IPost) {
   } else {
     const pdfRegex = /.*\.pdf/;
     if (post && post.links && typeof post === "object") {
-      const pdfLink = post.links.find(link => !!link.match(pdfRegex));
+      const links = post.links as string[];
+      const pdfLink = links.find(link => !!link.match(pdfRegex));
 
       if (pdfLink) {
         return pdfLink;
       } else {
-        return post.links[0];
+        return links[0];
       }
     } else {
       return post.whitePaperUrl;

@@ -19,7 +19,7 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
     comment: "",
   };
 
-  private handleSubmit = (e?: React.FormEvent<HTMLFontElement>) => {
+  private handleSubmit = (e?: any) => {
     if (e) {
       e.preventDefault();
     }

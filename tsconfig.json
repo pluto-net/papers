@@ -5,6 +5,7 @@
     "allowUnusedLabels": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "strictNullChecks": true,
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",

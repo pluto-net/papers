@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Input, Button, Modal, Divider } from "semantic-ui-react";
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import { IAppState } from "../../reducers";
 import { IDialogState } from "../../reducers/globalDialog";
 import FacebookButton from "../common/facebookButton";
@@ -42,7 +42,7 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, ISignUpDialog
     const { dispatch } = this.props;
     const { email, name, password } = this.state;
 
-    dispatch({
+    (dispatch as Dispatch<any>)({
       type: "REQUEST_CREATE_USER",
       payload: {
         email,

@@ -10,9 +10,9 @@ export interface IPostParamsInterface {
   fields: string[];
   icoPrice: string;
   bonus: string;
-  homepageUrl: string;
-  whitePaperUrl: string;
-  tokenDistribution: string;
+  homepageUrl?: string;
+  whitePaperUrl?: string;
+  tokenDistribution?: string;
   startICODate: Date;
   endICODate: Date;
 }

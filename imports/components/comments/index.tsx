@@ -28,7 +28,7 @@ class CommentList extends React.PureComponent<ICommentListProps, ICommentListSta
     hasMore: true,
   };
 
-  private commentListNode: HTMLDivElement;
+  private commentListNode: HTMLDivElement | null;
 
   private handleLoadMore = throttle(this.props.loadMoreFunction, 2000);
 
@@ -82,7 +82,7 @@ class CommentList extends React.PureComponent<ICommentListProps, ICommentListSta
             loadMore={this.handleLoadMore}
             hasMore={this.state.hasMore}
             threshold={10}
-            loader={null}
+            loader={<span />}
             useWindow={false}
             initialLoad={false}
             isReverse

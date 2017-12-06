@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Meteor } from "meteor/meteor";
 import * as queryString from "query-string";
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Container, Tab, Grid, Dropdown, Input, Icon, Modal } from "semantic-ui-react";
@@ -73,10 +73,10 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     const { dispatch, location } = this.props;
     const dateFilter = data.panes[data.activeIndex].menuItem.toLowerCase();
 
-    const removeKeys = dateFilter === "all" ? null : ["keyword"];
+    const removeKeys = dateFilter === "all" ? undefined : ["keyword"];
     const queryParams = addOrChangeQueryParams(location.search, { dateFilter }, removeKeys);
 
-    dispatch(push(`/?${queryParams}`));
+    (dispatch as Dispatch<any>)(push(`/?${queryParams}`));
   };
 
   private handleSortChange = (_e: any, data: any) => {
@@ -85,7 +85,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     const sortOption = data.value;
     const queryParams = addOrChangeQueryParams(location.search, { sortOption });
 
-    dispatch(push(`/?${queryParams}`));
+    (dispatch as Dispatch<any>)(push(`/?${queryParams}`));
   };
 
   private getSortDropdown = () => {
@@ -140,7 +140,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
             loadMore={this.handleLoadMore}
             hasMore={this.props.hasMore}
             threshold={600}
-            loader={null}
+            loader={<span />}
             initialLoad={false}
             useWindow
           >
@@ -189,7 +189,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     const keyword = searchTerm;
     const queryParams = addOrChangeQueryParams(location.search, { keyword, dateFilter: "all" });
 
-    dispatch(push(`/?${queryParams}`));
+    (dispatch as Dispatch<any>)(push(`/?${queryParams}`));
   };
 
   private getSearchInput = () => {
