@@ -237,6 +237,19 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     }
   };
 
+  public componentWillReceiveProps(nextProps: IHomeComponentProps) {
+    const activeOldPost = this.state.activePost;
+    if (activeOldPost) {
+      const incomingPost = nextProps.posts.find(post => activeOldPost._id === post._id);
+      if (incomingPost && activeOldPost !== incomingPost) {
+        console.log("FIRED!");
+        this.setState({
+          activePost: incomingPost,
+        });
+      }
+    }
+  }
+
   public render() {
     return (
       <div className="pluto-home-page">

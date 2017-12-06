@@ -27,7 +27,7 @@ interface IPostContentStates {
   isCommentsOpen: boolean;
 }
 
-class PostContent extends React.Component<IPostContentProps, IPostContentStates> {
+class PostContent extends React.PureComponent<IPostContentProps, IPostContentStates> {
   public state: IPostContentStates = {
     isCommentsOpen: false,
   };
@@ -42,12 +42,16 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
 
   private getRatingShow = () => {
     const { post } = this.props;
+    const averageRating = post.averageRating.toFixed(1);
     const rating = Math.round(post.averageRating);
 
     return (
       <div>
-        <Rating icon="star" maxRating={5} rating={rating} />
-        <span>{`${post.ratingCount} participants`}</span>
+        <div className="rating-wrapper">
+          <Rating icon="star" maxRating={5} rating={rating} />
+          <span className="average-rating-value">{averageRating}</span>
+        </div>
+        <div className="average-rating-count">{`${post.ratingCount} participants`}</div>
       </div>
     );
   };
@@ -180,6 +184,8 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
   public render() {
     const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
+    console.log(post);
+
     return (
       <div className="ico-post-content-wrapper">
         <div className="header">
@@ -211,7 +217,7 @@ const PostContentContainer = withTracker((props: IPostContentProps) => {
   // comments subscribe
   const CommentsHandle = Meteor.subscribe("comments", props.post._id);
   const commentsIsLoading = !CommentsHandle.ready();
-  const comments: IComment[] = Comment.find({}, { publishedAt: -1 }).fetch();
+  const comments: IComment[] = Comment.find({ postId: props.post._id }, { sort: { publishedAt: -1 } }).fetch();
 
   // users subscribe
   const userIds = comments.map(comment => comment.userId);
