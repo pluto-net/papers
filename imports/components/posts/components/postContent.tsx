@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Rating } from "semantic-ui-react";
+import { Rating, Icon } from "semantic-ui-react";
 import { IPost } from "../../../../both/model/post";
 import NewRating from "../../rating/new";
 import { Rating as RatingModel } from "../../../../both/model/rating";
@@ -230,6 +230,61 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     );
   }
 
+  private getPrimaryLinkButtons = () => {
+    const { post } = this.props;
+
+    return (
+      <div className="primary-link-buttons-wrapper">
+        <a target="_blank" href={post.whitePaperUrl} className="primary-link-button">
+          White paper
+        </a>
+        <a target="_blank" href={post.homepageUrl} className="primary-link-button">
+          Website
+        </a>
+      </div>
+    );
+  };
+
+  private getSocialLinks = () => {
+    const { post } = this.props;
+
+    let socialLinks = null;
+    if (post.links) {
+      socialLinks = post.links.map(link => {
+        if (link.includes("facebook")) {
+          return (
+            <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="facebook f" />
+          );
+        } else if (link.includes("twitter")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="twitter" />;
+        } else if (link.includes("reddit")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="reddit" />;
+        } else if (link.includes("github")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="github" />;
+        } else if (link.includes("medium")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="medium" />;
+        } else if (link.includes("slack")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="slack" />;
+        } else if (link.includes("t.me")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="telegram" />;
+        } else if (link.includes("linkedin")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="linkedin" />;
+        } else if (link.includes("bitcointalk")) {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="bitcoin" />;
+        } else {
+          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="linkify" />;
+        }
+      });
+    }
+
+    return (
+      <div className="socials-wrapper">
+        <div className="social-title">Socials</div>
+        {socialLinks}
+      </div>
+    );
+  };
+
   public render() {
     const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
@@ -265,7 +320,11 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
             {this.getComments()}
           </div>
         </div>
-        <div className="right-box">{this.getRatingInputBox()}</div>
+        <div className="right-box">
+          {this.getRatingInputBox()}
+          {this.getPrimaryLinkButtons()}
+          {this.getSocialLinks()}
+        </div>
       </div>
     );
   }

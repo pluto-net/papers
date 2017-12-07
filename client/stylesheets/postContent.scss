@@ -6,6 +6,7 @@
     display: inline-block;
     vertical-align: top;
     width: 691px;
+    padding-right: 22.5px;
   }
 
   .right-box {
@@ -198,6 +199,38 @@
       font-size: 15px;
       line-height: 1.5;
       color: #666d7c;
+    }
+  }
+
+  .primary-link-buttons-wrapper {
+    margin-top: 57.5px;
+
+    .primary-link-button {
+      display: block;
+      text-align: center;
+      height: 52px;
+      line-height: 52px;
+      border-radius: 6px;
+      background-color: #f5f7fb;
+      border: solid 1px #eaeef7;
+      font-size: 15.6px;
+      color: #34495e;
+    }
+
+    .primary-link-button + .primary-link-button {
+      margin-top: 10px;
+    }
+  }
+
+  .socials-wrapper {
+    margin-top: 42.5px;
+
+    .social-title {
+      font-size: 16px;
+      line-height: 1.5;
+      text-align: left;
+      color: #0c1020;
+      margin-bottom: 12px;
     }
   }
 }
