@@ -242,7 +242,6 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     if (activeOldPost) {
       const incomingPost = nextProps.posts.find(post => activeOldPost._id === post._id);
       if (incomingPost && activeOldPost !== incomingPost) {
-        console.log("FIRED!");
         this.setState({
           activePost: incomingPost,
         });

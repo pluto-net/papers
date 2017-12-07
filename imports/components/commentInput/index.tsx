@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Header, Form, Button, Loader } from "semantic-ui-react";
+import { Form, Button, Loader } from "semantic-ui-react";
 import { Comment } from "../../../both/model/comment";
 import { IUser } from "../../../both/model/user";
 
@@ -95,8 +95,7 @@ class CommentInput extends React.PureComponent<ICommentInputProps, ICommentInput
     const { comment } = this.state;
 
     return (
-      <div>
-        <Header size="tiny">Leave real time feedback</Header>
+      <div className="comment-input-wrapper clearfix">
         <Form onSubmit={this.handleSubmit}>
           <Form.Field>
             <Form.TextArea

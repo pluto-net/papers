@@ -81,7 +81,8 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
 
       return (
         <div className="ico-period-wrapper">
-          {`ICO Period | ${startDate} - ${endDate}`}
+          {`ICO Period | `}
+          <span className="ico-period-date-range">{`${startDate} - ${endDate}`}</span>
           {this.getICODateStatus()}
         </div>
       );
@@ -124,7 +125,7 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
               <span className="from-now">{moment(comment.publishedAt).fromNow()}</span>
               {this.getRatingInformation(targetUser._id)}
             </div>
-            {comment.content}
+            <div className="content-wrapper">{comment.content}</div>
           </div>
         );
       } else {
@@ -160,11 +161,12 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
 
     if (!usersIsLoading && !commentsIsLoading && comments && comments.length > 0) {
       const targetComments = isCommentsOpen ? comments : comments.slice(0, 3);
-      const loadMoreNode = isCommentsOpen ? null : (
-        <div onClick={this.handleClickLoadMoreComments} className="load-more-comments">
-          Load more comments
-        </div>
-      );
+      const loadMoreNode =
+        isCommentsOpen || comments.length < 3 ? null : (
+          <div onClick={this.handleClickLoadMoreComments} className="load-more-comments">
+            Load more comments
+          </div>
+        );
 
       const commentItems = targetComments.map(comment => {
         return this.getCommentItem(comment);
@@ -184,8 +186,6 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
   public render() {
     const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
-    console.log(post);
-
     return (
       <div className="ico-post-content-wrapper">
         <div className="header">
@@ -204,8 +204,10 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
         <div className="content-wrapper">
           {this.getICOPeriod()}
           <div className="content-description">{post.content}</div>
-          <CommentInput currentUser={currentUser} postId={post._id} handleOpenSignUpDialog={handleOpenSignUpDialog} />
           {this.getCommentsInformation()}
+          <div className="comment-input-wrapper">
+            <CommentInput currentUser={currentUser} postId={post._id} handleOpenSignUpDialog={handleOpenSignUpDialog} />
+          </div>
           {this.getComments()}
         </div>
       </div>

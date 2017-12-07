@@ -66,14 +66,18 @@
 
   .post-content-comment-item-wrapper {
     .meta-information-box {
+      display: flex;
+      align-items: center;
       position: relative;
       height: 35px;
+      margin-bottom: 8px;
 
       .username {
         font-size: 18px;
         font-weight: bold;
         line-height: 1.33;
         color: #0c1020;
+        margin-right: 14px;
       }
 
       .from-now {
@@ -86,8 +90,15 @@
       .rating-information {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 10px;
       }
+    }
+
+    .content-wrapper {
+      font-size: 14px;
+      line-height: 1.39;
+      text-align: left;
+      color: #666d7c;
     }
   }
 
@@ -101,10 +112,12 @@
     text-align: center;
     color: #9aa3b5;
     cursor: pointer;
+    margin-top: 20px;
   }
 
   .comments-information-wrapper {
     padding-bottom: 10px;
+    margin-bottom: 20.5px;
     border-bottom: solid 1px #d8dde7;
 
     .comment-count {
@@ -120,5 +133,36 @@
       line-height: 1.5;
       color: #6096ff;
     }
+  }
+
+  .ico-period-wrapper {
+    margin-top: 34px;
+    margin-bottom: 22.5px;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+    color: #0c1020;
+  }
+
+  .ico-period-date-range {
+    font-size: 18px;
+    text-align: left;
+    color: #9aa3b5;
+  }
+
+  .content-description {
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: left;
+    color: #666d7c;
+    margin-bottom: 72.5px;
+  }
+
+  .comment-input-wrapper {
+    margin-bottom: 41px;
+  }
+
+  .post-content-comment-item-wrapper + .post-content-comment-item-wrapper {
+    margin-top: 20px;
   }
 }
