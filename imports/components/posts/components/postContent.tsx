@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Rating } from "semantic-ui-react";
 import { IPost } from "../../../../both/model/post";
+import NewRating from "../../rating/new";
 import { Rating as RatingModel } from "../../../../both/model/rating";
 import * as moment from "moment";
 import { Comment, IComment } from "../../../../both/model/comment";
@@ -183,11 +184,48 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     }
   };
 
+  private handleRatingClick = (rating: number) => {
+    const { currentUser, post } = this.props;
+    if (currentUser && post) {
+      const ratingObj = new RatingModel();
+      return new Promise((resolve, reject) => {
+        const params = {
+          rating,
+          userId: currentUser._id,
+          postId: post._id,
+        };
+        ratingObj.callMethod("postRating", params, (err: Error) => {
+          if (err) {
+            reject();
+            alert(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+  };
+
   private getRatingInputBox() {
+    const { currentUser, ratings } = this.props;
+
+    let myRating;
+    if (currentUser) {
+      const rating = ratings.find(rating => rating.userId === currentUser._id);
+      if (rating) {
+        myRating = rating;
+      }
+    }
+
     return (
       <div className="rating-input-box-wrapper">
         <div className="rating-input-box-title">What is your score on this ICO?</div>
-        <Rating icon="star" maxRating={5} />
+        <NewRating
+          handleOpenSignUpDialog={this.props.handleOpenSignUpDialog}
+          currentUser={currentUser}
+          myRating={myRating}
+          handleRating={this.handleRatingClick}
+        />
       </div>
     );
   }
@@ -210,6 +248,8 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
             </div>
             <div className="header-right-box">{this.getRatingShow()}</div>
           </div>
+
+          <div className="header-divider" />
 
           <div className="content-wrapper">
             {this.getICOPeriod()}

@@ -1,4 +1,5 @@
 .ico-post-content-wrapper {
+  position: relative;
   padding: 47.5px 59px 185px 59px;
 
   .left-box {
@@ -114,6 +115,14 @@
     }
   }
 
+  .header-divider {
+    height: 1px;
+    border-bottom: solid 1px #d8dde7;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
   .load-more-comments {
     height: 50px;
     line-height: 50px;
@@ -176,5 +185,19 @@
 
   .post-content-comment-item-wrapper + .post-content-comment-item-wrapper {
     margin-top: 20px;
+  }
+
+  .rating-input-box-wrapper {
+    padding: 18px 31px 22px 31px;
+    border: solid 1px #ecf1fa;
+    border-radius: 5px;
+    text-align: center;
+
+    .rating-input-box-title {
+      margin-bottom: 12.3px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #666d7c;
+    }
   }
 }
