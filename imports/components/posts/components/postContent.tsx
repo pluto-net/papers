@@ -183,33 +183,49 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     }
   };
 
+  private getRatingInputBox() {
+    return (
+      <div className="rating-input-box-wrapper">
+        <div className="rating-input-box-title">What is your score on this ICO?</div>
+        <Rating icon="star" maxRating={5} />
+      </div>
+    );
+  }
+
   public render() {
     const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
     return (
       <div className="ico-post-content-wrapper">
-        <div className="header">
-          <div className="header-left-box">
-            <span className="logo-image-wrapper">
-              <img src={post.logoUrl} alt={post.title} className="logo-image" />
-            </span>
-            <span className="header-left-box-information">
-              <h1 className="header-title">{post.title}</h1>
-              <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
-            </span>
+        <div className="left-box">
+          <div className="header">
+            <div className="header-left-box">
+              <span className="logo-image-wrapper">
+                <img src={post.logoUrl} alt={post.title} className="logo-image" />
+              </span>
+              <span className="header-left-box-information">
+                <h1 className="header-title">{post.title}</h1>
+                <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+              </span>
+            </div>
+            <div className="header-right-box">{this.getRatingShow()}</div>
           </div>
-          <div className="header-right-box">{this.getRatingShow()}</div>
-        </div>
 
-        <div className="content-wrapper">
-          {this.getICOPeriod()}
-          <div className="content-description">{post.content}</div>
-          {this.getCommentsInformation()}
-          <div className="comment-input-wrapper">
-            <CommentInput currentUser={currentUser} postId={post._id} handleOpenSignUpDialog={handleOpenSignUpDialog} />
+          <div className="content-wrapper">
+            {this.getICOPeriod()}
+            <div className="content-description">{post.content}</div>
+            {this.getCommentsInformation()}
+            <div className="comment-input-wrapper">
+              <CommentInput
+                currentUser={currentUser}
+                postId={post._id}
+                handleOpenSignUpDialog={handleOpenSignUpDialog}
+              />
+            </div>
+            {this.getComments()}
           </div>
-          {this.getComments()}
         </div>
+        <div className="right-box">{this.getRatingInputBox()}</div>
       </div>
     );
   }

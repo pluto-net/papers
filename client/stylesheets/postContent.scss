@@ -1,6 +1,18 @@
 .ico-post-content-wrapper {
   padding: 47.5px 59px 185px 59px;
 
+  .left-box {
+    display: inline-block;
+    vertical-align: top;
+    width: 691px;
+  }
+
+  .right-box {
+    display: inline-block;
+    vertical-align: top;
+    width: 283.5px;
+  }
+
   .header {
     position: relative;
     height: 113px;
@@ -42,7 +54,7 @@
     .header-right-box {
       position: absolute;
       top: 0;
-      right: 0;
+      right: 20px;
 
       .rating-wrapper {
         margin-bottom: 6px;
