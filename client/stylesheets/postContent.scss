@@ -1,18 +1,98 @@
 .ico-post-content-wrapper {
+  position: relative;
+  padding: 47.5px 59px 185px 59px;
+  display: flex;
+
+  .left-box {
+    display: inline-block;
+    vertical-align: top;
+    width: 691px;
+    padding-right: 22.5px;
+  }
+
+  .right-box {
+    display: inline-block;
+    vertical-align: top;
+    width: 283.5px;
+  }
+
   .header {
-    height: 160px;
+    position: relative;
+    height: 113px;
+
+    .logo-image-wrapper {
+      display: inline-block;
+      vertical-align: top;
+      width: 81.5px;
+      height: 81.5px;
+      border-radius: 50%;
+      border: solid 1px #f1f3f6;
+      margin-right: 24px;
+
+      .logo-image {
+        width: 81.5px;
+        height: 81.5px;
+        border-radius: 50%;
+      }
+    }
+
+    .header-left-box-information {
+      display: inline-block;
+      vertical-align: top;
+
+      .header-title {
+        font-size: 27.5px;
+        font-weight: bold;
+        color: #0c1020;
+        margin-bottom: 10.5px;
+      }
+
+      .header-fields {
+        font-size: 18px;
+        text-align: center;
+        color: #6096ff;
+      }
+    }
+
+    .header-right-box {
+      position: absolute;
+      top: 0;
+      right: 20px;
+
+      .rating-wrapper {
+        margin-bottom: 6px;
+      }
+
+      .average-rating-value {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 16.8px;
+        font-weight: 500;
+        color: #0c1020;
+      }
+
+      .average-rating-count {
+        font-size: 14px;
+        color: #666d7c;
+        text-align: right;
+      }
+    }
   }
 
   .post-content-comment-item-wrapper {
     .meta-information-box {
+      display: flex;
+      align-items: center;
       position: relative;
       height: 35px;
+      margin-bottom: 8px;
 
       .username {
         font-size: 18px;
         font-weight: bold;
         line-height: 1.33;
         color: #0c1020;
+        margin-right: 14px;
       }
 
       .from-now {
@@ -25,9 +105,24 @@
       .rating-information {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 10px;
       }
     }
+
+    .content-wrapper {
+      font-size: 14px;
+      line-height: 1.39;
+      text-align: left;
+      color: #666d7c;
+    }
+  }
+
+  .header-divider {
+    height: 1px;
+    border-bottom: solid 1px #d8dde7;
+    position: absolute;
+    left: 0;
+    right: 0;
   }
 
   .load-more-comments {
@@ -40,5 +135,111 @@
     text-align: center;
     color: #9aa3b5;
     cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .comments-information-wrapper {
+    padding-bottom: 10px;
+    margin-bottom: 20.5px;
+    border-bottom: solid 1px #d8dde7;
+
+    .comment-count {
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.33;
+      color: #0c1020;
+    }
+
+    .comment-count-number {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.5;
+      color: #6096ff;
+    }
+  }
+
+  .ico-period-wrapper {
+    margin-top: 34px;
+    margin-bottom: 22.5px;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+    color: #0c1020;
+  }
+
+  .ico-period-date-range {
+    font-size: 18px;
+    text-align: left;
+    color: #9aa3b5;
+  }
+
+  .content-description {
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: left;
+    color: #666d7c;
+    margin-bottom: 72.5px;
+  }
+
+  .comment-input-wrapper {
+    margin-bottom: 41px;
+  }
+
+  .post-content-comment-item-wrapper + .post-content-comment-item-wrapper {
+    margin-top: 20px;
+  }
+
+  .rating-input-box-wrapper {
+    padding: 13px 10px;
+    border: solid 1px #ecf1fa;
+    border-radius: 5px;
+    text-align: center;
+
+    .rating-input-box-title {
+      margin-bottom: 12.3px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #666d7c;
+    }
+  }
+
+  .primary-link-buttons-wrapper {
+    margin-top: 57.5px;
+
+    .primary-link-button {
+      display: block;
+      text-align: center;
+      height: 52px;
+      line-height: 52px;
+      border-radius: 6px;
+      background-color: #f5f7fb;
+      border: solid 1px #eaeef7;
+      font-size: 15.6px;
+      color: #34495e;
+    }
+
+    .primary-link-button + .primary-link-button {
+      margin-top: 10px;
+    }
+  }
+
+  .socials-wrapper {
+    margin-top: 42.5px;
+
+    .social-title {
+      font-size: 16px;
+      line-height: 1.5;
+      text-align: left;
+      color: #0c1020;
+      margin-bottom: 12px;
+    }
+
+    .social-link-icon-wrapper {
+      display: inline-block;
+      vertical-align: top;
+      width: 35px;
+      height: 35px;
+      color: #333;
+    }
   }
 }

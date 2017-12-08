@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Rating, RatingProps } from "semantic-ui-react";
+import { IRating } from "../../../both/model/rating";
 
 interface INewRatingProps {
   currentUser: any;
-  myRating: any | undefined;
-  handleRating: (rating: number) => Promise<{}>;
+  myRating: IRating | undefined;
+  handleRating: (rating: number) => Promise<{}> | undefined;
   handleOpenSignUpDialog: () => void;
 }
 
@@ -44,7 +45,7 @@ class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
       targetRating = rating;
     }
 
-    return <Rating icon="star" onRate={this.handleRatingChange} maxRating={5} rating={targetRating} />;
+    return <Rating icon="star" size="huge" onRate={this.handleRatingChange} maxRating={5} rating={targetRating} />;
   }
 }
 

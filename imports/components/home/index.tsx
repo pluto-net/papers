@@ -13,12 +13,15 @@ import IcoCard from "./components/icoCard";
 import { getCurrentDate } from "../../helpers/getCurrentDate";
 import { addOrChangeQueryParams } from "../../helpers/queryParams";
 import PostContent from "../posts/components/postContent";
+import { IUser } from "../../../both/model/user";
+import { openDialog } from "../../actions/globalDialog";
+import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 
 interface IHomeComponentProps extends RouteComponentProps<{}>, DispatchProp<any> {
   // From Meteor
   postsIsLoading: boolean;
   posts: IPost[];
-  currentUser: any;
+  currentUser: IUser | null;
   isLoggingIn: boolean;
   dateFilter: DateFilter;
   // From Meta
@@ -209,19 +212,42 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     });
   };
 
+  private handleOpenSignUpDialog = () => {
+    const { dispatch } = this.props;
+
+    (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_UP));
+  };
+
   private getPostModal = () => {
+    const { currentUser } = this.props;
     const { activePost } = this.state;
 
     if (activePost) {
       return (
-        <Modal onClose={this.handleCloseModal} open={!!activePost}>
-          <PostContent post={activePost} />
+        <Modal className="post-modal-wrapper" size="large" onClose={this.handleCloseModal} open={!!activePost}>
+          <PostContent
+            post={activePost}
+            currentUser={currentUser}
+            handleOpenSignUpDialog={this.handleOpenSignUpDialog}
+          />
         </Modal>
       );
     } else {
       return null;
     }
   };
+
+  public componentWillReceiveProps(nextProps: IHomeComponentProps) {
+    const activeOldPost = this.state.activePost;
+    if (activeOldPost) {
+      const incomingPost = nextProps.posts.find(post => activeOldPost._id === post._id);
+      if (incomingPost && activeOldPost !== incomingPost) {
+        this.setState({
+          activePost: incomingPost,
+        });
+      }
+    }
+  }
 
   public render() {
     return (

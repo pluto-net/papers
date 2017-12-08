@@ -1,15 +1,21 @@
 import * as React from "react";
-import { Rating } from "semantic-ui-react";
+import { Rating, Icon } from "semantic-ui-react";
 import { IPost } from "../../../../both/model/post";
+import NewRating from "../../rating/new";
 import { Rating as RatingModel } from "../../../../both/model/rating";
 import * as moment from "moment";
 import { Comment, IComment } from "../../../../both/model/comment";
 import { IUser, User } from "../../../../both/model/user";
 import { IRating } from "../../../../both/model/rating";
+import CommentInput from "../../commentInput/index";
 const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostContentProps {
+  // From parent component
   post: IPost;
+  currentUser: IUser | null;
+  handleOpenSignUpDialog: () => void;
+  // From Meteor
   commentsIsLoading: boolean;
   comments: IComment[];
   users: IUser[];
@@ -22,7 +28,7 @@ interface IPostContentStates {
   isCommentsOpen: boolean;
 }
 
-class PostContent extends React.Component<IPostContentProps, IPostContentStates> {
+class PostContent extends React.PureComponent<IPostContentProps, IPostContentStates> {
   public state: IPostContentStates = {
     isCommentsOpen: false,
   };
@@ -37,12 +43,16 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
 
   private getRatingShow = () => {
     const { post } = this.props;
+    const averageRating = post.averageRating.toFixed(1);
     const rating = Math.round(post.averageRating);
 
     return (
       <div>
-        <Rating icon="star" maxRating={5} rating={rating} />
-        <span>{`${post.ratingCount} participants`}</span>
+        <div className="rating-wrapper">
+          <Rating icon="star" maxRating={5} rating={rating} />
+          <span className="average-rating-value">{averageRating}</span>
+        </div>
+        <div className="average-rating-count">{`${post.ratingCount} participants`}</div>
       </div>
     );
   };
@@ -72,7 +82,8 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
 
       return (
         <div className="ico-period-wrapper">
-          {`ICO Period | ${startDate} - ${endDate}`}
+          {`ICO Period | `}
+          <span className="ico-period-date-range">{`${startDate} - ${endDate}`}</span>
           {this.getICODateStatus()}
         </div>
       );
@@ -115,7 +126,7 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
               <span className="from-now">{moment(comment.publishedAt).fromNow()}</span>
               {this.getRatingInformation(targetUser._id)}
             </div>
-            {comment.content}
+            <div className="content-wrapper">{comment.content}</div>
           </div>
         );
       } else {
@@ -132,17 +143,31 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
     });
   };
 
+  private getCommentsInformation = () => {
+    const { post } = this.props;
+
+    return (
+      <div className="comments-information-wrapper">
+        <div className="comment-count">
+          {`Comments `}
+          <span className="comment-count-number">{post.commentCount}</span>
+        </div>
+      </div>
+    );
+  };
+
   private getComments = () => {
     const { isCommentsOpen } = this.state;
-    const { comments, commentsIsLoading, usersIsLoading } = this.props;
+    const { comments } = this.props;
 
-    if (!usersIsLoading && !commentsIsLoading && comments && comments.length > 0) {
+    if (comments && comments.length > 0) {
       const targetComments = isCommentsOpen ? comments : comments.slice(0, 3);
-      const loadMoreNode = isCommentsOpen ? null : (
-        <div onClick={this.handleClickLoadMoreComments} className="load-more-comments">
-          Load more comments
-        </div>
-      );
+      const loadMoreNode =
+        isCommentsOpen || comments.length < 3 ? null : (
+          <div onClick={this.handleClickLoadMoreComments} className="load-more-comments">
+            Load more comments
+          </div>
+        );
 
       const commentItems = targetComments.map(comment => {
         return this.getCommentItem(comment);
@@ -154,26 +179,187 @@ class PostContent extends React.Component<IPostContentProps, IPostContentStates>
           {loadMoreNode}
         </div>
       );
-    } else {
-      return null;
     }
   };
 
-  public render() {
+  private handleRatingClick = (rating: number) => {
+    const { currentUser, post } = this.props;
+    if (currentUser && post) {
+      const ratingObj = new RatingModel();
+      return new Promise((resolve, reject) => {
+        const params = {
+          rating,
+          userId: currentUser._id,
+          postId: post._id,
+        };
+        ratingObj.callMethod("postRating", params, (err: Error) => {
+          if (err) {
+            reject();
+            alert(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+  };
+
+  private getRatingInputBox() {
+    const { currentUser, ratings } = this.props;
+
+    let myRating;
+    if (currentUser) {
+      const rating = ratings.find(rating => rating.userId === currentUser._id);
+      if (rating) {
+        myRating = rating;
+      }
+    }
+
+    return (
+      <div className="rating-input-box-wrapper">
+        <div className="rating-input-box-title">What is your score on this ICO?</div>
+        <NewRating
+          handleOpenSignUpDialog={this.props.handleOpenSignUpDialog}
+          currentUser={currentUser}
+          myRating={myRating}
+          handleRating={this.handleRatingClick}
+        />
+      </div>
+    );
+  }
+
+  private getPrimaryLinkButtons = () => {
     const { post } = this.props;
 
     return (
-      <div className="ico-post-content-wrapper">
-        <div className="header">
-          <h1 className="header-title">{post.title}</h1>
-          <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
-          <div className="header-right-box">{this.getRatingShow()}</div>
-        </div>
+      <div className="primary-link-buttons-wrapper">
+        <a target="_blank" href={post.whitePaperUrl} className="primary-link-button">
+          White paper
+        </a>
+        <a target="_blank" href={post.homepageUrl} className="primary-link-button">
+          Website
+        </a>
+      </div>
+    );
+  };
 
-        <div className="content-wrapper">
-          {this.getICOPeriod()}
-          <div className="content-description">{post.content}</div>
-          {this.getComments()}
+  private getSocialLinks = () => {
+    const { post } = this.props;
+
+    let socialLinks = null;
+    if (post.links) {
+      socialLinks = post.links.map(link => {
+        if (link.includes("facebook")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="facebook f" />
+            </a>
+          );
+        } else if (link.includes("twitter")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="twitter" />
+            </a>
+          );
+        } else if (link.includes("reddit")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="reddit" />
+            </a>
+          );
+        } else if (link.includes("github")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="github" />
+            </a>
+          );
+        } else if (link.includes("medium")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="medium" />
+            </a>
+          );
+        } else if (link.includes("slack")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="slack" />
+            </a>
+          );
+        } else if (link.includes("t.me")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="telegram" />
+            </a>
+          );
+        } else if (link.includes("linkedin")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="linkedin" />
+            </a>
+          );
+        } else if (link.includes("bitcointalk")) {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="bitcoin" />
+            </a>
+          );
+        } else {
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="linkify" />
+            </a>
+          );
+        }
+      });
+    }
+
+    return (
+      <div className="socials-wrapper">
+        <div className="social-title">Socials</div>
+        {socialLinks}
+      </div>
+    );
+  };
+
+  public render() {
+    const { post, currentUser, handleOpenSignUpDialog } = this.props;
+
+    return (
+      <div className="ico-post-content-wrapper">
+        <div className="left-box">
+          <div className="header">
+            <div className="header-left-box">
+              <span className="logo-image-wrapper">
+                <img src={post.logoUrl} alt={post.title} className="logo-image" />
+              </span>
+              <span className="header-left-box-information">
+                <h1 className="header-title">{post.title}</h1>
+                <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+              </span>
+            </div>
+            <div className="header-right-box">{this.getRatingShow()}</div>
+          </div>
+
+          <div className="header-divider" />
+
+          <div className="content-wrapper">
+            {this.getICOPeriod()}
+            <div className="content-description">{post.content}</div>
+            {this.getCommentsInformation()}
+            <div className="comment-input-wrapper">
+              <CommentInput
+                currentUser={currentUser}
+                postId={post._id}
+                handleOpenSignUpDialog={handleOpenSignUpDialog}
+              />
+            </div>
+            {this.getComments()}
+          </div>
+        </div>
+        <div className="right-box">
+          {this.getRatingInputBox()}
+          {this.getPrimaryLinkButtons()}
+          {this.getSocialLinks()}
         </div>
       </div>
     );
@@ -184,7 +370,7 @@ const PostContentContainer = withTracker((props: IPostContentProps) => {
   // comments subscribe
   const CommentsHandle = Meteor.subscribe("comments", props.post._id);
   const commentsIsLoading = !CommentsHandle.ready();
-  const comments: IComment[] = Comment.find({}, { publishedAt: -1 }).fetch();
+  const comments: IComment[] = Comment.find({ postId: props.post._id }, { sort: { publishedAt: -1 } }).fetch();
 
   // users subscribe
   const userIds = comments.map(comment => comment.userId);
