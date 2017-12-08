@@ -1,6 +1,7 @@
 .ico-post-content-wrapper {
   position: relative;
   padding: 47.5px 59px 185px 59px;
+  display: flex;
 
   .left-box {
     display: inline-block;
@@ -189,7 +190,7 @@
   }
 
   .rating-input-box-wrapper {
-    padding: 18px 31px 22px 31px;
+    padding: 13px 10px;
     border: solid 1px #ecf1fa;
     border-radius: 5px;
     text-align: center;
@@ -231,6 +232,14 @@
       text-align: left;
       color: #0c1020;
       margin-bottom: 12px;
+    }
+
+    .social-link-icon-wrapper {
+      display: inline-block;
+      vertical-align: top;
+      width: 35px;
+      height: 35px;
+      color: #333;
     }
   }
 }

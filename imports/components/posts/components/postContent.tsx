@@ -251,26 +251,64 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
       socialLinks = post.links.map(link => {
         if (link.includes("facebook")) {
           return (
-            <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="facebook f" />
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="facebook f" />
+            </a>
           );
         } else if (link.includes("twitter")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="twitter" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="twitter" />
+            </a>
+          );
         } else if (link.includes("reddit")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="reddit" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="reddit" />
+            </a>
+          );
         } else if (link.includes("github")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="github" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="github" />
+            </a>
+          );
         } else if (link.includes("medium")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="medium" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="medium" />
+            </a>
+          );
         } else if (link.includes("slack")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="slack" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="slack" />
+            </a>
+          );
         } else if (link.includes("t.me")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="telegram" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="telegram" />
+            </a>
+          );
         } else if (link.includes("linkedin")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="linkedin" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="linkedin" />
+            </a>
+          );
         } else if (link.includes("bitcointalk")) {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="bitcoin" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="bitcoin" />
+            </a>
+          );
         } else {
-          return <Icon as="a" size="mini" key={`social_link_${link}`} href={link} target="_blank" circular name="linkify" />;
+          return (
+            <a href={link} target="_blank" key={`social_link_${link}`} className="social-link-icon-wrapper">
+              <Icon circular name="linkify" />
+            </a>
+          );
         }
       });
     }
