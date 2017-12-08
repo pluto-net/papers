@@ -143,7 +143,7 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
           <Container>
             <Menu.Item>
               <Link to="/">
-                <Header>The Papers</Header>
+                <Header>Paperating</Header>
               </Link>
             </Menu.Item>
             {this.getRightMenus()}

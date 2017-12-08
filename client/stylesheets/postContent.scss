@@ -84,11 +84,10 @@
       display: flex;
       align-items: center;
       position: relative;
-      height: 35px;
-      margin-bottom: 8px;
+      height: 30px;
 
       .username {
-        font-size: 18px;
+        font-size: 13px;
         font-weight: bold;
         line-height: 1.33;
         color: #0c1020;
@@ -96,7 +95,7 @@
       }
 
       .from-now {
-        font-size: 14px;
+        font-size: 11px;
         line-height: 1.71;
         text-align: left;
         color: #9aa3b5;
@@ -110,10 +109,10 @@
     }
 
     .content-wrapper {
-      font-size: 14px;
-      line-height: 1.39;
+      font-size: 15px;
+      line-height: 1.5;
       text-align: left;
-      color: #666d7c;
+      color: #111;
     }
   }
 
@@ -174,7 +173,7 @@
   }
 
   .content-description {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.5;
     text-align: left;
     color: #666d7c;
