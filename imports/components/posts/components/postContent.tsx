@@ -158,9 +158,9 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
 
   private getComments = () => {
     const { isCommentsOpen } = this.state;
-    const { comments, commentsIsLoading, usersIsLoading } = this.props;
+    const { comments } = this.props;
 
-    if (!usersIsLoading && !commentsIsLoading && comments && comments.length > 0) {
+    if (comments && comments.length > 0) {
       const targetComments = isCommentsOpen ? comments : comments.slice(0, 3);
       const loadMoreNode =
         isCommentsOpen || comments.length < 3 ? null : (
@@ -179,8 +179,6 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
           {loadMoreNode}
         </div>
       );
-    } else {
-      return null;
     }
   };
 
