@@ -224,7 +224,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
 
     if (activePost) {
       return (
-        <Modal className="post-modal-wrapper" onClose={this.handleCloseModal} open={!!activePost}>
+        <Modal className="post-modal-wrapper" size="large" onClose={this.handleCloseModal} open={!!activePost}>
           <PostContent
             post={activePost}
             currentUser={currentUser}
