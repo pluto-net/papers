@@ -6,8 +6,6 @@
     "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy thepapers.meteorapp.com --settings ./settings.json"
   },
   "dependencies": {
-    "@types/lodash.omit": "^4.5.3",
-    "@types/meteor": "^1.4.12",
     "aws-sdk": "^2.156.0",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
@@ -39,6 +37,8 @@
     "semantic-ui-react": "^0.76.0"
   },
   "devDependencies": {
+    "@types/lodash.omit": "^4.5.3",
+    "@types/meteor": "^1.4.12",
     "@types/aws-sdk": "^2.7.0",
     "@types/history": "^4.6.1",
     "@types/immutable": "^3.8.7",

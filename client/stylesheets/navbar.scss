@@ -9,4 +9,20 @@
     font-weight: 700;
     cursor: pointer;
   }
+
+  .sign-in-button-wrapper {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .sign-up-button-wrapper {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .sign-in-button {
+    font-size: 14px;
+    font-weight: 500;
+    color: #34495e;
+  }
 }

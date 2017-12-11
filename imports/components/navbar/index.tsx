@@ -3,7 +3,7 @@ import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
-import { Menu, Button, Container, Header, Input } from "semantic-ui-react";
+import { Menu, Container, Header, Input } from "semantic-ui-react";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
@@ -103,14 +103,12 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
       return (
         <Menu.Menu position="right">
           {this.getSearchInput()}
-          <Menu.Item onClick={this.handleOpenSignUpDialog}>
-            <Button size="tiny" primary>
-              Sign Up
-            </Button>
-          </Menu.Item>
-          <Menu.Item onClick={this.handleOpenSignInDialog}>
-            <Button size="tiny">Log-in</Button>
-          </Menu.Item>
+          <span className="sign-in-button-wrapper" onClick={this.handleOpenSignInDialog}>
+            <button className="sign-in-button">Sign in</button>
+          </span>
+          <span className="sign-up-button-wrapper" onClick={this.handleOpenSignUpDialog}>
+            <button>Get Started</button>
+          </span>
         </Menu.Menu>
       );
     } else if (!currentUser && isLoggingIn) {
@@ -119,17 +117,11 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
       return (
         <Menu.Menu position="right">
           {this.getSearchInput()}
-          <Menu.Item>
-            <div className="navbar-menu-item">{currentUser.username}</div>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to="/posts/new">New ICO</Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to="/" onClick={this.handleLogoutClick}>
-              Logout
-            </Link>
-          </Menu.Item>
+          <div className="navbar-menu-item">{currentUser.username}</div>
+          <Link to="/posts/new">New ICO</Link>
+          <Link to="/" onClick={this.handleLogoutClick}>
+            Logout
+          </Link>
           {adminMenu}
         </Menu.Menu>
       );
@@ -143,7 +135,9 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
           <Container>
             <Menu.Item>
               <Link to="/">
-                <Header>Paperating</Header>
+                <Header>
+                  <object data="/paperating-logo.svg" type="image/svg+xml" />
+                </Header>
               </Link>
             </Menu.Item>
             {this.getRightMenus()}
