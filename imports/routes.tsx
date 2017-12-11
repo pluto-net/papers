@@ -6,11 +6,12 @@ import { applyMiddleware, createStore } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { History, createBrowserHistory, createHashHistory } from "history";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter, RouteComponentProps } from "react-router-dom";
 import HomeComponent from "./components/home";
 import Navbar from "./components/navbar";
 import CreatePost from "./components/posts/new";
 import PostShow from "./components/posts/show";
+import PostModal from "./components/posts/modal";
 import UserProfile from "./components/users/show";
 import UserProfileEdit from "./components/users/edit";
 import AdminMainPage from "./components/admin";
@@ -55,6 +56,36 @@ export const store = createStore(rootReducer, initialState, applyMiddleware(...m
 
 sagaMiddleware.run(rootSaga);
 
+interface IPostModalSwitch extends RouteComponentProps<{}> {}
+
+@withRouter
+class PostModalSwitch extends React.Component<IPostModalSwitch, {}> {
+  private previousLocation = this.props.location;
+
+  public componentWillUpdate(nextProps: IPostModalSwitch) {
+    const { location } = this.props;
+    // set previousLocation if props.location is not modal
+    if (nextProps.history.action !== "POP" && (!location.state || !location.state.modal)) {
+      this.previousLocation = this.props.location;
+    }
+  }
+
+  public render() {
+    const { location } = this.props;
+    const isModal = !!(location.state && location.state.modal && this.previousLocation !== location);
+
+    return (
+      <div>
+        <Switch location={isModal ? this.previousLocation : location}>
+          <Route exact path="/" component={HomeComponent} />
+          <Route exact path="/posts/:postId" component={PostShow} />
+        </Switch>
+        {isModal ? <Route exact path="/posts/:postId" component={PostModal} /> : null}
+      </div>
+    );
+  }
+}
+
 const RootRoute = () => {
   return (
     <Provider store={store}>
@@ -62,11 +93,10 @@ const RootRoute = () => {
         <div>
           <Navbar />
           <LocationListener />
+          <Route component={PostModalSwitch} />
           <Switch>
-            <Route exact path="/" component={HomeComponent} />
             <Route exact path="/posts/new" component={CreatePost} />
             <Route exact path="/admin" component={AdminMainPage} />
-            <Route exact path="/posts/:postId" component={PostShow} />
             {/* <Route exact path="/admin/posts/confirm" component={AdminConfirmFeedContainer} /> */}
             <Route exact path="/users/:userId/edit" component={UserProfileEdit} />
             <Route exact path="/users/:userId" component={UserProfile} />

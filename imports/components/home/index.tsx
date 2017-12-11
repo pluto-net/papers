@@ -4,7 +4,7 @@ import * as queryString from "query-string";
 import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Container, Tab, Grid, Dropdown, Input, Icon, Modal } from "semantic-ui-react";
+import { Container, Tab, Grid, Dropdown, Input, Icon } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import InfiniteScroll = require("react-infinite-scroller");
 import throttle = require("lodash.throttle");
@@ -12,10 +12,7 @@ import { Post, IPost } from "../../../both/model/post";
 import IcoCard from "./components/icoCard";
 import { getCurrentDate } from "../../helpers/getCurrentDate";
 import { addOrChangeQueryParams } from "../../helpers/queryParams";
-import PostContent from "../posts/components/postContent";
 import { IUser } from "../../../both/model/user";
-import { openDialog } from "../../actions/globalDialog";
-import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 
 interface IHomeComponentProps extends RouteComponentProps<{}>, DispatchProp<any> {
   // From Meteor
@@ -33,7 +30,6 @@ interface IHomeComponentProps extends RouteComponentProps<{}>, DispatchProp<any>
 
 interface IHomeComponentStates {
   searchTerm?: string;
-  activePost?: IPost | null;
 }
 
 type DateFilter = "current" | "upcoming" | "past" | "all";
@@ -55,21 +51,12 @@ interface ISortOptionDropdownItem {
 class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeComponentStates> {
   public state: IHomeComponentStates = {
     searchTerm: "",
-    activePost: null,
   };
 
   private handleLoadMore = throttle(this.props.incrementSubscriptionLimit, 400);
 
-  private handleClickPost = (post: IPost) => {
-    this.setState({
-      activePost: post,
-    });
-  };
-
   private mapPostItem = (targetPosts: any[], type: string) => {
-    return targetPosts.map(post => (
-      <IcoCard handleClickPost={this.handleClickPost} key={`${type}_${post._id}`} type={type} post={post} />
-    ));
+    return targetPosts.map(post => <IcoCard key={`${type}_${post._id}`} type={type} post={post} />);
   };
 
   private handleTabChange = (_e: any, data: any) => {
@@ -206,56 +193,12 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
     );
   };
 
-  private handleCloseModal = () => {
-    this.setState({
-      activePost: null,
-    });
-  };
-
-  private handleOpenSignUpDialog = () => {
-    const { dispatch } = this.props;
-
-    (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_UP));
-  };
-
-  private getPostModal = () => {
-    const { currentUser } = this.props;
-    const { activePost } = this.state;
-
-    if (activePost) {
-      return (
-        <Modal className="post-modal-wrapper" size="large" onClose={this.handleCloseModal} open={!!activePost}>
-          <PostContent
-            post={activePost}
-            currentUser={currentUser}
-            handleOpenSignUpDialog={this.handleOpenSignUpDialog}
-          />
-        </Modal>
-      );
-    } else {
-      return null;
-    }
-  };
-
-  public componentWillReceiveProps(nextProps: IHomeComponentProps) {
-    const activeOldPost = this.state.activePost;
-    if (activeOldPost) {
-      const incomingPost = nextProps.posts.find(post => activeOldPost._id === post._id);
-      if (incomingPost && activeOldPost !== incomingPost) {
-        this.setState({
-          activePost: incomingPost,
-        });
-      }
-    }
-  }
-
   public render() {
     return (
       <div className="pluto-home-page">
         <Container style={{ marginTop: 30 }}>
           {this.getSearchInput()}
           {this.getContent()}
-          {this.getPostModal()}
         </Container>
       </div>
     );
