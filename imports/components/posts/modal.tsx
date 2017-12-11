@@ -42,7 +42,7 @@ class PostModal extends React.PureComponent<IPostModalProps, {}> {
         <Modal
           closeIcon={<Icon inverted style={{ cursor: "pointer", right: "-90px", position: "absolute", zIndex: 1001 }} size="huge" name="remove" />}
           className="post-modal-wrapper"
-          size="big"
+          size="large"
           onClose={this.handleCloseModal}
           open
         >

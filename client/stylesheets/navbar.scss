@@ -1,28 +1,129 @@
+$navbar-height: 78px;
+
 .navbar-container {
-  a {
-    color: #333;
-    font-weight: 700;
+  position: relative;
+
+  .navbar-content-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $navbar-height;
+    line-height: $navbar-height;
   }
 
-  .navbar-menu-item {
-    color: #333;
-    font-weight: 700;
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .right-menus {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-image-wrapper {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items:center;
+    width: 250px;
+    height: 38px;
+    margin: 0;
+  }
+
+  .right-menu-item {
+    display: inline-block;
+    vertical-align: top;
+    line-height: $navbar-height;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: #34495e;
     cursor: pointer;
   }
 
-  .sign-in-button-wrapper {
-    display: inline-block;
-    vertical-align: top;
+  .submit-ico-button {
+    display: flex;
+    line-height: 35.5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 154.5px;
+    height: 35.5px;
+    border-radius: 2.5px;
+    border: solid 1px #3643a0;
+    margin-right: 23.5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3643a0;
+    cursor: pointer;
+  }
+
+  .logo-image {
+    width: 154px;
+    height: 22px;
+    cursor: pointer;
+
+    svg {
+      cursor: pointer;
+    }
   }
 
   .sign-up-button-wrapper {
-    display: inline-block;
-    vertical-align: top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 14.5px;
+    width: 108px;
+    height: 52.5px;
+    line-height: 52.5px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #d8dde7;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: #34495e;
+    cursor: pointer;
   }
 
   .sign-in-button {
     font-size: 14px;
     font-weight: 500;
     color: #34495e;
+  }
+
+  .navbar-jumbotron-wrapper {
+    height: 327.5px;
+    background-color: #f5f7fb;
+    border-bottom-left-radius: 50% 30px;
+    border-bottom-right-radius: 50% 30px;
+
+    .jumbotron-title {
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1.41;
+      text-align: center;
+      color: #0c1020;
+      white-space: pre-wrap;
+      padding-top: 118.5px;
+      margin-bottom: 14.5px;
+    }
+
+    .jumbotron-description {
+      font-size: 16.8px;
+      line-height: 1.36;
+      letter-spacing: -0px;
+      text-align: center;
+      color: #666d7c;
+      white-space: pre-wrap;
+    }
   }
 }

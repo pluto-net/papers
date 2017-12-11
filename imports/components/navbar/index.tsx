@@ -3,7 +3,7 @@ import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
-import { Menu, Container, Header, Input } from "semantic-ui-react";
+import { Container, Input } from "semantic-ui-react";
 import SignUpDialog from "../signup";
 import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
@@ -79,11 +79,11 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
 
   private getSearchInput = () => {
     return (
-      <Menu.Item>
+      <div className="search-input-wrapper">
         <form onSubmit={this.handleSubmitSearch}>
           <Input onChange={this.handleChangeSearchTerm} className="icon" icon="search" placeholder="Search ICO" />
         </form>
-      </Menu.Item>
+      </div>
     );
   };
 
@@ -93,56 +93,69 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
     let adminMenu = null;
     if (currentUser && currentUser.admin) {
       adminMenu = (
-        <Menu.Item>
+        <div className="right-menu-item">
           <Link to="/admin">ADMIN</Link>
-        </Menu.Item>
+        </div>
       );
     }
 
     if (!currentUser) {
       return (
-        <Menu.Menu position="right">
+        <div className="right-menus">
           {this.getSearchInput()}
-          <span className="sign-in-button-wrapper" onClick={this.handleOpenSignInDialog}>
-            <button className="sign-in-button">Sign in</button>
+          <span className="right-menu-item" onClick={this.handleOpenSignInDialog}>
+            Sign in
           </span>
           <span className="sign-up-button-wrapper" onClick={this.handleOpenSignUpDialog}>
-            <button>Get Started</button>
+            Get Started
           </span>
-        </Menu.Menu>
+        </div>
       );
     } else if (!currentUser && isLoggingIn) {
-      return <Menu.Menu position="right">is logging in...</Menu.Menu>;
+      return <div className="right-menus">is logging in...</div>;
     } else {
       return (
-        <Menu.Menu position="right">
+        <div className="right-menus">
           {this.getSearchInput()}
-          <div className="navbar-menu-item">{currentUser.username}</div>
-          <Link to="/posts/new">New ICO</Link>
-          <Link to="/" onClick={this.handleLogoutClick}>
-            Logout
+          <Link className="submit-ico-button" to="/posts/new">+ Submit your ICO</Link>
+          <Link className="right-menu-item" to="/" onClick={this.handleLogoutClick}>
+            Sign out
           </Link>
           {adminMenu}
-        </Menu.Menu>
+        </div>
       );
     }
   };
 
+  private getHeaderJumboTron = () => {
+    const { location } = this.props;
+
+    if (location.pathname === "/") {
+      return (
+        <div className="navbar-jumbotron-wrapper">
+          <h1 className="jumbotron-title">{`When you invest in decentralized coins, \n why rely on the risk assessed by the central?`}</h1>
+          <h2 className="jumbotron-description">{`The most accurate way to check your investment potential is \n to discuss directly with people who invest in value.`}</h2>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
+
   public render() {
     return (
       <div className="navbar-container">
-        <Menu borderless color="grey" size="small">
+        {this.getHeaderJumboTron()}
+        <div className="navbar-content-wrapper">
           <Container>
-            <Menu.Item>
-              <Link to="/">
-                <Header>
-                  <object data="/paperating-logo.svg" type="image/svg+xml" />
-                </Header>
+            <div className="navbar-container">
+              <Link className="logo-image-wrapper" to="/">
+                <img className="logo-image"src="/paperating-logo.svg" />
               </Link>
-            </Menu.Item>
-            {this.getRightMenus()}
+              {this.getRightMenus()}
+            </div>
           </Container>
-        </Menu>
+        </div>
         <SignUpDialog closeFunction={this.handleCloseSignUpDialog} />
         <SignInDialog closeFunction={this.handleCloseSignInDialog} />
       </div>
