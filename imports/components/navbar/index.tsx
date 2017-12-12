@@ -5,7 +5,6 @@ import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import { Container, Input } from "semantic-ui-react";
 import SignUpDialog from "../signup";
-import SignInDialog from "../signin";
 import { openDialog, closeDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
 import { addOrChangeQueryParams } from "../../helpers/queryParams";
@@ -36,18 +35,6 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
     const { dispatch } = this.props;
 
     (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_UP));
-  };
-
-  private handleCloseSignInDialog = () => {
-    const { dispatch } = this.props;
-
-    (dispatch as Dispatch<any>)(closeDialog(GLOBAL_DIALOGS.SIGN_IN));
-  };
-
-  private handleOpenSignInDialog = () => {
-    const { dispatch } = this.props;
-
-    (dispatch as Dispatch<any>)(openDialog(GLOBAL_DIALOGS.SIGN_IN));
   };
 
   private handleLogoutClick = () => {
@@ -103,8 +90,8 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
       return (
         <div className="right-menus">
           {this.getSearchInput()}
-          <span className="right-menu-item" onClick={this.handleOpenSignInDialog}>
-            Sign in
+          <span className="submit-ico-button" onClick={this.handleOpenSignUpDialog}>
+            + Submit your ICO
           </span>
           <span className="sign-up-button-wrapper" onClick={this.handleOpenSignUpDialog}>
             Get Started
@@ -117,7 +104,9 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
       return (
         <div className="right-menus">
           {this.getSearchInput()}
-          <Link className="submit-ico-button" to="/posts/new">+ Submit your ICO</Link>
+          <Link className="submit-ico-button" to="/posts/new">
+            + Submit your ICO
+          </Link>
           <Link className="right-menu-item" to="/" onClick={this.handleLogoutClick}>
             Sign out
           </Link>
@@ -136,11 +125,11 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
           <h1 className="jumbotron-title">{`When you invest in decentralized coins, \n why rely on the risk assessed by the central?`}</h1>
           <h2 className="jumbotron-description">{`The most accurate way to check your investment potential is \n to discuss directly with people who invest in value.`}</h2>
         </div>
-      )
+      );
     } else {
       return null;
     }
-  }
+  };
 
   public render() {
     return (
@@ -150,14 +139,13 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
           <Container>
             <div className="navbar-container">
               <Link className="logo-image-wrapper" to="/">
-                <img className="logo-image"src="/paperating-logo.svg" />
+                <img className="logo-image" src="/paperating-logo.svg" />
               </Link>
               {this.getRightMenus()}
             </div>
           </Container>
         </div>
         <SignUpDialog closeFunction={this.handleCloseSignUpDialog} />
-        <SignInDialog closeFunction={this.handleCloseSignInDialog} />
       </div>
     );
   }
