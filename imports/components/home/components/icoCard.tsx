@@ -87,10 +87,16 @@ const ICOCard = (props: IICOCardProps) => {
           >
             {fromNow}
           </Link>
-          <div className="comment-info">
+          <Link
+            to={{
+              pathname: `/posts/${post._id}`,
+              state: { modal: true },
+            }}
+            className="comment-info"
+          >
             Comments
             <span className="comment-count">{` ${post.commentCount}`}</span>
-          </div>
+          </Link>
         </div>
       </div>
     </Grid.Column>
