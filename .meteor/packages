@@ -30,3 +30,4 @@ seba:minifiers-autoprefixer
 mdg:meteor-apm-agent
 natestrauser:publish-performant-counts
 accounts-google
+accounts-twitter

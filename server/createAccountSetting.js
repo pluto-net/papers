@@ -1,8 +1,10 @@
 Accounts.onCreateUser((options, user) => {
   const defaultUser = {
     admin: false,
-    profile: user.username,
-    profileImagePublicId: "",
+    profile: {
+      username: user.username,
+      profileImagePublicId: "",
+    }
   }
 
   // Facebook
@@ -34,6 +36,22 @@ Accounts.onCreateUser((options, user) => {
           },
         ],
         username: user.services.google.name,
+      },
+    };
+
+    return customUser;
+  }  else if (user.services && user.services.twitter) { // Twitter
+    const customUser = {
+      ...defaultUser,
+      ...user,
+      ...{ // Information from Twitter
+        emails: [
+          {
+            address: user.services.twitter.email,
+            verified: false,
+          },
+        ],
+        username: user.services.twitter.screenName,
       },
     };
 

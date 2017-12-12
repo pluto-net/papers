@@ -23,4 +23,16 @@ Meteor.startup(function() {
       },
     },
   );
+
+  ServiceConfiguration.configurations.upsert(
+    {
+      service: "twitter",
+    },
+    {
+      $set: {
+        consumerKey: Meteor.settings.private.TWITTER_APP_ID,
+        secret: Meteor.settings.private.TWITTER_SECRET_KEY
+      },
+    },
+  );
 });
