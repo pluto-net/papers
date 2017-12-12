@@ -19,7 +19,7 @@ const AfterCreatePost = (props: IAfterCreatePost) => {
           {"If you have something to change or need help, just "}
           <a href="mailto:help@pluto.network">contact</a> us.
         </div>
-        <Link style={{ fontSize: "18px" }} to="/posts">
+        <Link style={{ fontSize: "18px" }} to="/">
           Go back to the recent ICO list
         </Link>
       </Container>

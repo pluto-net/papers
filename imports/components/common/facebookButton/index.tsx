@@ -5,7 +5,7 @@ import { Button } from "semantic-ui-react";
 const handleSignInWithFacebook = () => {
   Meteor.loginWithFacebook(
     {
-      requestPermissions: ["user_friends", "public_profile", "email"],
+      requestPermissions: ["public_profile", "email"],
     },
     (err: Error) => {
       if (err) {
