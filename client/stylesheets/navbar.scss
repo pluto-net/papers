@@ -32,7 +32,7 @@ $navbar-height: 78px;
 
   .search-input-wrapper {
     display: flex;
-    align-items:center;
+    align-items: center;
     width: 250px;
     height: 38px;
     margin: 0;
@@ -119,6 +119,7 @@ $navbar-height: 78px;
 
     .jumbotron-description {
       font-size: 16.8px;
+      font-weight: 300;
       line-height: 1.36;
       letter-spacing: -0px;
       text-align: center;
