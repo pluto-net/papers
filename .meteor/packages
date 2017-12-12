@@ -29,3 +29,4 @@ email@1.2.3
 seba:minifiers-autoprefixer
 mdg:meteor-apm-agent
 natestrauser:publish-performant-counts
+accounts-google

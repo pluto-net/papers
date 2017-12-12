@@ -1,18 +1,14 @@
 import * as React from "react";
-import { Input, Divider, Button, Modal } from "semantic-ui-react";
-import { connect, DispatchProp, Dispatch } from "react-redux";
+import {  Divider, Button, Modal } from "semantic-ui-react";
+import { connect, DispatchProp } from "react-redux";
 import { IAppState } from "../../reducers";
-import { IDialogState } from "../../reducers/globalDialog";
+import { IDialogState, GLOBAL_DIALOGS } from '../../reducers/globalDialog';
 import FacebookButton from "../common/facebookButton";
+import GoogleButton from '../common/googleButton';
 
 interface ISignInDialogProps extends DispatchProp<any> {
   signInDialog: IDialogState;
   closeFunction: () => void;
-}
-
-interface ISignInDialogState {
-  emailOrName: string;
-  password: string;
 }
 
 function mapStateToProps(state: IAppState) {
@@ -21,66 +17,13 @@ function mapStateToProps(state: IAppState) {
   };
 }
 
-class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialogState> {
-  public state = {
-    emailOrName: "",
-    password: "",
-  };
-
-  private handleInputChange = (field: string, e: React.FormEvent<{}>) => {
-    if (field !== "password") {
-      e.preventDefault();
-    }
-    const value = (e.currentTarget as any).value;
-    this.setState({ ...this.state, ...{ [field]: value } });
-  };
-
-  private handleSignInSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+class SignInDialog extends React.PureComponent<ISignInDialogProps, {}> {
+  private afterSignInCallback = () => {
     const { dispatch } = this.props;
-    const { emailOrName, password } = this.state;
-
-    (dispatch as Dispatch<any>)({
-      type: "REQUEST_SIGN_IN",
-      payload: {
-        emailOrName,
-        password,
-      },
-    });
-  };
-
-  private getSignInForm() {
-    const { emailOrName, password } = this.state;
-
-    return (
-      <div>
-        <div className="sign-in-input">
-          <Input
-            fluid
-            onChange={e => {
-              this.handleInputChange("emailOrName", e);
-            }}
-            type="text"
-            value={emailOrName}
-            placeholder="username or email"
-          />
-        </div>
-        <div className="sign-in-input">
-          <Input
-            fluid
-            onChange={e => {
-              this.handleInputChange("password", e);
-            }}
-            type="password"
-            value={password}
-            placeholder="password"
-          />
-        </div>
-      </div>
-    );
+    dispatch!({ type: `CLOSE_${GLOBAL_DIALOGS.SIGN_IN}`})
   }
 
-  render() {
+  public render() {
     const { closeFunction, signInDialog } = this.props;
 
     return (
@@ -90,13 +33,12 @@ class SignInDialog extends React.PureComponent<ISignInDialogProps, ISignInDialog
           <Modal.Content>
             <FacebookButton />
             <Divider />
-            {this.getSignInForm()}
+            <GoogleButton afterSignInCallback={this.afterSignInCallback} />
           </Modal.Content>
           <Modal.Actions>
             <Button onClick={closeFunction} negative>
               No
             </Button>
-            <Button onClick={this.handleSignInSubmit} type="submit" positive content="Submit" />
           </Modal.Actions>
         </Modal>
       </div>

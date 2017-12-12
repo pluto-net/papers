@@ -1,9 +1,16 @@
 Accounts.onCreateUser((options, user) => {
-  // facebook only
+  const defaultUser = {
+    admin: false,
+    profile: user.username,
+    profileImagePublicId: "",
+  }
+
+  // Facebook
   if (user.services && user.services.facebook) {
     const customUser = {
+      ...defaultUser,
       ...user,
-      ...{
+      ...{ // Information from Facebook
         emails: [
           {
             address: user.services.facebook.email,
@@ -12,20 +19,27 @@ Accounts.onCreateUser((options, user) => {
         ],
         username: user.services.facebook.name,
       },
-      admin: false,
-      profile: {
-        username: user.services.facebook.name,
-        profileImagePublicId: "",
+    };
+
+    return customUser;
+  } else if (user.services && user.services.google) { // Google
+    const customUser = {
+      ...defaultUser,
+      ...user,
+      ...{ // Information from Google
+        emails: [
+          {
+            address: user.services.google.email,
+            verified: false,
+          },
+        ],
+        username: user.services.google.name,
       },
     };
 
     return customUser;
   } else {
-    user.admin = false;
-    user.profile = {
-      username: user.username,
-      profileImagePublicId: "",
-    };
-    return user;
+    const normalUser = {...defaultUser, ...user }
+    return normalUser;
   }
 });
