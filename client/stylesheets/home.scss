@@ -53,5 +53,30 @@
   color: #3643a0 !important;
 }
 
-.post-modal-wrapper {
+.navbar-jumbotron-wrapper {
+  height: 327.5px;
+  background-color: #f5f7fb;
+  border-bottom-left-radius: 50% 30px;
+  border-bottom-right-radius: 50% 30px;
+
+  .jumbotron-title {
+    font-size: 27px;
+    font-weight: 900;
+    line-height: 1.41;
+    text-align: center;
+    color: #0c1020;
+    white-space: pre-wrap;
+    padding-top: 118.5px;
+    margin-bottom: 14.5px;
+  }
+
+  .jumbotron-description {
+    font-size: 16.8px;
+    font-weight: 300;
+    line-height: 1.36;
+    letter-spacing: -0px;
+    text-align: center;
+    color: #666d7c;
+    white-space: pre-wrap;
+  }
 }

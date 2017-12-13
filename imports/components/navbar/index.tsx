@@ -116,25 +116,9 @@ class Navbar extends React.PureComponent<INavbarProps, INavbarState> {
     }
   };
 
-  private getHeaderJumboTron = () => {
-    const { location } = this.props;
-
-    if (location.pathname === "/") {
-      return (
-        <div className="navbar-jumbotron-wrapper">
-          <h1 className="jumbotron-title">{`When you invest in decentralized coins, \n why rely on the risk assessed by the central?`}</h1>
-          <h2 className="jumbotron-description">{`The most accurate way to check your investment potential is \n to discuss directly with people who invest in value.`}</h2>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
-
   public render() {
     return (
       <div className="navbar-container">
-        {this.getHeaderJumboTron()}
         <div className="navbar-content-wrapper">
           <Container>
             <div className="navbar-container">
