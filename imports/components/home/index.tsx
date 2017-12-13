@@ -4,7 +4,7 @@ import * as queryString from "query-string";
 import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Container, Tab, Grid, Dropdown, Input, Icon } from "semantic-ui-react";
+import { Container, Grid, Dropdown, Input, Icon } from "semantic-ui-react";
 const { withTracker } = require("meteor/react-meteor-data");
 import InfiniteScroll = require("react-infinite-scroller");
 import throttle = require("lodash.throttle");
@@ -13,6 +13,7 @@ import IcoCard from "./components/icoCard";
 import { getCurrentDate } from "../../helpers/getCurrentDate";
 import { addOrChangeQueryParams } from "../../helpers/queryParams";
 import { IUser } from "../../../both/model/user";
+import IcoList from "./components/icoList";
 
 interface IHomeComponentProps extends RouteComponentProps<{}>, DispatchProp<any> {
   // From Meteor
@@ -93,25 +94,6 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
         value={this.props.sortOption}
         selection
       />
-    );
-  };
-
-  private getContent = () => {
-    const { dateFilter } = this.props;
-
-    const panes = [
-      { menuItem: "CURRENT", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
-      { menuItem: "UPCOMING", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
-      { menuItem: "PAST", render: () => <Tab.Pane className="ico-list-wrapper">{this.getIcoList()}</Tab.Pane> },
-      { menuItem: "ALL", render: () => <Tab.Pane className="ico-list-wrapper ">{this.getIcoList()}</Tab.Pane> },
-    ];
-
-    const activeIndex = panes.findIndex(pane => pane.menuItem.toLowerCase() === dateFilter);
-
-    return (
-      <div className="home-tab-wrapper">
-        <Tab className="home-tab-menu" onTabChange={this.handleTabChange} activeIndex={activeIndex} panes={panes} />
-      </div>
     );
   };
 
@@ -203,12 +185,19 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
   };
 
   public render() {
+    const { posts, dateFilter } = this.props;
+
     return (
       <div className="pluto-home-page">
         {this.getHeaderJumboTron()}
         <Container style={{ marginTop: 30 }}>
           {this.getSearchInput()}
-          <IcoList />
+          <IcoList
+            posts={posts}
+            dateFilter={dateFilter}
+            getIcoList={this.getIcoList}
+            handleTabChange={this.handleTabChange}
+          />
         </Container>
       </div>
     );

@@ -186,111 +186,113 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     }
 
     return (
-      <Container text style={{ marginTop: 30 }}>
-        <Header as="h1">New ICO / WhitePaper</Header>
-        <Form onSubmit={this.handleSubmitPost}>
-          <Form.Field>
-            <label>Company</label>
-            <Form.Input
-              placeholder="Company"
-              value={title}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("title", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field className="new-post-date-selector">
-            <label>ICO period</label>
-            <div className="new-post-date-box">
-              <label>Start Date</label>
-              <DatePicker
-                placeholderText="Start Date"
-                selected={this.state.startDate}
-                onChange={(date: moment.Moment) => {
-                  this.handleDateChange("startDate", date);
+      <div className="post-new-component-container">
+        <Container>
+          <Header as="h1">New WhitePaper</Header>
+          <Form onSubmit={this.handleSubmitPost}>
+            <Form.Field>
+              <label>Company</label>
+              <Form.Input
+                placeholder="Company"
+                value={title}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("title", e);
                 }}
               />
-            </div>
-            <div className="new-post-date-box">
-              <label>End Date</label>
-              <DatePicker
-                placeholderText="End Date"
-                selected={this.state.endDate}
-                onChange={(date: moment.Moment) => {
-                  this.handleDateChange("endDate", date);
+            </Form.Field>
+            <Form.Field className="new-post-date-selector">
+              <label>ICO period</label>
+              <div className="new-post-date-box">
+                <label>Start Date</label>
+                <DatePicker
+                  placeholderText="Start Date"
+                  selected={this.state.startDate}
+                  onChange={(date: moment.Moment) => {
+                    this.handleDateChange("startDate", date);
+                  }}
+                />
+              </div>
+              <div className="new-post-date-box">
+                <label>End Date</label>
+                <DatePicker
+                  placeholderText="End Date"
+                  selected={this.state.endDate}
+                  onChange={(date: moment.Moment) => {
+                    this.handleDateChange("endDate", date);
+                  }}
+                />
+              </div>
+            </Form.Field>
+            <Form.Field>
+              <label>Logo URL</label>
+              <Form.Input
+                placeholder="Please insert LogoURL"
+                value={logoUrl}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("logoUrl", e);
                 }}
               />
-            </div>
-          </Form.Field>
-          <Form.Field>
-            <label>Logo URL</label>
-            <Form.Input
-              placeholder="Please insert LogoURL"
-              value={logoUrl}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("logoUrl", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Homepage Address</label>
-            <Form.Input
-              placeholder="Please insert Homepage address(ex: https://paperating.pluto.network)"
-              value={homepageAddress}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("homepageAddress", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Fields(Optional)</label>
-            <Form.Input
-              placeholder="Please insert business fields separate by comma(ex: science, bio, medicine)"
-              value={fields}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("fields", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Links(Optional)</label>
-            <Form.Input
-              placeholder="Please insert social links separate by comma(ex: https://www.facebook.com/PlutoNetwork, https://https://pluto.network)"
-              value={links}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("links", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>WhitePaper Address</label>
-            <Form.Input
-              placeholder="Please insert WhitePaper address(ex: https://papers.whitepaper.pdf)"
-              value={whitepaperAddress}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("whitepaperAddress", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.TextArea
-              label="Description"
-              placeholder="Please insert description"
-              value={content}
-              onChange={(e: any) => {
-                this.handleInputChange("content", e);
-              }}
-            />
-          </Form.Field>
-          <Button type="submit" style={{ margin: 12 }} content="Submit" />
-        </Form>
-      </Container>
+            </Form.Field>
+            <Form.Field>
+              <label>Homepage Address</label>
+              <Form.Input
+                placeholder="Please insert Homepage address(ex: https://paperating.pluto.network)"
+                value={homepageAddress}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("homepageAddress", e);
+                }}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Fields(Optional)</label>
+              <Form.Input
+                placeholder="Please insert business fields separate by comma(ex: science, bio, medicine)"
+                value={fields}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("fields", e);
+                }}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Links(Optional)</label>
+              <Form.Input
+                placeholder="Please insert social links separate by comma(ex: https://www.facebook.com/PlutoNetwork, https://https://pluto.network)"
+                value={links}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("links", e);
+                }}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>WhitePaper Address</label>
+              <Form.Input
+                placeholder="Please insert WhitePaper address(ex: https://papers.whitepaper.pdf)"
+                value={whitepaperAddress}
+                onKeyPress={this.preventSubmit}
+                onChange={(e: any) => {
+                  this.handleInputChange("whitepaperAddress", e);
+                }}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.TextArea
+                label="Description"
+                placeholder="Please insert description"
+                value={content}
+                onChange={(e: any) => {
+                  this.handleInputChange("content", e);
+                }}
+              />
+            </Form.Field>
+            <Button type="submit" style={{ margin: 12 }} content="Submit" />
+          </Form>
+        </Container>
+      </div>
     );
   }
 }
