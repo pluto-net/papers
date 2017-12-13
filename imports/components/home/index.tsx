@@ -32,7 +32,7 @@ interface IHomeComponentStates {
   searchTerm?: string;
 }
 
-type DateFilter = "current" | "upcoming" | "past" | "all";
+export type DateFilter = "current" | "upcoming" | "past" | "all";
 type SortOption = "hot" | "score" | "date";
 
 interface IHomeQueryParams {
@@ -48,7 +48,7 @@ interface ISortOptionDropdownItem {
 }
 
 @withRouter
-class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeComponentStates> {
+class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentStates> {
   public state: IHomeComponentStates = {
     searchTerm: "",
   };
@@ -208,7 +208,7 @@ class HomeComponent extends React.PureComponent<IHomeComponentProps, IHomeCompon
         {this.getHeaderJumboTron()}
         <Container style={{ marginTop: 30 }}>
           {this.getSearchInput()}
-          {this.getContent()}
+          <IcoList />
         </Container>
       </div>
     );

@@ -6,10 +6,9 @@ import { Post } from "../../both/model/post";
 export interface IPostParamsInterface {
   title: string;
   content: string;
-  acceptCurrency: string[];
+  logoUrl: string;
+  links: string[];
   fields: string[];
-  icoPrice: string;
-  bonus: string;
   homepageUrl?: string;
   whitePaperUrl?: string;
   tokenDistribution?: string;
@@ -85,10 +84,9 @@ Post.extend({
     savePost({
       title,
       content,
-      acceptCurrency,
-      icoPrice,
-      bonus,
       fields,
+      links,
+      logoUrl,
       homepageUrl,
       whitePaperUrl,
       tokenDistribution,
@@ -97,10 +95,7 @@ Post.extend({
     }: IPostParamsInterface) {
       this.title = title;
       this.content = content;
-      this.acceptCurrency = acceptCurrency;
-      this.icoPrice = icoPrice;
-      this.bonus = bonus;
-      this.fields = fields;
+      (this.logoUrl = logoUrl), (this.links = links), (this.fields = fields);
       this.homepageUrl = homepageUrl;
       this.whitePaperUrl = whitePaperUrl;
       this.tokenDistribution = tokenDistribution;

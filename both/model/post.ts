@@ -10,18 +10,19 @@ export interface IPost extends IModelClassInstance {
   homepageUrl: string;
   startICODate: Date;
   endICODate: Date;
+  logoUrl: string;
+  content: string;
+  whitePaperUrl: string;
+  // optional fields
+  fields?: string[];
+  links?: string[];
+  // deprecated fields
+  bonus?: string;
+  bountyCampaign?: string;
+  escrow?: string;
   acceptCurrency: string[];
   icoPrice: string;
   tokenDistribution: string;
-  // optional fields
-  logoUrl?: string;
-  content?: string;
-  bonus?: string;
-  fields?: string[];
-  links?: string[];
-  bountyCampaign?: string;
-  escrow?: string;
-  whitePaperUrl?: string;
   facebookUrl?: string;
   twitterUrl?: string;
   redditUrl?: string;
@@ -74,27 +75,36 @@ export const Post = Class.create({
         },
       ],
     },
+    logoUrl: {
+      type: String,
+    },
+    whitePaperUrl: {
+      type: String,
+    },
+    content: {
+      type: String,
+    },
     startICODate: {
       type: Date,
     },
     endICODate: {
       type: Date,
     },
-    acceptCurrency: {
-      type: [String],
-    },
-    icoPrice: {
-      type: String,
-    },
-    tokenDistribution: {
-      type: String,
-    },
     // optional fields
-    logoUrl: {
+    fields: {
+      type: [String],
+      optional: true,
+    },
+    links: {
+      type: [String],
+      optional: true,
+    },
+    // Deprecated fields
+    bonus: {
       type: String,
       optional: true,
     },
-    whitePaperUrl: {
+    bountyCampaign: {
       type: String,
       optional: true,
     },
@@ -130,24 +140,15 @@ export const Post = Class.create({
       type: String,
       optional: true,
     },
-
-    content: {
-      type: String,
-      optional: true,
-    },
-    bonus: {
-      type: String,
-      optional: true,
-    },
-    fields: {
+    acceptCurrency: {
       type: [String],
       optional: true,
     },
-    links: {
-      type: [String],
+    icoPrice: {
+      type: String,
       optional: true,
     },
-    bountyCampaign: {
+    tokenDistribution: {
       type: String,
       optional: true,
     },

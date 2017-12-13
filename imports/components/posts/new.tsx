@@ -17,15 +17,13 @@ interface ICreatePostParams extends DispatchProp<any> {
 }
 
 interface ICreatePostState {
-  title: string;
-  content: string;
-  currency: string;
-  fields: string;
-  price: string;
-  bonus: string;
-  homepageAddress: string;
-  whitepaperAddress: string;
-  tokenDistribution: string;
+  title: string; // Company name
+  content: string; // Description
+  logoUrl: string; // Logo url
+  homepageAddress: string; // home page link
+  whitepaperAddress: string; // Whitepaper link
+  fields: string; // Business fields
+  links: string; // links
   startDate: moment.Moment;
   endDate: moment.Moment;
   succeededToCreate: boolean;
@@ -35,13 +33,11 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
   public state = {
     title: "",
     content: "",
-    currency: "",
-    fields: "",
-    price: "",
-    bonus: "",
+    logoUrl: "",
     homepageAddress: "",
     whitepaperAddress: "",
-    tokenDistribution: "",
+    fields: "",
+    links: "",
     startDate: moment(),
     endDate: moment(),
     succeededToCreate: false,
@@ -75,13 +71,6 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     const content = e.currentTarget.value;
 
     switch (type) {
-      case "currency": {
-        this.setState({
-          currency: content,
-        });
-        break;
-      }
-
       case "homepageAddress": {
         this.setState({
           homepageAddress: content,
@@ -89,16 +78,9 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
         break;
       }
 
-      case "tokenDistribution": {
+      case "logoUrl": {
         this.setState({
-          tokenDistribution: content,
-        });
-        break;
-      }
-
-      case "price": {
-        this.setState({
-          price: content,
+          logoUrl: content,
         });
         break;
       }
@@ -117,9 +99,9 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
         break;
       }
 
-      case "bonus": {
+      case "links": {
         this.setState({
-          bonus: content,
+          links: content,
         });
         break;
       }
@@ -149,15 +131,13 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     const {
       title,
       content,
-      currency,
-      price,
-      bonus,
+      logoUrl,
       homepageAddress,
       whitepaperAddress,
-      tokenDistribution,
+      fields,
+      links,
       startDate,
       endDate,
-      fields,
     } = this.state;
 
     if (!currentUser) {
@@ -168,13 +148,11 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     const postParams: IPostParamsInterface = {
       title,
       content,
-      acceptCurrency: currency.replace(/\s+/g, "").split(","),
+      logoUrl,
+      links: links.replace(/\s+/g, "").split(","),
       fields: fields.replace(/\s+/g, "").split(","),
-      icoPrice: price,
-      bonus,
       homepageUrl: homepageAddress,
       whitePaperUrl: whitepaperAddress,
-      tokenDistribution: tokenDistribution,
       startICODate: startDate.toDate(),
       endICODate: endDate.toDate(),
     };
@@ -195,12 +173,10 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
       title,
       content,
       homepageAddress,
-      currency,
-      price,
-      tokenDistribution,
       whitepaperAddress,
-      bonus,
+      links,
       fields,
+      logoUrl,
       succeededToCreate,
     } = this.state;
     const { currentUser } = this.props;
@@ -248,9 +224,20 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
             </div>
           </Form.Field>
           <Form.Field>
+            <label>Logo URL</label>
+            <Form.Input
+              placeholder="Please insert LogoURL"
+              value={logoUrl}
+              onKeyPress={this.preventSubmit}
+              onChange={(e: any) => {
+                this.handleInputChange("logoUrl", e);
+              }}
+            />
+          </Form.Field>
+          <Form.Field>
             <label>Homepage Address</label>
             <Form.Input
-              placeholder="Please insert Homepage address(ex: https://www.papers.com)"
+              placeholder="Please insert Homepage address(ex: https://paperating.pluto.network)"
               value={homepageAddress}
               onKeyPress={this.preventSubmit}
               onChange={(e: any) => {
@@ -259,41 +246,9 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
             />
           </Form.Field>
           <Form.Field>
-            <label>Accept Currency</label>
+            <label>Fields(Optional)</label>
             <Form.Input
-              placeholder="Please insert currency separate by comma(ex: BTC, ETH, BCH)"
-              value={currency}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("currency", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>ICO Price</label>
-            <Form.Input
-              placeholder="Please insert ICO price"
-              value={price}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("price", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.TextArea
-              label="Token Distribution"
-              placeholder="Please insert Token Distribution information"
-              value={tokenDistribution}
-              onChange={(e: any) => {
-                this.handleInputChange("tokenDistribution", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Fields</label>
-            <Form.Input
-              placeholder="Please insert fields separate by comma(ex: science, bio, medicine)"
+              placeholder="Please insert business fields separate by comma(ex: science, bio, medicine)"
               value={fields}
               onKeyPress={this.preventSubmit}
               onChange={(e: any) => {
@@ -302,7 +257,18 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
             />
           </Form.Field>
           <Form.Field>
-            <label>WhitePaper Address(Optional)</label>
+            <label>Links(Optional)</label>
+            <Form.Input
+              placeholder="Please insert social links separate by comma(ex: https://www.facebook.com/PlutoNetwork, https://https://pluto.network)"
+              value={links}
+              onKeyPress={this.preventSubmit}
+              onChange={(e: any) => {
+                this.handleInputChange("links", e);
+              }}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>WhitePaper Address</label>
             <Form.Input
               placeholder="Please insert WhitePaper address(ex: https://papers.whitepaper.pdf)"
               value={whitepaperAddress}
@@ -313,20 +279,9 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
             />
           </Form.Field>
           <Form.Field>
-            <label>Bonus Token(Optional)</label>
-            <Form.Input
-              placeholder="Please insert bonus token information"
-              value={bonus}
-              onKeyPress={this.preventSubmit}
-              onChange={(e: any) => {
-                this.handleInputChange("bonus", e);
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
             <Form.TextArea
-              label="Additional Information (optional)"
-              placeholder="Please insert additional information"
+              label="Description"
+              placeholder="Please insert description"
               value={content}
               onChange={(e: any) => {
                 this.handleInputChange("content", e);
