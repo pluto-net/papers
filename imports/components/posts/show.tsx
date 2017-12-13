@@ -1,12 +1,13 @@
 import * as React from "react";
 import { connect, DispatchProp, Dispatch } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+const { withTracker } = require("meteor/react-meteor-data");
+import { Container } from "semantic-ui-react";
 import { Post, IPost } from "../../../both/model/post";
 import { IUser } from "../../../both/model/user";
 import PostContent from "./components/postContent";
 import { openDialog } from "../../actions/globalDialog";
 import { GLOBAL_DIALOGS } from "../../reducers/globalDialog";
-const { withTracker } = require("meteor/react-meteor-data");
 
 interface IPostShowProps extends RouteComponentProps<IPostShowParams>, DispatchProp<any> {
   post: IPost | undefined;
@@ -33,7 +34,9 @@ class PostShow extends React.PureComponent<IPostShowProps, {}> {
     if (post) {
       return (
         <div className="post-show-component-wrapper">
-          <PostContent post={post} currentUser={currentUser} handleOpenSignUpDialog={this.handleOpenSignUpDialog} />
+          <Container>
+            <PostContent post={post} currentUser={currentUser} handleOpenSignUpDialog={this.handleOpenSignUpDialog} />
+          </Container>
         </div>
       );
     } else {
