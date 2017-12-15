@@ -1,7 +1,8 @@
-import * as queryString from "query-string";
+import * as qs from "qs";
 
 export function addOrChangeQueryParams(currentParamsString: string, targetObject: object, removeKeys?: string[]) {
-  const queryParamsObject = queryString.parse(currentParamsString);
+  const targetString = currentParamsString[0] === "?" ? currentParamsString.slice(1) : currentParamsString;
+  const queryParamsObject = qs.parse(targetString);
   const newQueryParamsObject = { ...queryParamsObject, ...targetObject };
 
   if (removeKeys) {
@@ -10,5 +11,5 @@ export function addOrChangeQueryParams(currentParamsString: string, targetObject
     });
   }
 
-  return queryString.stringify(newQueryParamsObject);
+  return qs.stringify(newQueryParamsObject);
 }

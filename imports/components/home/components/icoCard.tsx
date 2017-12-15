@@ -34,8 +34,6 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
 
     if (!post) return null;
 
-    console.log(shave);
-
     return (
       <Grid.Column>
         <div className="ico-card-item-wrapper">

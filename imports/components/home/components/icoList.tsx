@@ -12,7 +12,7 @@ interface IIcoList {
 
 class IcoList extends React.Component<IIcoList, {}> {
   public shouldComponentUpdate(nextProps: IIcoList) {
-    return this.props.posts !== nextProps.posts;
+    return this.props.posts !== nextProps.posts || this.props.dateFilter !== nextProps.dateFilter;
   }
 
   public render() {

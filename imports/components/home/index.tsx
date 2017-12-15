@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Meteor } from "meteor/meteor";
-import * as queryString from "query-string";
+import * as qs from "qs";
 import { connect, DispatchProp, Dispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -205,30 +205,25 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
 }
 
 const HomeContainer = withTracker((props: IHomeComponentProps) => {
-  const rawLocationSearch = props.location.search;
-  const queryParamsObject: IHomeQueryParams = queryString.parse(rawLocationSearch);
+  const rawLocationSearch = props.location.search.slice(1);
+  const queryParamsObject: IHomeQueryParams = qs.parse(rawLocationSearch);
   const limit = props.limit;
   // Build subscribe options
   const currentDate = getCurrentDate();
   const subscribeFilter: any = {};
-  if (queryParamsObject.dateFilter) {
-    switch (queryParamsObject.dateFilter) {
-      case "upcoming":
-        subscribeFilter.startICODate = { $gte: currentDate };
-        break;
 
-      case "past":
-        subscribeFilter.endICODate = { $lte: currentDate };
-        break;
+  switch (queryParamsObject.dateFilter) {
+    case "past":
+      subscribeFilter.endICODate = { $lte: currentDate };
+      break;
 
-      case "all":
-        break;
+    case "all":
+      break;
 
-      default:
-        subscribeFilter.startICODate = { $lte: currentDate };
-        subscribeFilter.endICODate = { $gte: currentDate };
-        break;
-    }
+    case "upcoming":
+    default:
+      subscribeFilter.startICODate = { $lte: currentDate };
+      break;
   }
 
   if (queryParamsObject.keyword) {
@@ -243,15 +238,11 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
       targetSortOption.startICODate = -1;
       break;
 
-    case "hot":
-      targetSortOption.commentCount = -1;
-      targetSortOption.startICODate = -1;
-      break;
-
     case "date":
       targetSortOption.endICODate = 1;
       break;
 
+    case "hot":
     default:
       targetSortOption.commentCount = -1;
       targetSortOption.startICODate = -1;
@@ -259,7 +250,6 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
   }
 
   const subscribeOptions: any = {
-    limit,
     sort: targetSortOption,
   };
 
@@ -268,7 +258,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
   // posts subscribe
   const PostsHandle = Meteor.subscribe("posts", subscribeFilter, subscribeOptions);
   const postsIsLoading = !PostsHandle.ready();
-  const posts = Post.find(subscribeFilter, subscribeOptions).fetch();
+  const posts = Post.find(subscribeFilter, { ...subscribeOptions, ...{ limit } }).fetch();
 
   let hasMore: boolean = true;
   Meteor.call("getIcoPostCountWithOptions", subscribeFilter, subscribeOptions, (err: Error, count: number) => {
@@ -319,8 +309,8 @@ class HigherHomeContainer extends React.Component<IHomeComponentProps, IHigherHo
   public componentWillReceiveProps(nextProps: IHomeComponentProps) {
     const currentLocation = this.props.location;
     const nextLocation = nextProps.location;
-    const currentSearch = queryString.parse(currentLocation.search);
-    const nextSearch = queryString.parse(nextLocation.search);
+    const currentSearch = qs.parse(currentLocation.search);
+    const nextSearch = qs.parse(nextLocation.search);
 
     if (currentSearch && nextSearch && currentSearch.dateFilter !== nextSearch.dateFilter) {
       this.initializeSubscriptionLimit();
