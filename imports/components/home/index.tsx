@@ -116,7 +116,7 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
             initialLoad={false}
             useWindow
           >
-            <Grid columns={3} padded className="ico-list-wrapper">
+            <Grid columns={3} stackable className="ico-list-wrapper">
               {this.mapPostItem(posts, "manyViewCountPosts")}
             </Grid>
           </InfiniteScroll>

@@ -1,4 +1,4 @@
-$card-horizontal-padding: 32.5px;
+$card-horizontal-padding: 25px;
 $logo-image-width: 65px;
 $logo-image-margin-right: 20px;
 
@@ -6,24 +6,26 @@ $logo-image-margin-right: 20px;
   border-radius: 10px;
   background-color: #ffffff;
   border: solid 1px #d8dde7;
-  padding: $card-horizontal-padding 25px 24px 25px;
+  overflow: hidden;
 
   .ico-card-item-title-box {
     position: relative;
-    height: $logo-image-width + 32px;
+    display: block;
+    color: #333;
+    height: 132.5px;
   }
 
   .ico-card-item-title-left-box {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 32px;
+    left: $card-horizontal-padding;
     width: $logo-image-width + $logo-image-margin-right;
   }
 
   .ico-card-item-title-right-box {
     position: absolute;
-    top: 0;
-    left: $logo-image-width + $logo-image-margin-right;
+    top: 32px;
+    left: $card-horizontal-padding + $logo-image-width + $logo-image-margin-right;
     right: $card-horizontal-padding;
   }
 
@@ -82,10 +84,12 @@ $logo-image-margin-right: 20px;
     line-height: 1.5;
     color: #666d7c;
     margin-bottom: 20px;
+    padding: 0 $card-horizontal-padding;
   }
 
   .link-buttons-wrapper {
     display: flex;
+    padding: 0 $card-horizontal-padding;
     margin-bottom: 21px;
   }
 
@@ -111,6 +115,8 @@ $logo-image-margin-right: 20px;
 
   .meta-information-wrapper {
     position: relative;
+    display: block;
+    padding: 0 $card-horizontal-padding 23.5px $card-horizontal-padding;
   }
 
   .fromNow {
@@ -121,7 +127,7 @@ $logo-image-margin-right: 20px;
 
   .comment-info {
     position: absolute;
-    right: 0;
+    right: $card-horizontal-padding;
     top: 0;
     bottom: 0;
     font-size: 15px;
@@ -136,5 +142,10 @@ $logo-image-margin-right: 20px;
 
   .ico-card-item-modal-link {
     cursor: pointer;
+  }
+
+  .ico-card-icon {
+    margin-right: 10px;
+    margin-top: 1.5px;
   }
 }

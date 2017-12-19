@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
-import { Rating, Grid } from "semantic-ui-react";
+import { Rating, Grid, Icon } from "semantic-ui-react";
 const shave = require("shave");
 import { IPost } from "../../../../both/model/post";
 import { getWhitePaperAddress } from "../../../helpers/getWhitepaperAddress";
@@ -37,7 +37,13 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     return (
       <Grid.Column>
         <div className="ico-card-item-wrapper">
-          <div className="ico-card-item-title-box">
+          <Link
+            className="ico-card-item-title-box"
+            to={{
+              pathname: `/posts/${post._id}`,
+              state: { modal: true },
+            }}
+          >
             <div className="ico-card-item-title-left-box">
               <div className="ico-card-item-img-wrapper">
                 <img src={post.logoUrl} alt={post.title} />
@@ -45,15 +51,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
             </div>
             <div className="ico-card-item-title-right-box">
               <div className="ico-card-item-title">
-                <Link
-                  to={{
-                    pathname: `/posts/${post._id}`,
-                    state: { modal: true },
-                  }}
-                  className="ico-card-item-modal-link"
-                >
-                  {post.title}
-                </Link>
+                <div className="ico-card-item-modal-link">{post.title}</div>
               </div>
               <div className="ico-card-item-rating-box">
                 <Rating style={{ marginRight: 3 }} icon="star" maxRating={5} rating={rating} disabled />
@@ -62,7 +60,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
               </div>
               <div className="field-wrapper">{post.fields ? post.fields.join(" · ") : null}</div>
             </div>
-          </div>
+          </Link>
           <div className="content-wrapper">
             <Link
               to={{
@@ -85,34 +83,28 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
 
           <div className="link-buttons-wrapper">
             <a target="_blank" href={getWhitePaperAddress(post)} className="link-button">
+              <Icon className="ico-card-icon" size="large" name="sticky note outline" />
               White Paper
             </a>
             <a target="_blank" href={post.links ? post.links[0] : getWhitePaperAddress(post)} className="link-button">
+              <Icon className="ico-card-icon" size="large" name="linkify" />
               Homepage
             </a>
           </div>
 
-          <div className="meta-information-wrapper">
-            <Link
-              to={{
-                pathname: `/posts/${post._id}`,
-                state: { modal: true },
-              }}
-              className="ico-card-item-modal-link fromNow"
-            >
-              {fromNow}
-            </Link>
-            <Link
-              to={{
-                pathname: `/posts/${post._id}`,
-                state: { modal: true },
-              }}
-              className="comment-info"
-            >
+          <Link
+            to={{
+              pathname: `/posts/${post._id}`,
+              state: { modal: true },
+            }}
+            className="meta-information-wrapper"
+          >
+            <div className="ico-card-item-modal-link fromNow">{fromNow}</div>
+            <div className="comment-info">
               Comments
               <span className="comment-count">{` ${post.commentCount}`}</span>
-            </Link>
-          </div>
+            </div>
+          </Link>
         </div>
       </Grid.Column>
     );
