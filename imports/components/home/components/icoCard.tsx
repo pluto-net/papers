@@ -2,13 +2,15 @@ import * as React from "react";
 import * as moment from "moment";
 import { Link } from "react-router-dom";
 import { Rating, Grid, Icon } from "semantic-ui-react";
-const shave = require("shave");
 import { IPost } from "../../../../both/model/post";
 import { getWhitePaperAddress } from "../../../helpers/getWhitepaperAddress";
+import { DateFilter } from "..";
+const shave = require("shave");
 
 interface IICOCardProps {
   post: IPost;
   type: string;
+  dateFilter: DateFilter;
 }
 
 class ICOCard extends React.Component<IICOCardProps, {}> {
@@ -19,10 +21,17 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
   }
 
   public render() {
-    const { post } = this.props;
+    const { post, dateFilter } = this.props;
     const rating = Math.round(post.averageRating);
     const avgRating = post.averageRating.toFixed(1);
-    const fromNow = moment(post.endICODate).fromNow();
+
+    let fromNow;
+    if (dateFilter === "upcoming") {
+      fromNow = moment(post.startICODate).fromNow();
+    } else {
+      fromNow = moment(post.endICODate).fromNow();
+    }
+
     let content: string;
     if (post.content && post.content.length > 50) {
       content = post.content.slice(0, 50) + "...";

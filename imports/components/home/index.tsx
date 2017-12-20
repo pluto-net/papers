@@ -57,7 +57,10 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
   private handleLoadMore = throttle(this.props.incrementSubscriptionLimit, 400);
 
   private mapPostItem = (targetPosts: any[], type: string) => {
-    return targetPosts.map(post => <IcoCard key={`${type}_${post._id}`} type={type} post={post} />);
+    const { dateFilter } = this.props;
+    return targetPosts.map(post => (
+      <IcoCard key={`${type}_${post._id}`} dateFilter={dateFilter} type={type} post={post} />
+    ));
   };
 
   private handleTabChange = (_e: any, data: any) => {
@@ -221,7 +224,11 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
       break;
 
     case "upcoming":
+      subscribeFilter.startICODate = { $lte: currentDate };
+      break;
+
     default:
+      subscribeFilter.endICODate = { $gte: currentDate };
       subscribeFilter.startICODate = { $lte: currentDate };
       break;
   }
