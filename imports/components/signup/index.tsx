@@ -44,7 +44,7 @@ class SignUpDialog extends React.PureComponent<ISignUpDialogProps, {}> {
           </Modal.Content>
           <Modal.Actions>
             <Button onClick={closeFunction} negative>
-              No
+              Cancel
             </Button>
           </Modal.Actions>
         </Modal>

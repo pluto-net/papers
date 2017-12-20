@@ -10,7 +10,7 @@ const AfterCreatePost = (props: IAfterCreatePost) => {
   return (
     <div className="after-create-post-wrapper">
       <Container textAlign="center">
-        <Header as="h1" size="huge" style={{ marginBottom: 10 }}>
+        <Header as="h1" size="huge" style={{ marginBottom: 20 }}>
           You almost done!
           <Header.Subheader>Please wait until we confirming your ICO & WhitePaper details.</Header.Subheader>
         </Header>
