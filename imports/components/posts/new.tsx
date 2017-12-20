@@ -181,7 +181,7 @@ class CreatePost extends React.PureComponent<ICreatePostParams, ICreatePostState
     } = this.state;
     const { currentUser } = this.props;
 
-    if (!succeededToCreate && currentUser) {
+    if (succeededToCreate && currentUser) {
       return <AfterCreatePost currentUser={currentUser} />;
     }
 

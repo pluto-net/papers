@@ -15,7 +15,7 @@ interface INewRatingState {
 
 class NewRating extends React.PureComponent<INewRatingProps, INewRatingState> {
   public state = {
-    rating: 0,
+    rating: 5,
   };
 
   private handleRatingChange = (event: React.MouseEvent<HTMLDivElement>, data: RatingProps) => {

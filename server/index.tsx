@@ -57,8 +57,8 @@ Meteor.publish("myRating", function(postId: string) {
   return Rating.find({ postId, userId: Meteor.userId() });
 });
 
-Meteor.publish("ratingsFromPostIdAndUserIds", function(postId: string, userIds: string[]) {
-  return Rating.find({ postId, userId: { $in: userIds } });
+Meteor.publish("ratingsFromPostId", function(postId: string) {
+  return Rating.find({ postId });
 });
 
 Meteor.publish("comments", function(postId: string) {

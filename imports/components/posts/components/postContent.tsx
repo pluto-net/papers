@@ -49,7 +49,7 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     return (
       <div>
         <div className="rating-wrapper">
-          <Rating icon="star" maxRating={5} rating={rating} />
+          <Rating disabled clearable={false} maxRating={5} rating={rating} />
           <span className="average-rating-value">{averageRating}</span>
         </div>
         <div className="average-rating-count">{`${post.ratingCount} participants`}</div>
@@ -217,7 +217,7 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
 
     return (
       <div className="rating-input-box-wrapper">
-        <div className="rating-input-box-title">What is your score on this ICO?</div>
+        <div className="rating-input-box-title">What is your score on this WhitePaper?</div>
         <NewRating
           handleOpenSignUpDialog={this.props.handleOpenSignUpDialog}
           currentUser={currentUser}
@@ -379,9 +379,9 @@ const PostContentContainer = withTracker((props: IPostContentProps) => {
   const users: IUser[] = User.find({ _id: { $in: userIds } }).fetch();
 
   // rating subscribe
-  const RatingHandle = Meteor.subscribe("ratingsFromPostIdAndUserIds", props.post._id, userIds);
+  const RatingHandle = Meteor.subscribe("ratingsFromPostId", props.post._id);
   const ratingIsLoading = !RatingHandle.ready();
-  const ratings: IRating[] = RatingModel.find({ postId: props.post._id, userId: { $in: userIds } }).fetch();
+  const ratings: IRating[] = RatingModel.find({ postId: props.post._id }).fetch();
 
   return {
     commentsIsLoading,
