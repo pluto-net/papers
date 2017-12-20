@@ -34,7 +34,7 @@ interface IHomeComponentStates {
 }
 
 export type DateFilter = "current" | "upcoming" | "past" | "all";
-type SortOption = "hot" | "score" | "date";
+type SortOption = "view" | "score" | "date";
 
 interface IHomeQueryParams {
   dateFilter?: DateFilter;
@@ -81,7 +81,7 @@ class HomeComponent extends React.Component<IHomeComponentProps, IHomeComponentS
 
   private getSortDropdown = () => {
     const options: ISortOptionDropdownItem[] = [
-      { key: 1, text: "Hot", value: "hot" },
+      { key: 1, text: "View", value: "view" },
       { key: 2, text: "Score", value: "score" },
       { key: 3, text: "Date", value: "date" },
     ];
@@ -242,7 +242,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
       targetSortOption.endICODate = 1;
       break;
 
-    case "hot":
+    case "view":
     default:
       targetSortOption.commentCount = -1;
       targetSortOption.startICODate = -1;
@@ -281,7 +281,7 @@ const HomeContainer = withTracker((props: IHomeComponentProps) => {
     dateFilter: queryParamsObject.dateFilter ? queryParamsObject.dateFilter : "current",
     limit,
     hasMore,
-    sortOption: queryParamsObject.sortOption ? queryParamsObject.sortOption : "hot",
+    sortOption: queryParamsObject.sortOption ? queryParamsObject.sortOption : "view",
   };
 })(connect()(HomeComponent));
 
