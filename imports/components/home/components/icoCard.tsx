@@ -16,14 +16,55 @@ interface IICOCardProps {
 class ICOCard extends React.Component<IICOCardProps, {}> {
   private contentNode: HTMLDivElement | null;
 
+  private getLogoImage = () => {
+    const { post } = this.props;
+
+    if (post.logoUrl) {
+      return (
+        <div className="ico-card-item-title-left-box">
+          <div className="ico-card-item-img-wrapper">
+            <img src={post.logoUrl} alt={post.title} />
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  private getTitleBox = () => {
+    const { post } = this.props;
+    const rating = Math.round(post.averageRating);
+    const avgRating = post.averageRating.toFixed(1);
+
+    let wrapperClassName: string;
+    if (post.logoUrl) {
+      wrapperClassName = "ico-card-item-title-right-box";
+    } else {
+      wrapperClassName = "ico-card-item-title-box";
+    }
+
+    return (
+      <div className={wrapperClassName}>
+        <div className="ico-card-item-title">
+          <div className="ico-card-item-modal-link">{post.title}</div>
+        </div>
+        <div className="ico-card-item-rating-box">
+          <Rating style={{ marginRight: 3 }} icon="star" maxRating={5} rating={rating} disabled />
+          <span className="average-rating">{avgRating}</span>
+          <span className="average-count">{` (${post.ratingCount} participants)`}</span>
+        </div>
+        <div className="field-wrapper">{post.fields ? post.fields.join(" · ") : null}</div>
+      </div>
+    );
+  };
+
   public componentDidMount() {
     shave(this.contentNode, 91);
   }
 
   public render() {
     const { post, dateFilter } = this.props;
-    const rating = Math.round(post.averageRating);
-    const avgRating = post.averageRating.toFixed(1);
 
     let fromNow;
     if (dateFilter === "upcoming") {
@@ -53,22 +94,8 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
               state: { modal: true },
             }}
           >
-            <div className="ico-card-item-title-left-box">
-              <div className="ico-card-item-img-wrapper">
-                <img src={post.logoUrl} alt={post.title} />
-              </div>
-            </div>
-            <div className="ico-card-item-title-right-box">
-              <div className="ico-card-item-title">
-                <div className="ico-card-item-modal-link">{post.title}</div>
-              </div>
-              <div className="ico-card-item-rating-box">
-                <Rating style={{ marginRight: 3 }} icon="star" maxRating={5} rating={rating} disabled />
-                <span className="average-rating">{avgRating}</span>
-                <span className="average-count">{` (${post.ratingCount} participants)`}</span>
-              </div>
-              <div className="field-wrapper">{post.fields ? post.fields.join(" · ") : null}</div>
-            </div>
+            {this.getLogoImage()}
+            {this.getTitleBox()}
           </Link>
           <div className="content-wrapper">
             <Link

@@ -22,6 +22,10 @@ $logo-image-margin-right: 20px;
     width: $logo-image-width + $logo-image-margin-right;
   }
 
+  .ico-card-item-title-box {
+    padding: $card-horizontal-padding;
+  }
+
   .ico-card-item-title-right-box {
     position: absolute;
     top: 32px;

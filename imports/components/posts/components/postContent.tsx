@@ -321,27 +321,52 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     );
   };
 
+  private getHeader = () => {
+    const { post } = this.props;
+
+    let leftBox: React.ReactElement<any> | null;
+    let rightBoxClassName: string;
+    if (post.logoUrl) {
+      leftBox = (
+        <div className="header-left-box">
+          <span className="logo-image-wrapper">
+            <img src={post.logoUrl} alt={post.title} className="logo-image" />
+          </span>
+          <span className="header-left-box-information">
+            <h1 className="header-title">{post.title}</h1>
+            <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+          </span>
+        </div>
+      );
+      rightBoxClassName = "header-right-box";
+    } else {
+      leftBox = (
+        <div className="header-left-box">
+          <span className="header-left-box-information">
+            <h1 className="header-title">{post.title}</h1>
+            <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
+          </span>
+        </div>
+      );
+      rightBoxClassName = "";
+    }
+
+    return (
+      <div className="header">
+        {leftBox}
+        <div className={rightBoxClassName}>{this.getRatingShow()}</div>
+      </div>
+    );
+  };
+
   public render() {
     const { post, currentUser, handleOpenSignUpDialog } = this.props;
 
     return (
       <div className="ico-post-content-wrapper">
         <div className="left-box">
-          <div className="header">
-            <div className="header-left-box">
-              <span className="logo-image-wrapper">
-                <img src={post.logoUrl} alt={post.title} className="logo-image" />
-              </span>
-              <span className="header-left-box-information">
-                <h1 className="header-title">{post.title}</h1>
-                <div className="header-fields">{this.getFields(post.fields ? post.fields : [])}</div>
-              </span>
-            </div>
-            <div className="header-right-box">{this.getRatingShow()}</div>
-          </div>
-
           <div className="header-divider" />
-
+          {this.getHeader()}
           <div className="content-wrapper">
             {this.getICOPeriod()}
             <div className="content-description">{post.content}</div>
