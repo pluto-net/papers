@@ -13,7 +13,15 @@ interface IICOCardProps {
   dateFilter: DateFilter;
 }
 
-class ICOCard extends React.Component<IICOCardProps, {}> {
+interface IICOCardStates {
+  hasErrorOnImgLoad: boolean;
+}
+
+class ICOCard extends React.Component<IICOCardProps, IICOCardStates> {
+  public state = {
+    hasErrorOnImgLoad: false,
+  };
+
   private contentNode: HTMLDivElement | null;
 
   private shaveText() {
@@ -22,14 +30,20 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     }
   }
 
+  private setHasErrorOnImageLoad = () => {
+    this.setState({
+      hasErrorOnImgLoad: true,
+    });
+  };
+
   private getLogoImage = () => {
     const { post } = this.props;
 
-    if (post.logoUrl) {
+    if (post.logoUrl && !this.state.hasErrorOnImgLoad) {
       return (
         <div className="ico-card-item-title-left-box">
           <div className="ico-card-item-img-wrapper">
-            <img src={post.logoUrl} alt={post.title} />
+            <img src={post.logoUrl} onError={this.setHasErrorOnImageLoad} alt={post.title} />
           </div>
         </div>
       );
@@ -44,10 +58,10 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     const avgRating = post.averageRating.toFixed(1);
 
     let wrapperClassName: string;
-    if (post.logoUrl) {
+    if (post.logoUrl && !this.state.hasErrorOnImgLoad) {
       wrapperClassName = "ico-card-item-title-right-box";
     } else {
-      wrapperClassName = "ico-card-item-title-box";
+      wrapperClassName = "ico-card-item-non-image-title-box";
     }
 
     return (
