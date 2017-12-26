@@ -16,6 +16,12 @@ interface IICOCardProps {
 class ICOCard extends React.Component<IICOCardProps, {}> {
   private contentNode: HTMLDivElement | null;
 
+  private shaveText() {
+    if (!!this.contentNode) {
+      shave(this.contentNode, 90);
+    }
+  }
+
   private getLogoImage = () => {
     const { post } = this.props;
 
@@ -60,7 +66,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
   };
 
   public componentDidMount() {
-    shave(this.contentNode, 91);
+    this.shaveText();
   }
 
   public render() {
@@ -74,9 +80,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     }
 
     let content: string;
-    if (post.content && post.content.length > 50) {
-      content = post.content.slice(0, 50) + "...";
-    } else if (!post.content) {
+    if (!post.content) {
       content = "There is no description yet";
     } else {
       content = post.content;
@@ -106,13 +110,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
               style={{ color: "inherit" }}
               className="ico-card-item-modal-link"
             >
-              <div
-                style={{ lineHeight: "22.5px" }}
-                z
-                ref={el => {
-                  this.contentNode = el;
-                }}
-              >
+              <div className="content-text-wrapper" ref={el => (this.contentNode = el)}>
                 {content}
               </div>
             </Link>
