@@ -22,8 +22,9 @@ $logo-image-margin-right: 20px;
     width: $logo-image-width + $logo-image-margin-right;
   }
 
-  .ico-card-item-title-box {
+  .ico-card-item-non-image-title-box {
     padding: $card-horizontal-padding;
+    display: block;
   }
 
   .ico-card-item-title-right-box {
@@ -88,7 +89,15 @@ $logo-image-margin-right: 20px;
     line-height: 1.5;
     color: #666d7c;
     margin-bottom: 20px;
+    height: 90px;
     padding: 0 $card-horizontal-padding;
+  }
+
+  .content-text-wrapper {
+    line-height: 22.5px;
+    height: 100%;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
   .link-buttons-wrapper {
@@ -145,6 +154,8 @@ $logo-image-margin-right: 20px;
   }
 
   .ico-card-item-modal-link {
+    display: block;
+    height: 100%;
     cursor: pointer;
   }
 

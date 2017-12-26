@@ -13,17 +13,37 @@ interface IICOCardProps {
   dateFilter: DateFilter;
 }
 
-class ICOCard extends React.Component<IICOCardProps, {}> {
+interface IICOCardStates {
+  hasErrorOnImgLoad: boolean;
+}
+
+class ICOCard extends React.Component<IICOCardProps, IICOCardStates> {
+  public state = {
+    hasErrorOnImgLoad: false,
+  };
+
   private contentNode: HTMLDivElement | null;
+
+  private shaveText() {
+    if (!!this.contentNode) {
+      shave(this.contentNode, 90);
+    }
+  }
+
+  private setHasErrorOnImageLoad = () => {
+    this.setState({
+      hasErrorOnImgLoad: true,
+    });
+  };
 
   private getLogoImage = () => {
     const { post } = this.props;
 
-    if (post.logoUrl) {
+    if (post.logoUrl && !this.state.hasErrorOnImgLoad) {
       return (
         <div className="ico-card-item-title-left-box">
           <div className="ico-card-item-img-wrapper">
-            <img src={post.logoUrl} alt={post.title} />
+            <img src={post.logoUrl} onError={this.setHasErrorOnImageLoad} alt={post.title} />
           </div>
         </div>
       );
@@ -38,10 +58,10 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     const avgRating = post.averageRating.toFixed(1);
 
     let wrapperClassName: string;
-    if (post.logoUrl) {
+    if (post.logoUrl && !this.state.hasErrorOnImgLoad) {
       wrapperClassName = "ico-card-item-title-right-box";
     } else {
-      wrapperClassName = "ico-card-item-title-box";
+      wrapperClassName = "ico-card-item-non-image-title-box";
     }
 
     return (
@@ -60,7 +80,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
   };
 
   public componentDidMount() {
-    shave(this.contentNode, 91);
+    this.shaveText();
   }
 
   public render() {
@@ -74,9 +94,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
     }
 
     let content: string;
-    if (post.content && post.content.length > 50) {
-      content = post.content.slice(0, 50) + "...";
-    } else if (!post.content) {
+    if (!post.content) {
       content = "There is no description yet";
     } else {
       content = post.content;
@@ -106,12 +124,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
               style={{ color: "inherit" }}
               className="ico-card-item-modal-link"
             >
-              <div
-                style={{ lineHeight: "22.5px" }}
-                ref={el => {
-                  this.contentNode = el;
-                }}
-              >
+              <div className="content-text-wrapper" ref={el => (this.contentNode = el)}>
                 {content}
               </div>
             </Link>
