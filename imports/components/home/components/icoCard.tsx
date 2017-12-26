@@ -108,6 +108,7 @@ class ICOCard extends React.Component<IICOCardProps, {}> {
             >
               <div
                 style={{ lineHeight: "22.5px" }}
+                z
                 ref={el => {
                   this.contentNode = el;
                 }}

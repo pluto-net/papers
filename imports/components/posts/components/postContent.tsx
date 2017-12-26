@@ -365,7 +365,6 @@ class PostContent extends React.PureComponent<IPostContentProps, IPostContentSta
     return (
       <div className="ico-post-content-wrapper">
         <div className="left-box">
-          <div className="header-divider" />
           {this.getHeader()}
           <div className="content-wrapper">
             {this.getICOPeriod()}
