@@ -75,14 +75,18 @@ export const Post = Class.create({
         },
       ],
     },
+
     logoUrl: {
       type: String,
+      default: "",
     },
     whitePaperUrl: {
       type: String,
+      default: "",
     },
     content: {
       type: String,
+      default: "",
     },
     startICODate: {
       type: Date,
@@ -90,7 +94,7 @@ export const Post = Class.create({
     endICODate: {
       type: Date,
     },
-    // optional fields
+
     fields: {
       type: [String],
       optional: true,
@@ -99,7 +103,6 @@ export const Post = Class.create({
       type: [String],
       optional: true,
     },
-    // Deprecated fields
     bonus: {
       type: String,
       optional: true,
@@ -213,4 +216,9 @@ export const Post = Class.create({
       },
     },
   },
+  // events: {
+  //   beforeSave(e) {
+  //     const doc = e.currentTarget;
+  //   }
+  // }
 });

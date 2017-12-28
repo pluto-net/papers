@@ -95,7 +95,9 @@ Post.extend({
     }: IPostParamsInterface) {
       this.title = title;
       this.content = content;
-      (this.logoUrl = logoUrl), (this.links = links), (this.fields = fields);
+      this.logoUrl = logoUrl;
+      this.links = links;
+      this.fields = fields;
       this.homepageUrl = homepageUrl;
       this.whitePaperUrl = whitePaperUrl;
       this.tokenDistribution = tokenDistribution;

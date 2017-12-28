@@ -51,15 +51,13 @@ export const Rating = Class.create({
   },
   indexes: {
     userIdAndPost: {
-      // Index name.
       fields: {
-        // List of fields.
         userId: 1,
         postId: 1,
       },
       options: {
         unique: true,
-      }, // Mongo index options.
+      },
     },
   },
   events: {
